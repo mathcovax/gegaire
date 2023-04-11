@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>gegaire</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="mathcovax">
+
+		<link rel="icon" href="/logo.png">
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+	
+			#app{
+				height: 100%;
+				width: 100%;
+				position: fixed;
+				font-family: 'Montserrat', sans-serif;
+				font-weight: 400;
+			}
+	
+			*{
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+		</style>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				mode: "jit",
+				corePlugins: {
+					preflight: false
+				}
+			};
+		</script>
+
+		<link
+		href="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css"
+		rel="stylesheet"
+		/>
+	</head>
+	
+	<body>
+		<div id="app"></div>
+		<script type="module" src="/src/main.js"></script>
+	</body>
+</html>

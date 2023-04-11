@@ -1,0 +1,50 @@
+#! /usr/bin/sh
+
+DOCKER_COMPOSE="docker compose"
+
+AOB_CONTAINER_SERVICE="aob"
+AOB_WORKDIR="/api"
+EXEC_AOB="$DOCKER_COMPOSE exec -u node -w $AOB_WORKDIR $AOB_CONTAINER_SERVICE"
+
+POSTGRES_CONTAINER_SERVICE="postgres"
+EXEC_POSTGRES="$DOCKER_COMPOSE exec $POSTGRES_CONTAINER_SERVICE"
+
+if [ "$1" == "up" ] && [ -z $2 ]
+then
+	$DOCKER_COMPOSE up
+	
+elif [ "$1" == "up" ] && [ "$2" == "-d" ]
+then
+	$DOCKER_COMPOSE up -d
+
+elif [ "$1" == "down" ]
+then
+	$DOCKER_COMPOSE down
+	
+elif [ "$1" == "bash" ]
+then
+	$EXEC_AOB /bin/bash
+
+elif [ "$1" == "studio" ]
+then
+	$EXEC_AOB npx prisma studio
+
+elif [ "$1" == "migrate" ]
+then
+	$EXEC_AOB npx prisma migrate dev
+	$EXEC_AOB npx prisma generate
+
+elif [ "$1" == "generate" ]
+then
+	$EXEC_AOB npx prisma generate
+	
+elif [ "$1" == "data_fix" ]
+then
+	$EXEC_AOB npx prisma migrate reset --force
+	$EXEC_AOB node src/prisma/dataFixtures.js
+elif [ "$1" == "save_db" ]
+then
+	$EXEC_POSTGRES pg_dumpall -c -U mathcovax > ./save_db/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+else
+	echo "error arg"
+fi

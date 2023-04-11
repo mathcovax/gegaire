@@ -1,0 +1,34 @@
+{
+
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+
+	"files.autoSave": "off",
+
+	"[yaml]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true,
+	},
+
+	"eslint.validate": ["javascript", "vue"],
+	"eslint.workingDirectories": [
+		"./back",
+		"./vue",
+		"./aob",
+		"./proxy",
+	],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true,
+		"source.fixAll.stylelint": true
+	},
+	"vetur.validation.template": false,
+
+	"css.validate": false,
+	"scss.validate": false,
+	"stylelint.validate": ["css", "scss"],
+
+	"[prisma]": {
+		"editor.formatOnSave": true
+	},
+}

@@ -1,0 +1,129 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id Int @id @default(autoincrement())
+
+    name     String @unique @db.VarChar(30)
+    password String
+    email    String @unique @db.VarChar(255)
+    tel      String @unique @db.VarChar(12)
+
+    address  Address?
+    pro_card Pro_Card?
+
+    isManager Boolean @default(false)
+    isAdmin   Boolean @default(false)
+
+    groups       Group[]
+    availability Availability[]
+    work         Work[]
+
+    createdAt DateTime @default(now())
+    updatedAT DateTime @updatedAt
+}
+
+model Address {
+    id Int @id @default(autoincrement())
+
+    activity   Activity? @relation(fields: [activityId], references: [id])
+    activityId Int?      @unique
+    user       User?     @relation(fields: [userId], references: [id])
+    userId     Int?      @unique
+
+    postcode String @db.VarChar(6)
+    text     String @db.VarChar(255)
+    city     String @db.VarChar(50)
+    lng      Float
+    lat      Float
+}
+
+model Pro_Card {
+    id Int @id @default(autoincrement())
+
+    user   User @relation(fields: [userId], references: [id])
+    userId Int  @unique
+
+    from DateTime
+    to   DateTime
+}
+
+model Group {
+    id Int @id @default(autoincrement())
+
+    name         String         @db.VarChar(20)
+    users        User[]
+    Activity     Activity[]
+    Availability Availability[]
+    Link         Link[]
+}
+
+model Availability {
+    id Int @id @default(autoincrement())
+
+    user    User  @relation(fields: [userId], references: [id])
+    userId  Int
+    group   Group @relation(fields: [groupId], references: [id])
+    groupId Int
+
+    year  Int
+    month Int
+    day   Int
+    am    Boolean?
+    pm    Boolean?
+    note  String   @db.VarChar(1500)
+
+    work Work?
+
+    @@unique([userId, year, month, day])
+}
+
+model Work {
+    id Int @id @default(autoincrement())
+
+    availability   Availability @relation(fields: [availabilityId], references: [id])
+    availabilityId Int          @unique
+    user           User         @relation(fields: [userId], references: [id])
+    userId         Int
+
+    amActivity   Activity? @relation(name: "am", fields: [amActivityId], references: [id])
+    amActivityId Int?
+    amLeader     Boolean?
+
+    pmActivity   Activity? @relation(name: "pm", fields: [pmActivityId], references: [id])
+    pmActivityId Int?
+    pmLeader     Boolean?
+}
+
+model Activity {
+    id Int @id @default(autoincrement())
+
+    name      String   @db.VarChar(30)
+    number    Int
+    address   Address?
+    date      DateTime
+    hourStart String?  @default("") @db.VarChar(5)
+    hourEnd   String?  @default("") @db.VarChar(5)
+    note      String?  @default("") @db.VarChar(1500)
+    group     Group    @relation(fields: [groupId], references: [id])
+    groupId   Int
+
+    createdAt DateTime @default(now())
+    updatedAT DateTime @updatedAt
+
+    amGuide Work[] @relation(name: "am")
+    pmGuide Work[] @relation(name: "pm")
+}
+
+model Link {
+    id        String   @id @default(uuid())
+    email     String   @unique @db.VarChar(255)
+    createdAt DateTime @default(now())
+    groups    Group[]
+}

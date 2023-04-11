@@ -1,0 +1,39 @@
+version: '3'
+services:
+  proxy:
+    container_name: proxy
+    build: ./.docker/proxy
+    ports:
+      - 1506:80
+    volumes: 
+      - ./proxy:/proxy
+
+  aob:
+    container_name: aob
+    image: mathcovax/anotherback:2.3.4
+    expose:
+      - 5555
+    environment:
+      AOB_V: "2.8.12"
+    ports:
+      - 5555:5555
+    volumes: 
+      - ./aob:/api
+    depends_on:
+      - postgres
+  
+  vue:
+    container_name: vue
+    build: ./.docker/vue
+    volumes: 
+      - ./vue:/vue
+
+  postgres:
+    container_name: postgres
+    image: postgres:15.2
+    env_file: ./aob/.env
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

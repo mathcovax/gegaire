@@ -1,0 +1,7 @@
+{
+	"ignoreFiles": "!**/*.(scss|css|vue)",
+	"rules": {
+		"indentation": "tab",
+		"max-empty-lines": 1
+	}
+}
