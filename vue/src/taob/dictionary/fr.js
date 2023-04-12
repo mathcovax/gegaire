@@ -42,10 +42,10 @@ export default {
 		sendeError: "Une erreur est survenue lors de l'envoi du mail."
 	},
 	activity: {
-		successfulCreate: "Activités créées.",
-		successfulEdit: "Activités modifiées.",
+		create: "Activités créées.",
+		edit: "Activités modifiées.",
 		notfound: "Activité introuvable.",
-		successfulDelete: "Activités supprimées."
+		delete: "Activités supprimées."
 	},
 
 	btn: {

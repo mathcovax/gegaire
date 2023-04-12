@@ -2,7 +2,7 @@ import {checker} from "anotherback/cli";
 
 export default checker(
 	{
-		body: req => ({date: req.body.date})
+		body: req => ({date: req.body.activity_date})
 	},
 	function({date}){
 		date = new Date(date);

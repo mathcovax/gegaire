@@ -155,9 +155,8 @@
 </template>
 
 <script>
-import { get } from "toanotherback";
-import { defineComponent } from "vue";
-import { mapGetters, mapMutations } from "vuex";
+
+import {defineComponent} from "vue";
 import AvailableBtn from "@/components/AvailableBtn.vue";
 
 export default defineComponent({
@@ -176,17 +175,16 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("managerActivityPlace", ["selectGuide", "activity", "guidesSelect"])
+
 	},
 	methods: {
-		...mapMutations("managerActivityPlace", ["SET_SELECT_GUIDE"]),
 
 		async init(){
 			let date = new Date(this.activity.date);
 
 			let info = await get(
 				"/guide/availability/" + 
-				(date.getMonth()+1) + "-" + date.getFullYear() + 
+				(date.getMonth() + 1) + "-" + date.getFullYear() + 
 				"/day/" + 
 				date.getDate() + 
 				"/" +
@@ -197,15 +195,15 @@ export default defineComponent({
 			info.day.name = info.name;
 			info = info.day;
 
-			if(info.work.am !== false && info.work.am !== this.activity._id)await this.getActivity(info.work.am);
+			if(info.work.am !== false && info.work.am !== this.activity._id) await this.getActivity(info.work.am);
 			else if(info.work.am !== false && info.work.am === this.activity._id)info.work.am = this.activity;
 
-			if(info.work.pm !== false && info.work.pm !== this.activity._id)await this.getActivity(info.work.pm);
+			if(info.work.pm !== false && info.work.pm !== this.activity._id) await this.getActivity(info.work.pm);
 			else if(info.work.pm !== false && info.work.pm === this.activity._id)info.work.pm = this.activity;
 			
 			let guideParameter = this.guidesSelect.find(value => value.guide._id === info._id);
 
-			this.isInActivity = guideParameter? true : false;
+			this.isInActivity = guideParameter ? true : false;
 
 			this.leader = guideParameter?.leader || false;
 			this.am = guideParameter?.am || false;

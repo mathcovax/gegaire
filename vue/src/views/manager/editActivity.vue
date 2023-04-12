@@ -184,13 +184,13 @@ export default defineComponent({
 				await taob.post(
 					"/activity", 
 					{
-						name: this.name,
-						number: parseInt(this.number),
+						activity_name: this.name,
+						activity_number: parseInt(this.number),
 						address: this.loc,
-						date: this.date,
-						hourStart: this.hourStart,
-						hourEnd: this.hourEnd,
-						note: this.note,
+						activity_date: this.date,
+						activity_hourStart: this.hourStart,
+						activity_hourEnd: this.hourEnd,
+						activity_note: this.note,
 						group_id: this.group[0].id,
 					}
 				)
@@ -200,20 +200,21 @@ export default defineComponent({
 				.result;
 			}
 			else {
-				await patch(
-					"/activity/" + this.$route.params.id,
+				await taob.put(
+					"/activity/" + this.$route.params.id, 
 					{
-						name: this.name,
-						number: this.number,
+						activity_name: this.name,
+						activity_number: parseInt(this.number),
 						address: this.loc,
-						date: this.date,
-						hour: this.hour,
-						note: this.note,
-						group: this.group[0]._id,
+						activity_date: this.date,
+						activity_hourStart: this.hourStart,
+						activity_hourEnd: this.hourEnd,
+						activity_note: this.note,
+						group_id: this.group[0].id,
 					}
 				)
-				.s(() => {
-					this.$router.push("/manager/activities/" + this.$route.params.id + "/place");
+				.s(data => {
+					this.$router.push("/manager/activities/" + data.id + "/place");
 				})
 				.result;
 			}
@@ -222,15 +223,16 @@ export default defineComponent({
 
 		async initEdit(){
 
-			await get("/activity/info/" + this.$route.params.id)
-			.s((rep) => {
-				this.name = rep.name;
-				this.number = rep.number;
-				this.loc = rep.loc;
-				this.date = rep.date.split("T")[0];
-				this.hour = rep.hour;
-				this.note = rep.note;
-				this.group = [rep.group];
+			await taob.get("/activity/" + this.$route.params.id)
+			.s(data => {
+				this.name = data.name;
+				this.number = data.number;
+				this.loc = data.address;
+				this.date = data.date.split("T")[0];
+				this.hourStart = data.hourStart;
+				this.hourEnd = data.hourEnd;
+				this.note = data.note;
+				this.group = [data.group];
 			})
 			.e((rep) => {
 				this.$router.push("/manager/planning");
@@ -240,12 +242,8 @@ export default defineComponent({
 		},
 
 		async deleteActivity(){
-
-			await del("/activity/" + this.$route.params.id)
-			.info((message, status) => {
-				this.toasterPush({message, status});
-			})
-			.s((rep) => {
+			await taob.delete("/activity/" + this.$route.params.id)
+			.s(() => {
 				this.$router.push("/manager/planning");
 			})
 			.result;

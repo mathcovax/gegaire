@@ -2,7 +2,7 @@ import {checker} from "anotherback/cli";
 
 export default checker(
 	{
-		body: req => ({hourStart: req.body.hourStart, hourEnd: req.body.hourEnd})
+		body: req => ({hourStart: req.body.activity_hourStart, hourEnd: req.body.activity_hourEnd})
 	},
 	function({hourStart, hourEnd}){
 		if(!hourStart && !hourEnd) return;

@@ -137,13 +137,12 @@
 
 		<InfoActivity v-if="showInfo === true"/>
 
-		<PlaceGuide v-if="selectGuide !== false"/>
+		<!-- <PlaceGuide v-if="selectGuide !== false"/> -->
 	</main>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import {defineComponent} from "vue";
 import AvailableBtn from "@/components/AvailableBtn.vue";
 import Card from "@/partials/manager/placeActivity/Card.vue";
 import InfoActivity from "@/partials/manager/placeActivity/InfoActivity.vue";
@@ -162,55 +161,16 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("managerActivityPlace", ["guides", "searchValue", "AM", "PM", "showInfo", "selectGuide"]),
 
-		am: {
-			get(){
-				return this.AM;
-			},
-			set(arg){
-				this.SET_AM(arg);
-			}
-		},
-		pm: {
-			get(){
-				return this.PM;
-			},
-			set(arg){
-				this.SET_PM(arg);
-			}
-		},
-		sv: {
-			get(){
-				return this.searchValue;
-			},
-			set(arg){
-				this.SET_SEARCH_VALUE(arg);
-				this.getFirtPage();
-			}
-		}
 	},
 	methods: {
-		...mapActions("managerActivityPlace", ["initStore", "purgeStore", "getFirtPage"]),
-		...mapMutations("managerActivityPlace", ["SET_AM", "SET_PM", "SET_SEARCH_VALUE", "SET_SHOW_INFO"]),
 
-		setAMPM(am, pm){
-			if(this.am === am && this.pm === pm){
-				this.am = undefined;
-				this.pm = undefined;
-			}
-			else{
-				this.am = am;
-				this.pm = pm;
-			}
-			this.getFirtPage();
-		}
 	},
 	mounted(){
-		this.initStore(this.$route.params.id);
+
 	},
 	unmounted(){
-		this.purgeStore();
+
 	}
 
 });
