@@ -144,5 +144,42 @@ export default register(
 
 			this.sender("no_content", "user.delete");
 		});
+
+		reg({
+			path: "/users/availability",
+			ignoreRegisterPrefix: true,
+			method: "GET",
+			access: "manager.accessToken",
+			ignoreRegisterAccess: true,
+			schema: {
+				query: {
+					"user_id?": "user::id",
+					"day?": "availability::day",
+					"month?": "availability::month",
+					"year?": "availability::year",
+					"am?": "availability::am",
+					"pm?": "availability::pm",
+					"skip?": "type::number",
+					"take?": "type::number",
+					"searchName?": "type::string"
+				}
+			}
+		})
+		(async function(){
+			let result = await this.method(
+				"user.get::withAvailability",
+				this.pass("user_id"),
+				this.pass("day"),
+				this.pass("month"),
+				this.pass("year"),
+				this.pass("am"),
+				this.pass("pm"),
+				this.pass("searchName"),
+				this.pass("skip"),
+				this.pass("take")
+			);
+
+			this.sender("ok", "availability.get", result);
+		});
 	}
 );

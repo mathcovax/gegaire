@@ -7,7 +7,7 @@
 
 			<Btn
 			small
-			@click="SET_SHOW_INFO(true)"
+			@click="showInfo = true"
 			>
 				{{ $tr("btn.info") }}
 			</Btn>
@@ -22,7 +22,7 @@
 				<div class="flex gap-[5px] items-center mt-[5px]">
 					<TextInput
 					:label="$tr('placeActivity.searchInput')"
-					v-model="sv"
+					v-model="searchName"
 					/>
 
 					<div class="flex gap-[5px]">
@@ -84,7 +84,10 @@
 
 				<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
 
-				<div class="flex flex-col w-full grow overflow-y-auto gap-[5px]">
+				<div
+				class="flex flex-col w-full grow overflow-y-auto gap-[5px]"
+				@scroll="scrolled"
+				>
 					<Loader
 					class="h-full"
 					v-if="guides === false"
@@ -93,9 +96,14 @@
 					<Card
 					v-else
 					v-for="guide of guides"
-					:key="guide._id"
+					:key="guide.id"
 					:guide="guide"
 					class="w-full"
+					/>
+
+					<Loader
+					size="50px"
+					v-if="isFetch === true && guides !== false"
 					/>
 				</div>
 			</Frame>
@@ -135,9 +143,12 @@
 			</Frame>
 		</div>
 
-		<InfoActivity v-if="showInfo === true"/>
+		<InfoActivity
+		v-if="showInfo === true"
+		@close="showInfo = false"
+		/>
 
-		<!-- <PlaceGuide v-if="selectGuide !== false"/> -->
+		<PlaceGuide v-if="selectedGuide !== false"/>
 	</main>
 </template>
 
@@ -147,6 +158,10 @@ import AvailableBtn from "@/components/AvailableBtn.vue";
 import Card from "@/partials/manager/placeActivity/Card.vue";
 import InfoActivity from "@/partials/manager/placeActivity/InfoActivity.vue";
 import PlaceGuide from "@/partials/manager/placeActivity/PlaceGuide.vue";
+import {taob} from "../../taob";
+import {mapActions, mapState} from "pinia";
+import {activityPlaceStore} from "../../stores/activityPlace";
+import {fixedStore} from "../../stores/fixed";
 
 export default defineComponent({
 	components: {
@@ -157,17 +172,110 @@ export default defineComponent({
 	},
 	data(){
 		return {
+			page: 0,
+			guides: false,
 
+			am: undefined,
+			pm: undefined,
+			searchName: "",
+			isFetch: false,
+			isAllFetch: false,
+
+			showInfo: false,
 		};
 	},
 	computed: {
-
+		...mapState(activityPlaceStore, ["activity", "selectedGuide"])
+	},
+	watch: {
+		am(){
+			this.reset();
+			this.findPage();
+		},
+		pm(){
+			this.reset();
+			this.findPage();
+		},
+		searchName(){
+			this.reset();
+			this.findPage();
+		}
 	},
 	methods: {
+		...mapActions(activityPlaceStore, ["initActivityPlaceStore"]),
+		
+		async findPage(page = this.page){
+			if(this.isFetch === true || this.isAllFetch === true) return;
+			this.isFetch = true;
 
+			let [
+				year,
+				month, 
+				day
+			] = this.activity.date.split("T")[0].split("-");
+
+			let result = await taob.get(
+				"/users/availability?" + 
+				`skip=${page * 10}` +
+				"&take=10" +
+				`&searchName=${this.searchName || ""}` +
+				`&day=${day}` +
+				`&month=${month}` +
+				`&year=${year}` +
+				`${this.am !== undefined ? "&am=" + this.am : ""}` +
+				`${this.pm !== undefined ? "&pm=" + this.pm : ""}`
+			).sd();
+
+			if(result === undefined || this.isFetch === false) return;
+
+			if(this.guides === false) this.guides = [];
+			this.guides = [...this.guides, ...result];
+
+			if(result.length !== 10) this.isAllFetch = true;
+			this.isFetch = false;
+		},
+
+		setAMPM(am, pm){
+			if(this.am === am && this.pm === pm){
+				this.am = undefined;
+				this.pm = undefined;
+			}
+			else {
+				this.am = am;
+				this.pm = pm;
+			}
+		},
+
+		scrolled(e){
+			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 100) && this.isFetch === false){
+				this.page++;
+				this.findPage();
+			}
+		},
+
+		reset(){
+			this.page = 0;
+			this.guides = false;
+			this.isFetch = false;
+			this.isAllFetch = false;
+		},
+
+		async init(){
+			let {close} = fixedStore().requestLoader();
+			await taob.get("/activity/" + this.$route.params.id + "?all=true")
+			.s(data => {
+				this.initActivityPlaceStore(data);
+				this.findPage();
+			})
+			.e((rep) => {
+				this.$router.push("/manager/planning");
+			})
+			.result;
+			close();
+		}
 	},
 	mounted(){
-
+		this.init();
 	},
 	unmounted(){
 

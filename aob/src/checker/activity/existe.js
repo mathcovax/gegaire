@@ -8,6 +8,8 @@ export default checker(
 		let result = await this.method("activity.exist::byId", this.pass("activity_id"));
 
 		if(result === null) this.sender("not_found", "activity.notfound");
+
+		this.pass("activity", result);
 	}
 );
 

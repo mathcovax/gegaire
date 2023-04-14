@@ -1,37 +1,30 @@
 <template>
 	<div
-	@click="SET_SELECT_GUIDE(false)"
+	@click="unSelectGuide(false)"
 	class="absolute w-full h-full top-0 bg-[rgba(0,0,0,0.30)] flex justify-center items-center"
 	>
 		<Frame
 		@click="$event.stopPropagation()"
 		border="4px"
-		class="w-[90%]"
+		class="w-[90%] lg:w-[400px] max-h-[80%]"
 		classs="p-[10px]"
 		>
-			<Loader
-			v-if="guide === false"
-			/>
-
-			<div
-			v-else
-			class="w-full h-full flex flex-col gap-[10px] items-center"
-			>
+			<div class="w-full h-full flex flex-col gap-[10px] items-center">
 				<div class="flex justify-between w-full">
-					<p>{{ guide.name }}</p>
+					<h3>{{ guide.name }}</h3>
 
 					<div class="flex gap-[5px]">
 						<div class="flex flex-col justify-between">
-							<p v-if="guide.am === true">
-								{{ guide.work.am === false? $tr("placeActivity.placeAvailable") : guide.work.am.name }}
+							<p v-if="availability.am === true">
+								{{ work.amActivity === null? $tr("placeActivity.placeAvailable") : work.amActivity.name }}
 							</p>
 
 							<p v-else>
 								{{ $tr("placeActivity.placeUnAvailable") }}
 							</p>
 
-							<p v-if="guide.pm === true">
-								{{ guide.work.pm === false? $tr("placeActivity.placeAvailable") : guide.work.pm.name }}
+							<p v-if="availability.pm === true">
+								{{ work.pmActivity === null? $tr("placeActivity.placeAvailable") : work.pmActivity.name }}
 							</p>
 
 							<p v-else>
@@ -43,37 +36,37 @@
 							<div class="h-[40px] w-[20px] relative rounded-[4px] overflow-hidden p-[5px] ">
 								<div
 								:class="{
-									'bg-[green]': guide.am === true,
-									'bg-[red]': guide.am === false,
-									'bg-[orange]': guide.am === null,
+									'bg-[green]': availability.am === true,
+									'bg-[red]': availability.am === false,
+									'bg-[orange]': availability.am === null,
 								}"
 								class="absolute top-0 left-0 w-full h-[50%]"
 								/>
 
 								<div
 								:class="{
-									'bg-[green]': guide.pm === true,
-									'bg-[red]': guide.pm === false,
-									'bg-[orange]': guide.pm === null,
+									'bg-[green]': availability.pm === true,
+									'bg-[red]': availability.pm === false,
+									'bg-[orange]': availability.pm === null,
 								}"
 								class="absolute bottom-0 left-0 w-full h-[50%]"
 								/>
 
 								<div class="relative h-full w-full bg-[white] rounded-[4px] flex">
 									<div
-									v-if="guide.work.am !== false"
+									v-if="work.amActivity !== null"
 									:class="{
-										'bg-[green]': guide.work.am === activity._id,
-										'bg-[red]': guide.work.am !== activity._id,
+										'bg-[green]': work.amActivity?.id === activity.id,
+										'bg-[red]': work.amActivity?.id !== activity.id,
 									}"
 									class="absolute top-0 left-0 w-full h-[50%]"
 									/>
 
 									<div
-									v-if="guide.work.pm !== false"
+									v-if="work.pmActivity !== null"
 									:class="{
-										'bg-[green]': guide.work.pm === activity._id,
-										'bg-[red]': guide.work.pm !== activity._id,
+										'bg-[green]': work.pmActivity?.id === activity.id,
+										'bg-[red]': work.pmActivity?.id !== activity.id,
 									}"
 									class="absolute bottom-0 left-0 w-full h-[50%]"
 									/>
@@ -84,51 +77,54 @@
 				</div>
 
 				<div
-				v-if="guide.note !== ''"
+				v-if="availability.note !== ''"
 				class="flex w-full gap-[5px]"
 				>
-					<p>
+					<p class="whitespace-nowrap">
 						{{ $tr("placeActivity.placeNote") }} :
 					</p>
 
-					<p class="grow overflow-y-auto max-h-[150px]">
-						{{ guide.note }}
+					<p class="grow overflow-y-auto max-h-[150px] whitespace-pre">
+						{{ availability.note }}
 					</p>
 				</div>
 
 				<div class="flex items-center w-full justify-between">
 					<div
 					class="flex gap-[5px]"
-					:class="{'invisible': !((guide.am === true && guide.work.am === false) || (guide.pm === true && guide.work.pm === false))}"
+					:class="{'invisible': !showLeaderCheckbox}"
 					>
 						<p>Leader :</p>
 
-						<input type="checkbox"/>
+						<input
+						type="checkbox"
+						v-model="leader"
+						/>
 					</div>
 					
 					<div class="flex gap-[10px] justify-center">
 						<AvailableBtn
 						class="h-[30px]"
-						:class="{'invisible': guide.am === false || guide.pm === false || guide.work.am !== false || guide.work.pm !== false}"
-						@click="am = true; pm = true"
+						:class="{'invisible': !(showAMCheckbox && showPMCheckbox)}"
+						@click="setAMPM(true, true)"
 						:am="true"
 						:pm="true"
 						:check="am === true && pm === true"
 						/>
 
 						<AvailableBtn
-						:class="{'invisible': guide.am === false || guide.work.am !== false}"
+						:class="{'invisible': !showAMCheckbox}"
 						class="h-[30px]"
-						@click="am = true; pm = false"
+						@click="setAMPM(true, false)"
 						:am="true"
 						:pm="null"
 						:check="am === true && pm === false"
 						/>
 
 						<AvailableBtn
-						:class="{'invisible': guide.pm === false || guide.work.pm !== false}"
+						:class="{'invisible': !showPMCheckbox}"
 						class="h-[30px]"
-						@click="am = false; pm = true"
+						@click="setAMPM(false, true)"
 						:am="null"
 						:pm="true"
 						:check="am === false && pm === true"
@@ -137,15 +133,17 @@
 				</div>
 
 				<Btn
-				v-if="(guide.am === true && guide.work.am === false) || (guide.pm === true && guide.work.pm === false)"
-				small
+				v-if="showLeaderCheckbox"
+				@click="patch"
+				:disabled="am === undefined || pm === undefined"
 				>
 					{{ $tr("btn.validate") }}
 				</Btn>
 
 				<Btn
-				v-if="isInActivity === true"
-				small
+				v-if="work.amActivity?.id === activity.id || work.pmActivity?.id === activity.id"
+				theme="red"
+				@click="remove"
 				>
 					{{ $tr("btn.remove") }}
 				</Btn>
@@ -158,6 +156,10 @@
 
 import {defineComponent} from "vue";
 import AvailableBtn from "@/components/AvailableBtn.vue";
+import {mapActions, mapState} from "pinia";
+import {activityPlaceStore} from "../../../stores/activityPlace";
+import {taob} from "../../../taob";
+import {fixedStore} from "../../../stores/fixed";
 
 export default defineComponent({
 	components: {
@@ -166,58 +168,135 @@ export default defineComponent({
 	data(){
 		return {
 			guide: false,
-
-			am: false,
-			pm: false,
+			availability: false,
+			work: false,
+			
+			am: undefined,
+			pm: undefined,
 			leader: false,
-
-			isInActivity: false
+			
+			isInActivity: false,
 		};
 	},
 	computed: {
+		...mapState(activityPlaceStore, ["activity", "selectedGuide"]),
 
-	},
-	methods: {
+		showLeaderCheckbox(){
+			if(this.availability.am !== true && this.availability.pm !== true) return false;
+			else if(
+				this.work.amActivity !== null && 
+				this.work.amActivity.id !== this.activity.id &&
+				this.work.pmActivity !== null && 
+				this.work.pmActivity.id !== this.activity.id
+			) return false;
 
-		async init(){
-			let date = new Date(this.activity.date);
+			else return true;
+		}, 
 
-			let info = await get(
-				"/guide/availability/" + 
-				(date.getMonth() + 1) + "-" + date.getFullYear() + 
-				"/day/" + 
-				date.getDate() + 
-				"/" +
-				this.selectGuide._id
-			)
-			.sd();
+		showAMCheckbox(){
+			if(this.availability.am !== true) return false;
+			else if(
+				this.work.amActivity !== null && 
+				this.work.amActivity.id !== this.activity.id
+			) return false;
 
-			info.day.name = info.name;
-			info = info.day;
-
-			if(info.work.am !== false && info.work.am !== this.activity._id) await this.getActivity(info.work.am);
-			else if(info.work.am !== false && info.work.am === this.activity._id)info.work.am = this.activity;
-
-			if(info.work.pm !== false && info.work.pm !== this.activity._id) await this.getActivity(info.work.pm);
-			else if(info.work.pm !== false && info.work.pm === this.activity._id)info.work.pm = this.activity;
-			
-			let guideParameter = this.guidesSelect.find(value => value.guide._id === info._id);
-
-			this.isInActivity = guideParameter ? true : false;
-
-			this.leader = guideParameter?.leader || false;
-			this.am = guideParameter?.am || false;
-			this.pm = guideParameter?.pm || false;
-
-			this.guide = info;
+			else return true;
 		},
 
-		async getActivity(_id){
-			return await get("/activity/info/" + _id).sd();
+		showPMCheckbox(){
+			if(this.availability.pm !== true) return false;
+			else if(
+				this.work.pmActivity !== null && 
+				this.work.pmActivity.id !== this.activity.id
+			) return false;
+
+			else return true;
+		},
+	},
+	methods: {
+		...mapActions(activityPlaceStore, ["unSelectGuide"]),
+
+		setAMPM(am, pm){
+			if(this.am === am && this.pm === pm){
+				this.am = undefined;
+				this.pm = undefined;
+			}
+			else {
+				this.am = am;
+				this.pm = pm;
+			}
+		},
+
+		async patch(){
+			let {close} = fixedStore().requestLoader();
+
+			let [
+				year,
+				month, 
+				day
+			] = this.activity.date.split("T")[0].split("-").map(v => parseInt(v));
+			console.log(this.leader);
+			await taob.patch(
+				`/activity/${this.activity.id}/place`,
+				{
+					user_id: this.guide.id,
+					day,
+					month,
+					year,
+
+					work_am: this.am,
+					work_pm: this.pm,
+					work_leader: this.leader,
+				}
+			)
+			.s(() => {
+				this.$parent.reset();
+				this.$parent.findPage();
+				this.unSelectGuide();
+			})
+			.result;
+
+			close();
+		},
+
+		async remove(){
+			let {close} = fixedStore().requestLoader();
+
+			await taob.delete(`/activity/${this.activity.id}/place/${this.guide.id}`)
+			.s(() => {
+				this.$parent.reset();
+				this.$parent.findPage();
+				this.unSelectGuide();
+			})
+			.result;
+
+			close();
 		}
 	},
 	mounted(){
-		this.init();
+		this.guide = this.selectedGuide;
+		this.availability = this.selectedGuide.availability[0];
+		this.work = this.selectedGuide.availability[0].work || {amActivity: null, pmActivity: null};
+
+		if(this.work.amActivity?.id === this.activity.id && this.work.pmActivity?.id === this.activity.id){
+			this.am = true;
+			this.pm = true;
+		}
+		else if(this.work.amActivity?.id === this.activity.id){
+			this.am = true;
+			this.pm = false;
+		}
+		else if(this.work.pmActivity?.id === this.activity.id){
+			this.am = false;
+			this.pm = true;
+		}
+		else {
+			this.am = undefined;
+			this.pm = undefined;
+		}
+
+		if(this.work.amLeader === true || this.work.pmLeader === true) this.leader = true;
+		else this.leader = false;
 	}
 });
 </script>

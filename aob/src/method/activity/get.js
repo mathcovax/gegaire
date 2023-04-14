@@ -20,12 +20,13 @@ export const byId = method(
 );
 
 export const infoById = method(
-	async function(id){
+	async function(id, all){
 		return await Prisma.activity.findUnique({
 			where: {
 				id
 			},
 			select: {
+				id: true,
 				name: true,
 				number: true,
 				date: true,
@@ -42,6 +43,8 @@ export const infoById = method(
 					}
 				},
 				group: true,
+				amGuide: all,
+				pmGuide: all,
 			}
 		});
 	}

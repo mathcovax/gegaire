@@ -51,6 +51,9 @@ export default register(
 						schema: "activity::id",
 						key: "id"
 					}
+				},
+				query: {
+					"all?": "type::bool"
 				}
 			},
 			checkers: ["activity.existe<pass"]
@@ -58,7 +61,8 @@ export default register(
 		(async function(){
 			let result = await this.method(
 				"activity.get::infoById",
-				this.pass("activity_id")
+				this.pass("activity_id"),
+				this.pass("all") || false
 			);
 
 			this.sender("ok", "activity.get", result);
@@ -125,6 +129,78 @@ export default register(
 			);
 
 			this.sender("no_content", "activity.delete");
+		});
+
+		reg({
+			path: "/:id/place",
+			method: "PATCH",
+			schema: {
+				params: {
+					activity_id: {
+						schema: "activity::id",
+						key: "id"
+					}
+				},
+				body: {
+					user_id: "user::id",
+					day: "availability::day",
+					month: "availability::month",
+					year: "availability::year",
+
+					work_am: "work::am",
+					work_pm: "work::pm",
+					work_leader: "work::leader"
+				}
+			},
+			checkers: [
+				"activity.existe<pass",
+				"user.existById<pass",
+				"user.isAvailable<pass"
+			]
+		})
+		(async function(){
+			await this.method(
+				"activity.place",
+				this.pass("activity_id"),
+				this.pass("user_id"),
+				this.pass("availability_id"),
+				this.pass("work_am"),
+				this.pass("work_pm"),
+				this.pass("work_leader"),
+			);
+			
+			this.sender("no_content", "activity.place");
+		});
+
+		reg({
+			path: "/:id/place/:uid",
+			method: "DELETE",
+			schema: {
+				params: {
+					activity_id: {
+						schema: "activity::id",
+						key: "id"
+					},
+					user_id: {
+						schema: "user::id",
+						key: "uid"
+					},
+				},
+			},
+			checkers: [
+				"activity.existe<pass",
+				"user.existById<pass",
+				"activity.hasUser<pass",
+			]
+		})
+		(async function(){
+			await this.method(
+				"activity.place::remove",
+				this.pass("activity_id"),
+				this.pass("user_id")
+			);
+
+			this.sender("no_content", "activity.deletePlace");
 		});
 	}
 );

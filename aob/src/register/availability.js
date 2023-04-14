@@ -1,4 +1,4 @@
-import {method, register, registerOptions} from "anotherback/cli";
+import {register, registerOptions} from "anotherback/cli";
 
 export const options = registerOptions(
 	{
@@ -12,18 +12,26 @@ export default register(
 		reg({
 			path: "/",
 			method: "GET",
-			checkers: [
-				"user.existById<self",
-				"availability.month<query",
-				"availability.year<query",
-			]
+			schema: {
+				query: {
+					month: "availability::month",
+					year: "availability::year",
+				}
+			},
+			checkers: ["user.existById<self"]
 		})
 		(async function(){
 			let result = await this.method(
-				"availability.getFromMY", 
+				"availability.get", 
 				this.pass("user_id"),
+				undefined,
 				this.pass("month"),
 				this.pass("year"),
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined
 			);
 
 			this.sender("ok", "availability.getFromMY", result);
@@ -32,15 +40,19 @@ export default register(
 		reg({
 			path: "/",
 			method: "POST",
+			schema: {
+				body: {
+					day: "availability::day",
+					month: "availability::month",
+					year: "availability::year",
+					am: "availability::am",
+					pm: "availability::pm",
+					note: "availability::note",
+				}
+			},
 			checkers: [
 				"user.existById<self",
-				"availability.day<body",
-				"availability.month<body",
-				"availability.year<body",
-				"availability.am<body",
-				"availability.pm<body",
 				"group.existById<body",
-				"availability.note<body",
 			]
 		})
 		(async function(){

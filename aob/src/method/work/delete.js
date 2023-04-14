@@ -1,12 +1,15 @@
 import {method} from "anotherback/cli";
 import {Prisma} from "../../import/prisma.js";
 
-// export default method(
-// 	function(arg){
-// 		console.log(arg);
-// 		return false;
-// 	}
-// );
+export default method(
+	async function(id){
+		await Prisma.work.delete({
+			where: {
+				id
+			}
+		});
+	}
+);
 
 export const fromActivityId = method(
 	async function(id){

@@ -1,13 +1,12 @@
 <template>
 	<div
-	@click="SET_SHOW_INFO(false)"
+	@click="$emit('close')"
 	class="absolute w-full h-full top-0 bg-[rgba(0,0,0,0.30)] flex justify-center items-center"
 	>
 		<Frame
 		@click="$event.stopPropagation()"
-		v-if="activity !== false"
 		border="4px"
-		class="w-[90%]"
+		class="w-[90%] lg:w-[350px]"
 		classs="p-[10px] grid grid-cols-12 gap-[5px] overflow-hidden"
 		>
 			<p class="col-span-4">
@@ -39,7 +38,7 @@
 			</p>
 
 			<p class="col-span-8 overflow-hidden whitespace-nowrap text-ellipsis">
-				{{ activity.loc.text }}
+				{{ activity.address.text }}
 			</p>
 
 			<p class="col-span-4">
@@ -55,7 +54,7 @@
 			</p>
 
 			<p class="col-span-8 overflow-hidden whitespace-nowrap text-ellipsis">
-				{{ activity.hour.from.replace(":", "h") }}
+				{{ activity.hourStart.replace(":", "h") }}
 			</p>
 
 			<p class="col-span-4">
@@ -63,7 +62,7 @@
 			</p>
 
 			<p class="col-span-8 overflow-hidden whitespace-nowrap text-ellipsis">
-				{{ activity.hour.to.replace(":", "h") }}
+				{{ activity.hourEnd.replace(":", "h") }}
 			</p>
 
 			<p class="col-span-4">
@@ -79,7 +78,7 @@
 			<div class="col-span-12 flex justify-center">
 				<Btn
 				small
-				@click="$router.push('/manager/activities/' + activity._id + '/edit')"
+				@click="$router.push('/manager/activities/' + activity.id + '/edit')"
 				>
 					{{ $tr("btn.edit") }}
 				</Btn>
@@ -89,15 +88,13 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { mapGetters, mapMutations } from "vuex";
+import {defineComponent} from "vue";
+import {mapState} from "pinia";
+import {activityPlaceStore} from "../../../stores/activityPlace";
 
 export default defineComponent({
 	computed: {
-		...mapGetters("managerActivityPlace", ["activity"])
-	},
-	methods: {
-		...mapMutations("managerActivityPlace", ["SET_SHOW_INFO"]),
+		...mapState(activityPlaceStore, ["activity"])
 	}
 });
 </script>
