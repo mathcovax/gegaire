@@ -99,7 +99,7 @@ export const remove = method(
 
 		else if(work.amActivityId === activity_id) await this.method(
 			"work.edit",
-			availabilityId,
+			work.availabilityId,
 			null,
 			null,
 			undefined,
@@ -108,7 +108,7 @@ export const remove = method(
 
 		else if(work.pmActivityId === activity_id) await this.method(
 			"work.edit",
-			availabilityId,
+			work.availabilityId,
 			undefined,
 			undefined,
 			null,

@@ -18,6 +18,8 @@ export default {
 		password: "Le format du mot de passe n'est pas conforme.",
 		searchName: "Le format de 'searchName' n'est pas conforme.",
 		tel: "Le format du numéro de téléphone n'est pas conforme.",
+		work_am: "La personne n'est pas disponible sur la période indiquée.",
+		work_pm: "La personne n'est pas disponible sur la période indiquée.",
 	},
 	group: {
 		create: "Le groupe a bien été créé.",
@@ -36,7 +38,8 @@ export default {
 		delete: "Le lien a bien été supprimé.",
 	},
 	availability: {
-		post: "La disponibilité a bien été mis à jour."
+		post: "La disponibilité a bien été mis à jour.",
+		hasWork: "Impossible de poser une disponibilité après avoir été sélectionné.",
 	},
 	mailer: {
 		sendeError: "Une erreur est survenue lors de l'envoi du mail."
@@ -45,7 +48,10 @@ export default {
 		create: "Activités créées.",
 		edit: "Activités modifiées.",
 		notfound: "Activité introuvable.",
-		delete: "Activités supprimées."
+		delete: "Activités supprimées.",
+		place: "Le guide a bien été placé dans l'activité.",
+		deletePlace: "Le guide a bien été retiré de l'activité.",
+		wrong_group: "Le groupe de la disponibilité ne correspond pas au groupe de l'activité.",
 	},
 
 	btn: {

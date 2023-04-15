@@ -138,7 +138,17 @@
 				<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
 
 				<div class="flex flex-col w-full grow overflow-y-auto">
-					l
+					<Loader
+					class="h-full"
+					size="75px"
+					v-if="selectedGuides === false"
+					/>
+
+					<SelectCard
+					v-else
+					v-for="guide of selectedGuides"
+					:guide="guide"
+					/>
 				</div>
 			</Frame>
 		</div>
@@ -158,6 +168,7 @@ import AvailableBtn from "@/components/AvailableBtn.vue";
 import Card from "@/partials/manager/placeActivity/Card.vue";
 import InfoActivity from "@/partials/manager/placeActivity/InfoActivity.vue";
 import PlaceGuide from "@/partials/manager/placeActivity/PlaceGuide.vue";
+import SelectCard from "../../partials/manager/placeActivity/SelectCard.vue";
 import {taob} from "../../taob";
 import {mapActions, mapState} from "pinia";
 import {activityPlaceStore} from "../../stores/activityPlace";
@@ -169,6 +180,7 @@ export default defineComponent({
 		Card,
 		InfoActivity,
 		PlaceGuide,
+		SelectCard,
 	},
 	data(){
 		return {
@@ -185,7 +197,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapState(activityPlaceStore, ["activity", "selectedGuide"])
+		...mapState(activityPlaceStore, [
+			"activity", "selectedGuide", "selectedGuides"
+		]),
 	},
 	watch: {
 		am(){
@@ -265,6 +279,7 @@ export default defineComponent({
 			await taob.get("/activity/" + this.$route.params.id + "?all=true")
 			.s(data => {
 				this.initActivityPlaceStore(data);
+				this.reset();
 				this.findPage();
 			})
 			.e((rep) => {

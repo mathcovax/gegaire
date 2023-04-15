@@ -214,7 +214,7 @@ export default defineComponent({
 		},
 	},
 	methods: {
-		...mapActions(activityPlaceStore, ["unSelectGuide"]),
+		...mapActions(activityPlaceStore, ["unSelectGuide", "purgeStore"]),
 
 		setAMPM(am, pm){
 			if(this.am === am && this.pm === pm){
@@ -235,7 +235,7 @@ export default defineComponent({
 				month, 
 				day
 			] = this.activity.date.split("T")[0].split("-").map(v => parseInt(v));
-			console.log(this.leader);
+
 			await taob.patch(
 				`/activity/${this.activity.id}/place`,
 				{
@@ -250,8 +250,8 @@ export default defineComponent({
 				}
 			)
 			.s(() => {
-				this.$parent.reset();
-				this.$parent.findPage();
+				this.purgeStore();
+				this.$parent.init();
 				this.unSelectGuide();
 			})
 			.result;
@@ -264,8 +264,7 @@ export default defineComponent({
 
 			await taob.delete(`/activity/${this.activity.id}/place/${this.guide.id}`)
 			.s(() => {
-				this.$parent.reset();
-				this.$parent.findPage();
+				this.$parent.init();
 				this.unSelectGuide();
 			})
 			.result;
@@ -295,7 +294,16 @@ export default defineComponent({
 			this.pm = undefined;
 		}
 
-		if(this.work.amLeader === true || this.work.pmLeader === true) this.leader = true;
+		if(
+			(
+				this.work.amLeader === true && 
+				this.work.amActivity?.id === this.activity.id
+		 	) || 
+			(
+				this.work.pmLeader === true &&
+				this.work.pmActivity?.id === this.activity.id
+			)
+		) this.leader = true;
 		else this.leader = false;
 	}
 });

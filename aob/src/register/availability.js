@@ -47,12 +47,13 @@ export default register(
 					year: "availability::year",
 					am: "availability::am",
 					pm: "availability::pm",
-					note: "availability::note",
+					"note?": "availability::note",
 				}
 			},
 			checkers: [
 				"user.existById<self",
 				"group.existById<body",
+				"availability.hasWork<pass"
 			]
 		})
 		(async function(){

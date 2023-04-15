@@ -43,8 +43,55 @@ export const infoById = method(
 					}
 				},
 				group: true,
-				amGuide: all,
-				pmGuide: all,
+				amGuide: (
+					all ?
+						{
+							select: {
+								amActivityId: true,
+								amLeader: true,
+								pmActivityId: true,
+								pmLeader: true,
+								user: {
+									select: {
+										name: true,
+										id: true,
+									}
+								},
+								availability: {
+									select: {
+										note: true
+									}
+								}
+								
+							}
+						}
+						:
+						undefined
+				),
+				pmGuide: (
+					all ?
+						{
+							select: {
+								amActivityId: true,
+								amLeader: true,
+								pmActivityId: true,
+								pmLeader: true,
+								user: {
+									select: {
+										name: true,
+										id: true,
+									}
+								},
+								availability: {
+									select: {
+										note: true
+									}
+								}
+							}
+						}
+						:
+						undefined
+				),
 			}
 		});
 	}

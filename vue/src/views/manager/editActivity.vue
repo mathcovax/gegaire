@@ -38,6 +38,7 @@
 				class="col-span-6"
 				v-model="date"
 				:rules="dateRules"
+				:disabled="$route.params.id !== 'newactivity'"
 				/>
 
 				<HourInput
@@ -60,6 +61,7 @@
 				:max="1"
 				:qte="3"
 				:rules="sgRules"
+				:disabled="$route.params.id !== 'newactivity'"
 				/>
 
 				<AreaInput
