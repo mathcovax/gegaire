@@ -167,7 +167,13 @@ export default {
 	},
 	"/manager/planning": {
 		title: "Planning.",
-		btnAddActivity: "Créer une activité."
+		btnAddActivity: "Créer une activité.",
+		empty: "Aucune activité ce mois-ci.",
+		pepol: "Personnes",
+		guides: "Guides",
+		date: "Date",
+		address: "Addresse",
+		group: "Group",
 	},
 	editActivity: {
 		titleCreate: "Création d'une activité.",
@@ -217,5 +223,5 @@ export default {
 	},
 	invit: {
 		title: "Information a remplire."
-	}
+	},
 };

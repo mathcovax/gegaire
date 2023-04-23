@@ -11,7 +11,7 @@
 
 		<Frame
 		border="4px" 
-		class="grow w-full overflow-hidden"
+		class="grow w-full overflow-hidden lg:w-[700px]"
 		classs="w-full h-full flex flex-col p-[5px] gap-[5px] overflow-y-auto items-center"
 		@scroll="scrolled"
 		>

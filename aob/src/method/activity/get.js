@@ -97,6 +97,84 @@ export const infoById = method(
 	}
 );
 
+export const month = method(
+	async function(date){
+		date.setDate(1);
+		let toDate = new Date(date.getTime());
+		toDate.setMonth(toDate.getMonth() + 1);
+
+		return await Prisma.activity.findMany({
+			where: {
+				date: {
+					gte: date,
+					lt: toDate
+				}
+			},
+			select: {
+				name: true,
+				date: true,
+				number: true,
+				note: true,
+				hourStart: true,
+				hourEnd: true,
+				id: true,
+				address: {
+					select: {
+						text: true,
+					}
+				},
+				group: {
+					select: {
+						name: true,
+						id: true
+					}
+				},
+				amGuide: {
+					select: {
+						amActivityId: true,
+						amLeader: true,
+						pmActivityId: true,
+						pmLeader: true,
+						user: {
+							select: {
+								name: true,
+								id: true,
+							}
+						},
+						availability: {
+							select: {
+								note: true
+							}
+						}
+					}
+				},
+				pmGuide: {
+					select: {
+						amActivityId: true,
+						amLeader: true,
+						pmActivityId: true,
+						pmLeader: true,
+						user: {
+							select: {
+								name: true,
+								id: true,
+							}
+						},
+						availability: {
+							select: {
+								note: true
+							}
+						}
+					}
+				},
+			},
+			orderBy: {
+				date: "asc"
+			}
+		});
+	}
+);
+
 // export const other = method(
 // 	function(arg){
 // 		console.log(arg);

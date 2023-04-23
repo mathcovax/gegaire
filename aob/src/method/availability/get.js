@@ -53,7 +53,7 @@ export default method(
 						}
 						:
 						false
-				) 
+				)
 			},
 			skip,
 			take
@@ -109,7 +109,8 @@ export const byId = method(
 						pmActivityId: true,
 						pmLeader: true,
 					}
-				}
+				},
+				date: true
 			}
 		}); 
 	}

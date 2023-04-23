@@ -53,7 +53,8 @@ export default register(
 			checkers: [
 				"user.existById<self",
 				"group.existById<body",
-				"availability.hasWork<pass"
+				"availability.hasWork<pass",
+				"availability.isPast::not<pass",
 			]
 		})
 		(async function(){

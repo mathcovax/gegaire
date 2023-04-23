@@ -84,7 +84,7 @@ export default defineComponent({
 	},
 	data(){
 		return {
-			availability: this.guide.availability[0]
+			availability: this.guide.availability[0] || {note: "", work: {pmActivity: null, amActivity: null}}
 		};
 	},
 	computed: {

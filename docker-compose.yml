@@ -14,7 +14,7 @@ services:
     expose:
       - 5555
     environment:
-      AOB_V: "2.8.12"
+      AOB_V: "2.10.13"
     ports:
       - 5555:5555
     volumes: 

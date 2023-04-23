@@ -2,7 +2,7 @@ import {method} from "anotherback/cli";
 import {Prisma} from "../../import/prisma.js";
 
 export default method(
-	async function(id, name, address, number, date, hourStart, hourEnd, groupId, note){
+	async function(id, name, address, number, hourStart, hourEnd, note){
 		return await Prisma.activity.update({
 			where: {
 				id,
@@ -13,10 +13,8 @@ export default method(
 					update: address
 				},
 				number,
-				date,
 				hourStart,
 				hourEnd,
-				groupId,
 				note
 			},
 			select: {

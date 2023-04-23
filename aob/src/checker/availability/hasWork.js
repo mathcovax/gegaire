@@ -13,7 +13,7 @@ export default checker(
 			this.pass("year"),
 		);
 
-		if(result.work !== null) this.sender("conflict", "availability.hasWork");
+		if(result !== null && result.work !== null) this.sender("conflict", "availability.hasWork");
 	}
 );
 

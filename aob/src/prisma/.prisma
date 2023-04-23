@@ -78,6 +78,7 @@ model Availability {
     am    Boolean?
     pm    Boolean?
     note  String   @db.VarChar(1500)
+    date  DateTime
 
     work Work?
 
@@ -99,6 +100,8 @@ model Work {
     pmActivity   Activity? @relation(name: "pm", fields: [pmActivityId], references: [id])
     pmActivityId Int?
     pmLeader     Boolean?
+
+    date DateTime
 }
 
 model Activity {
@@ -113,6 +116,7 @@ model Activity {
     note      String?  @default("") @db.VarChar(1500)
     group     Group    @relation(fields: [groupId], references: [id])
     groupId   Int
+    isShow    Boolean  @default(false)
 
     createdAt DateTime @default(now())
     updatedAT DateTime @updatedAt

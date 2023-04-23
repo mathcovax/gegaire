@@ -1,7 +1,6 @@
 <template>
 	<div
-	class="w-full grid grid-cols-12 h-[22px] hover:bg-[rgba(0,0,0,0.12)]"
-	@click="selectGuide(guide.id)"
+	class="w-full grid grid-cols-12 h-[22px]"
 	>
 		<p class="col-span-4 overflow-hidden text-ellipsis">
 			{{ guide.name }}
@@ -49,9 +48,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "pinia";
 import {defineComponent} from "vue";
-import {activityPlaceStore} from "../../../stores/activityPlace";
 
 export default defineComponent({
 	props: {
@@ -59,17 +56,6 @@ export default defineComponent({
 
 		}
 	},
-	data(){
-		return {
-			
-		};
-	},
-	computed: {
-		...mapState(activityPlaceStore, ["activity"])	
-	},
-	methods: {
-		...mapActions(activityPlaceStore, ["selectGuide"])
-	}
 });
 </script>
 

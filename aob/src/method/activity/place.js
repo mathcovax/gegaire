@@ -8,6 +8,7 @@ export default method(
 		if(availability.work === null) await this.method(
 			"work.create",
 			availability.id,
+			availability.date,
 			user_id,
 			work_am ? activity_id : undefined,
 			work_am ? leader : undefined,

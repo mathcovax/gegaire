@@ -208,11 +208,9 @@ export default defineComponent({
 						activity_name: this.name,
 						activity_number: parseInt(this.number),
 						address: this.loc,
-						activity_date: this.date,
 						activity_hourStart: this.hourStart,
 						activity_hourEnd: this.hourEnd,
 						activity_note: this.note,
-						group_id: this.group[0].id,
 					}
 				)
 				.s(data => {

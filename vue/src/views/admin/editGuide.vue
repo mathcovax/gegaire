@@ -83,6 +83,14 @@
 				</Btn>
 
 				<Btn
+				theme="orange"
+				class="col-start-4 col-end-10"
+				@click="$router.push('/admin/guides')"
+				>
+					{{ $tr("btn.cancel") }}
+				</Btn>
+
+				<Btn
 				class="col-start-4 col-end-10"
 				theme="red"
 				:popup="{

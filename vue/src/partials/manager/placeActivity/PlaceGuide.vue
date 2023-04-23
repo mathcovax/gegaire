@@ -274,8 +274,8 @@ export default defineComponent({
 	},
 	mounted(){
 		this.guide = this.selectedGuide;
-		this.availability = this.selectedGuide.availability[0];
-		this.work = this.selectedGuide.availability[0].work || {amActivity: null, pmActivity: null};
+		this.availability = this.selectedGuide.availability[0] || {note: "", work: {pmActivity: null, amActivity: null}};
+		this.work = this.selectedGuide.availability?.[0]?.work || {amActivity: null, pmActivity: null};
 
 		if(this.work.amActivity?.id === this.activity.id && this.work.pmActivity?.id === this.activity.id){
 			this.am = true;

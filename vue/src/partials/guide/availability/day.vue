@@ -3,7 +3,7 @@
 	@click="clicked"
 	class="h-full p-[3px] relative overflow-hidden rounded-[4px] select-none"
 	:class="{
-		'opacity-[0.5]': isPast 
+		'opacity-[0.5]': isPast || hasWork,
 	}"
 	>  
 		<div 
@@ -26,7 +26,12 @@
 		}"
 		/>
 
-		<div class="relative w-full h-full p-[2px] flex flex-col bg-[white] rounded-[4px] border-solid border-[2px] border-[black] gap-[5px]">
+		<div
+		class="relative w-full h-full p-[2px] flex flex-col bg-[white] rounded-[4px] border-solid border-[2px] border-[black] gap-[5px]"
+		:class="{
+			'bg-[#ADD8E6]': hasWork
+		}"
+		>
 			<p class="w-full text-center text-[13px]">
 				{{ toDay }}-{{ month }}
 			</p>
@@ -83,7 +88,6 @@ export default defineComponent({
 		...mapState(availabilityStore, ["availability", "date"]),
 
 		avb(){
-			
 			if(
 				this.my === false ||
                 this.availability[this.my] === undefined ||
@@ -98,13 +102,18 @@ export default defineComponent({
 		isPast(){
 			if(this.toDate === false || this.toDate.getTime() > Date.now()) return false;
 			else return true;
+		},
+		hasWork(){
+			if(!this.avb) return false;
+			else if(this.avb.work !== null) return true;
+			else return false;
 		}
 	},
 	methods: {
 		...mapActions(availabilityStore, ["getMonth", "startEditingDay"]),
 
 		clicked(e){
-			if(this.avb === undefined || this.toDate.getTime() < Date.now()) return;
+			if(this.avb === undefined || this.isPast === true || this.hasWork === true) return;
 			this.startEditingDay(this.toDate);
 		},
 
@@ -120,6 +129,7 @@ export default defineComponent({
 		this.toDay = this.toDate.getDate();
 		this.my = this.month + "-" + this.toDate.getFullYear();
 		this.getMonth(this.my);
+
 	}
 });
 </script>

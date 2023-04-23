@@ -25,7 +25,8 @@ export default method(
 					am,
 					pm,
 					groupId: group_id,
-					note
+					note,
+					date: new Date(`${year}-${month}-${day}`)
 				},
 				select: {
 					day: true,

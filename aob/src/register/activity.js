@@ -87,9 +87,8 @@ export default register(
 			},
 			checkers: [
 				"activity.existe<pass",
-				"activity.date<body",
+				"activity.isPast::not<pass",
 				"activity.hour<body",
-				"group.existById<body"
 			]
 		})
 		(async function(){
@@ -99,10 +98,8 @@ export default register(
 				this.pass("activity_name"),
 				this.pass("address"),
 				this.pass("activity_number"),
-				this.pass("activity_date"),
 				this.pass("activity_hourStart"),
 				this.pass("activity_hourEnd"),
-				this.pass("group_id"),
 				this.pass("activity_note"),
 			);
 
@@ -154,8 +151,9 @@ export default register(
 			},
 			checkers: [
 				"activity.existe<pass",
+				"activity.isPast::not<pass",
 				"user.existById<pass",
-				"user.isAvailable<pass"
+				"user.isAvailable<pass",
 			]
 		})
 		(async function(){
@@ -201,6 +199,25 @@ export default register(
 			);
 
 			this.sender("no_content", "activity.deletePlace");
+		});
+
+		reg({
+			path: "activities",
+			ignoreRegisterPrefix: true,
+			method: "GET",
+			schema: {
+				query: {
+					activity_date: "activity::date"
+				}
+			}
+		})
+		(async function(){
+			let result = await this.method(
+				"activity.get::month",
+				this.pass("activity_date")
+			);
+
+			this.sender("ok", "activity.get", result);
 		});
 	}
 );

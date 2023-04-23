@@ -25,3 +25,8 @@ export const id = schema(
 	s.number(),
 	(sender) => sender("bad_request", "activity.id")
 );
+
+export const date = schema(
+	s.date(),
+	(sender) => sender("bad_request", "activity.date")
+);
