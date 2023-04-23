@@ -13,7 +13,7 @@
 		v-if="work.amActivity !== null"
 		class="col-span-6 flex flex-col items-center gap-[5px]"
 		:class="{
-			'col-span-12': work.pmActivity === null
+			'!col-span-12': work.pmActivity === null
 		}"
 		>
 			<h4>AM :</h4>
@@ -39,7 +39,7 @@
 		v-if="work.pmActivity !== null"
 		class="col-span-6 flex flex-col items-center gap-[5px]"
 		:class="{
-			'col-span-12': work.amActivity === null
+			'!col-span-12': work.amActivity === null
 		}"
 		>
 			<h4>PM :</h4>

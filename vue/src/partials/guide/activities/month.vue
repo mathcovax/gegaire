@@ -1,5 +1,10 @@
 <template>
-	<section class="flex flex-col items-center gap-[10px]">
+	<section
+	class="flex flex-col items-center gap-[10px]"
+	:class="{
+		'min-h-[300px]': monthWork?.length < 3
+	}"
+	>
 		<h3 class="sticky top-0 z-[1] bg-[white] w-full text-center">
 			{{ this.$tr("/guide/availability.month")[this.date?.getMonth?.() || 0] + " " + this.date?.getFullYear?.() }}
 		</h3>

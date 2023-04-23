@@ -24,9 +24,12 @@ services:
   
   vue:
     container_name: vue
-    build: ./.docker/vue
-    volumes: 
-      - ./vue:/vue
+    image: node:18.13.0-alpine
+    volumes:
+      - ./vue:/home/node/vue
+    working_dir: /home/node/vue
+    command: npm run preview
+
 
   postgres:
     container_name: postgres
