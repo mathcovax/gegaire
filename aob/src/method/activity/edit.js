@@ -24,6 +24,19 @@ export default method(
 	}
 );
 
+export const show = method(
+	async function(id){
+		return await Prisma.activity.update({
+			where: {
+				id
+			},
+			data: {
+				isShow: true
+			}
+		});
+	}
+);
+
 // export const other = method(
 // 	function(arg){
 // 		console.log(arg);

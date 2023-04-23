@@ -1,31 +1,31 @@
 import {defineStore} from "pinia";
 import {taob} from "../taob";
 
-export const planningStore = defineStore(
-	"planning",
+export const activitiesStore = defineStore(
+	"activities",
 	{
 		state(){
 			return {
 				dateInStore: new Date(),
-				activities: {},
+				work: {},
 			};
 		},
 		getters: {
 			
 		},
 		actions: {
-			purgePlanningStore(){
+			purgeActivitiesStore(){
 				this.dateInStore = new Date();
-				this.activities = {};
+				this.work = {};
 			},
 
 			async getMonth(date){
 				let my = date.split("-").reverse().slice(1).join("-");
 				
-				if(this.activities[my] !== undefined) return;
-				this.activities[my] = false;
+				if(this.work[my] !== undefined) return;
+				this.work[my] = false;
 
-				this.activities[my] = await taob.get(`activities?activity_date=${date}`).sd();
+				this.work[my] = await taob.get(`work?work_date=${date}`).sd();
 			}
 		}
 	}

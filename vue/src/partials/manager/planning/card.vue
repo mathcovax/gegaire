@@ -24,12 +24,20 @@
 				</p>
 			</div>
 		
-			<div class="flex items-start lg:items-center h-full">
+			<div class="flex flex-col items-end lg:items-center h-full justify-between gap-[5px] lg:flex-row-reverse">
 				<Btn
 				:icon="!isOpen? 'plus' : 'minus'"
 				iconPadding="2px"
 				iconSize="20px"
 				@click="isOpen = !isOpen"
+				/>
+
+				<div
+				class="h-[10px] w-[10px] rounded-full"
+				:class="{
+					'bg-[red]': activity.isShow === false,
+					'bg-[green]': activity.isShow === true,
+				}"
 				/>
 			</div>
 		</div>

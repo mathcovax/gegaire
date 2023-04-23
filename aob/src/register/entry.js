@@ -54,5 +54,14 @@ export default register(
 		(function(req, res){
 			this.sender("no_content");
 		});
+
+		reg({
+			method: "GET",
+			path: "/activity*",
+			access: "entry.guide",
+		})
+		(function(req, res){
+			this.sender("no_content");
+		});
 	}
 );

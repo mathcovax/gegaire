@@ -75,6 +75,24 @@
 				</div>
 			</div>
 
+			<p class="col-span-4">
+				{{ $tr("placeActivity.infoShow") + " :" }}
+			</p>
+
+			<div class="col-span-8 whitespace-pre-wrap flex justify-between items-center">
+				<p class="uppercase">
+					{{ activity.isShow === true? $tr("btn.yes") : $tr("btn.no") }}
+				</p>
+
+				<Btn
+				v-if="activity.isShow === false"
+				small
+				@click="showActivity"
+				>
+					{{ $tr("placeActivity.btnToShow") }}
+				</Btn>
+			</div>
+
 			<div class="col-span-12 flex justify-center">
 				<Btn
 				small
@@ -89,12 +107,15 @@
 
 <script>
 import {defineComponent} from "vue";
-import {mapState} from "pinia";
+import {mapActions, mapState} from "pinia";
 import {activityPlaceStore} from "../../../stores/activityPlace";
 
 export default defineComponent({
 	computed: {
 		...mapState(activityPlaceStore, ["activity"])
+	},
+	methods: {
+		...mapActions(activityPlaceStore, ["showActivity"])
 	}
 });
 </script>

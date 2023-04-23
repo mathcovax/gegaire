@@ -18,6 +18,11 @@ const router = createRouter({
 			name: "invit",
 			component: () => import("@/views/invit.vue"),
 		},
+		{
+			path: "/activity/:id",
+			name: "activity",
+			component: () => import("@/views/activity.vue"),
+		},
 		guide,
 		manager,
 		admin,

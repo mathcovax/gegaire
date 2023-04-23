@@ -8,7 +8,7 @@ export default access(
 			this.sender("forbidden", "redirectTo", "/?callback=" + req.url.replace("/entry", ""));
 		}
 
-		if(accessTokenValue.isManager === false){
+		if(accessTokenValue.isAdmin === false){
 			this.sender("forbidden", "redirectTo", "/guide");
 		}
 	}

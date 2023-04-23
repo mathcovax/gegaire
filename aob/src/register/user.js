@@ -12,7 +12,7 @@ export default register(
 		reg({
 			path: "/",
 			method: "GET",
-			checkers: ["user.existById<self"]
+			checkers: ["user.existById<self"],
 		})
 		(async function(req, res){
 			let result = await this.method("user.getById", this.pass("user_id"), false);
@@ -34,7 +34,7 @@ export default register(
 		});
 
 		reg({
-			path: ":users",
+			path: "/users",
 			ignoreRegisterPrefix: true,
 			method: "GET",
 			access: "adminOrManagerAccessToken",

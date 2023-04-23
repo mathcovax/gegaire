@@ -2,10 +2,10 @@ import {checker} from "anotherback/cli";
 
 export default checker(
 	{
-		pass: req => undefined
+		pass: (req, pass) => pass("activity_id")
 	},
-	async function(){
-		let result = await this.method("activity.exist::byId", this.pass("activity_id"));
+	async function(activity_id){
+		let result = await this.method("activity.exist::byId", activity_id);
 
 		if(result === null) this.sender("not_found", "activity.notfound");
 

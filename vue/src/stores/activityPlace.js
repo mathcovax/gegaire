@@ -112,7 +112,16 @@ export const activityPlaceStore = defineStore(
 
 			unSelectGuide(){
 				this.selectedGuide = false;
+			},
+
+			async showActivity(){
+				let {close} = fixedStore().requestLoader();
+				await taob.patch(`/activity/${this.activity.id}/show`)
+				.info(() => close())
+				.sd();
+
+				this.activity.isShow = true;
 			}
-		}
+		},
 	}
 );

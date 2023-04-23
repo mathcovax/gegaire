@@ -45,18 +45,21 @@ export default register(
 		reg({
 			path: "/:id",
 			method: "GET",
+			ignoreRegisterAccess: true,
+			access: "user.accessToken",
 			schema: {
 				params: {
 					activity_id: {
 						schema: "activity::id",
-						key: "id"
+						key: "id",
+						checkers: ["activity.existe<pass"]
 					}
 				},
 				query: {
 					"all?": "type::bool"
 				}
 			},
-			checkers: ["activity.existe<pass"]
+			checkers: ["activity.userHasRightShow<pass"],
 		})
 		(async function(){
 			let result = await this.method(
@@ -218,6 +221,28 @@ export default register(
 			);
 
 			this.sender("ok", "activity.get", result);
+		});
+
+		reg({
+			path: "/:id/show",
+			method: "PATCH",
+			schema: {
+				params: {
+					activity_id: {
+						schema: "activity::id",
+						key: "id",
+						checkers: ["activity.existe<pass"]
+					}
+				}
+			}
+		})
+		(async function(){
+			await this.method(
+				"activity.edit::show",
+				this.pass("activity_id")
+			);
+
+			this.sender("no_content", "activity.show");
 		});
 	}
 );

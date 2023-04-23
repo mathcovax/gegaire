@@ -52,6 +52,8 @@ export default {
 		place: "Le guide a bien été placé dans l'activité.",
 		deletePlace: "Le guide a bien été retiré de l'activité.",
 		wrong_group: "Le groupe de la disponibilité ne correspond pas au groupe de l'activité.",
+		show: "L'activité a bien été rendu visible.",
+		hasNotRight: "Vous n'avez pas le droit de voir cette activité",
 	},
 
 	btn: {
@@ -65,6 +67,8 @@ export default {
 		validate: "valider",
 		info: "information",
 		remove: "retirer",
+		seeMore: "voir plus",
+		back: "retour",
 	},
 	label: {
 		name: "Nom",
@@ -72,6 +76,10 @@ export default {
 		address: "Addresse physique",
 		password: "Mot de passe",
 		confirmPassword: "Confirmé mot de passe",
+		pepol: "Personne",
+		hour: "Horaire",
+		date: "Date",
+		note: "Note",
 	},
 	rules: {
 		passwordIsnotsame: "Les mots de passe ne correspondent pas."
@@ -216,6 +224,8 @@ export default {
 		infoStart: "Com. à",
 		infoEnd: "fini à",
 		infoNote: "Note",
+		infoShow: "Visible",
+		btnToShow: "rendre visible",
 
 		placeAvailable: "Disponible",
 		placeUnAvailable: "Indisponible",
@@ -224,4 +234,9 @@ export default {
 	invit: {
 		title: "Information a remplire."
 	},
+	"/guide/activities": {
+		title: "Activités",
+		empty: "Aucun travaile ce mois-ci.",
+		activityNotShow: "Aucune info disponible."
+	}
 };

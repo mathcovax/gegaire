@@ -105,7 +105,7 @@ export default defineComponent({
 		},
 		hasWork(){
 			if(!this.avb) return false;
-			else if(this.avb.work !== null) return true;
+			else if(this.avb.work) return true;
 			else return false;
 		}
 	},

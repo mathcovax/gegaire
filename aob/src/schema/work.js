@@ -18,7 +18,12 @@ export const pm = schema(
 
 export const leader = schema(
 	s.boolean(),
-	(sender) => sender("bad_request", "availability.leader")
+	(sender) => sender("bad_request", "work.leader")
+);
+
+export const date = schema(
+	s.date(),
+	(sender) => sender("bad_request", "work.date")
 );
 
 // export const other = schema(

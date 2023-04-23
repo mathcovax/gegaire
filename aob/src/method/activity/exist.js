@@ -9,7 +9,9 @@ import {method} from "anotherback/cli";
 
 export const byId = method(
 	async function(id){
-		return await this.method("activity.get::byId", id, {id: true, groupId: true, date: true});
+		return await this.method("activity.get::byId", id, {
+			id: true, groupId: true, date: true, isShow: true
+		});
 	}
 );
 
