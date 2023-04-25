@@ -2,7 +2,7 @@ import {method} from "anotherback/cli";
 import {Prisma} from "../../import/prisma.js";
 
 export default method(
-	async function(id, addressAndProCard){
+	async function(id){
 		return await Prisma.user.findUnique({
 			where: {
 				id,
@@ -16,8 +16,8 @@ export default method(
 				isAdmin: true,
 				groups: true,
 
-				address: addressAndProCard,
-				pro_card: addressAndProCard,
+				address: true,
+				pro_card: true,
 			}
 		});
 	}

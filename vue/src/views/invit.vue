@@ -104,14 +104,6 @@ export default defineComponent({
 				(value) => this.$rules.maxLength(30, value),
 			];
 		},
-		emailRules(){
-			return [
-				this.$rules.required,
-				this.$rules.validEmail,
-				(value) => this.$rules.minLength(10, value),
-				(value) => this.$rules.maxLength(255, value),
-			];
-		},
 		telRules(){
 			return [
 				this.$rules.required,

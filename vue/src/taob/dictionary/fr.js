@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 export default {
-	errorAccessToken: "Token invalide.",
+	expireAccessToken: "Token invalide.",
 	errorAccessTokenAdmin: "Token invalide.",
 	errorAccessTokenManager: "Token invalide.",
 
@@ -20,6 +20,8 @@ export default {
 		tel: "Le format du numéro de téléphone n'est pas conforme.",
 		work_am: "La personne n'est pas disponible sur la période indiquée.",
 		work_pm: "La personne n'est pas disponible sur la période indiquée.",
+		wrongPassword: "Le mot de passe n'est pas correct.",
+		edit: "Les informations ont bien été modifiés."
 	},
 	group: {
 		create: "Le groupe a bien été créé.",
@@ -69,8 +71,10 @@ export default {
 		remove: "retirer",
 		seeMore: "voir plus",
 		back: "retour",
+		save: "sauvgarder"
 	},
 	label: {
+		email: "Email",
 		name: "Nom",
 		tel: "Numéro de téléphone",
 		address: "Addresse physique",
@@ -114,10 +118,11 @@ export default {
 
 	"/": {
 		title: "connexion à gegaire",
-		invalideInputId: "Doit contenir entre 8 et 20 caractères.",
+		invalideInputEmail: "Doit contenir entre 10 et 250 caractères.",
+		invalideInputPassword: "Doit contenir entre 8 et 25 caractères.",
 		btnConnect: "se connecter",
-		wrongId: "L'identifiant est Invalides.",
 		notfoundId: "Cet identifiant ne correspond à aucun utilisateur."
+
 	},
 	"/guide/availability": {
 		title: "disponibilité",

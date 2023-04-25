@@ -11,6 +11,7 @@
 		name="gegaire-address"
 		:class="{'invalid': invalidMessage !== ''}"
 		autocomplete
+		:disabled="disabled"
 		/>
 
 		<div
@@ -101,7 +102,7 @@ export default defineComponent({
 			this.isOpen = false;
 		},
 		init(){
-			if(this.modelValue.text !== undefined){
+			if(this.modelValue?.text !== undefined){
 				this.mapValue = this.modelValue;
 				this.name = this.modelValue.text;
 			}

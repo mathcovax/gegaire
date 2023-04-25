@@ -5,7 +5,7 @@ export default checker(
 		pass: req => undefined
 	},
 	async function(){
-		let result = await this.method("user.getById", this.pass("user_id"), false);
+		let result = await this.method("user.getById", this.pass("user_id"));
 		
 		if(result.isAdmin === true) this.sender("forbidden", "user.forbiddenDelete");
 	}

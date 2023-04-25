@@ -70,7 +70,7 @@
 						</ico>
 
 						<router-link
-						:to="{path: '/guide'}"
+						to="/guide/availability"
 						class="no-underline hover:underline"
 						>
 							Retour

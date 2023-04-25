@@ -5,7 +5,12 @@ export default access(
 		let accessTokenValue = this.token.verify("accessToken");
 
 		if(!accessTokenValue){
-			this.sender("forbidden", "errorAccessToken");
+			if(accessTokenValue === null) this.sender("forbidden", "noAccessToken");
+			else if(accessTokenValue === false){
+				this.token.delete("accessToken");
+				this.token.delete("refresh_accessToken");
+				this.sender("forbidden", "expireAccessToken");
+			}
 		}
         
 		this.pass("accessTokenValue", accessTokenValue);

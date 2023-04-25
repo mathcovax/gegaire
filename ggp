@@ -11,11 +11,17 @@ EXEC_POSTGRES="$DOCKER_COMPOSE exec $POSTGRES_CONTAINER_SERVICE"
 
 if [ "$1" == "up" ]
 then
-	$DOCKER_COMPOSE up $2
+	$DOCKER_COMPOSE -f docker-compose-prod.yml up $2
 
 elif [ "$1" == "down" ]
 then
-	$DOCKER_COMPOSE down $2
+	$DOCKER_COMPOSE -f docker-compose-prod.yml down $2
+
+elif [ "$1" == "init" ]
+then
+	. ggp up -d
+	. ggp reset
+	. ggp down
 	
 elif [ "$1" == "bash" ]
 then
@@ -28,13 +34,8 @@ then
 elif [ "$1" == "migrate" ]
 then
 	$EXEC_AOB npx prisma migrate dev
-	$EXEC_AOB npx prisma generate
-
-elif [ "$1" == "generate" ]
-then
-	$EXEC_AOB npx prisma generate
 	
-elif [ "$1" == "data_fix" ]
+elif [ "$1" == "reset" ]
 then
 	$EXEC_AOB npx prisma migrate reset --force
 	$EXEC_AOB node src/prisma/dataFixtures.js

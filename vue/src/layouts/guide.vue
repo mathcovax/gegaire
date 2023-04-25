@@ -33,7 +33,7 @@
 					</ico>
 
 					<router-link 
-					:to="{path: '/guide/availability'}"
+					to="/guide/availability"
 					@click="isOpen = false" 
 					class="no-underline hover:underline"
 					>

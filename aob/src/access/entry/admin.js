@@ -9,7 +9,7 @@ export default access(
 		}
 
 		if(accessTokenValue.isAdmin === false){
-			this.sender("forbidden", "redirectTo", "/guide");
+			this.sender("forbidden", "redirectTo", "/guide/availability");
 		}
 	}
 );

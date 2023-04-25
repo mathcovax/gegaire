@@ -15,9 +15,50 @@ export default register(
 			checkers: ["user.existById<self"],
 		})
 		(async function(req, res){
-			let result = await this.method("user.getById", this.pass("user_id"), false);
+			let result = await this.method(
+				"user.getById", 
+				this.pass("user_id")
+			);
 
 			this.sender("ok", "user.getSelf", result);
+		});
+
+		reg({
+			path: "/",
+			method: "PATCH",
+			schema: {
+				body: {
+					"user_name?": {
+						schema: "user::name",
+						key: "user_name",
+						checkers: ["user.free::name<pass"]
+					},
+					"user_email?": {
+						schema: "user::email",
+						key: "user_email",
+						checkers: ["user.free::email<pass"]
+					},
+					"user_tel?": {
+						schema: "user::tel",
+						key: "user_tel",
+						checkers: ["user.free::tel<pass"]
+					},
+					"address?": "address",
+				}
+			},
+			checkers: ["user.existById<self"],
+		})
+		(async function(req, res){
+			await this.method(
+				"user.edit::patch",
+				this.pass("user_id"),
+				this.pass("user_name"),
+				this.pass("user_email"),
+				this.pass("user_tel"),
+				this.pass("address"),
+			);
+
+			this.sender("no_content", "user.edit");
 		});
 
 		reg({
@@ -28,7 +69,10 @@ export default register(
 			checkers: ["user.existById<params"]
 		})
 		(async function(req, res){
-			let result = await this.method("user.getById", this.pass("user_id"), true);
+			let result = await this.method(
+				"user.getById", 
+				this.pass("user_id")
+			);
 
 			this.sender("ok", "user.getById", result);
 		});

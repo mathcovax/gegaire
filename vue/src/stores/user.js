@@ -10,6 +10,7 @@ export const userStore = defineStore(
 				name: false,
 				email: false,
 				tel: false,
+				address: false,
 
 				groups: false,
 				isManager: false,
@@ -32,11 +33,14 @@ export const userStore = defineStore(
 				this.groups = user.groups;
 				this.isManager = user.isManager;
 				this.isAdmin = user.isAdmin;
+				this.address = user.address;
 			}
 		}
 	}
 );
 
 taob.setHookInfo("generateAccessToken", () => userStore().initUserStore());
+
+taob.setHookInfo("user.edit", () => userStore().initUserStore());
 
 userStore().initUserStore();

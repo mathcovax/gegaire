@@ -20,3 +20,24 @@ export default method(
 		});
 	}
 );
+
+export const patch = method(
+	async function(id, name, email, tel, address){
+		if(address !== undefined) await this.method(
+			"user.setAddress", 
+			id, 
+			address
+		);
+		
+		await Prisma.user.update({
+			where: {
+				id
+			},
+			data: {
+				name,
+				email,
+				tel,
+			}
+		});
+	}
+);

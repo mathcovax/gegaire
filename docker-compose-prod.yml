@@ -7,35 +7,49 @@ services:
       - 1506:80
     volumes: 
       - ./proxy:/proxy
+    depends_on:
+      - aob
+      - vue
 
   aob:
     container_name: aob
     image: mathcovax/anotherback:2.3.4
-    expose:
-      - 5555
     environment:
       AOB_V: "2.10.13"
-    ports:
-      - 5555:5555
     volumes: 
       - ./aob:/api
+    env_file:
+      - ./aob/.env
     depends_on:
       - postgres
   
+  builder-vue:
+    container_name: builder-vue
+    image: node:18.13.0-alpine
+    volumes:
+      - ./vue:/home/node/vue
+    environment:
+      npm_config_cache: /home/node/cache
+    working_dir: /home/node/vue
+    entrypoint: npm run build
+
   vue:
     container_name: vue
     image: node:18.13.0-alpine
     volumes:
       - ./vue:/home/node/vue
     working_dir: /home/node/vue
-    command: npm run dev
+    command: npm run preview
+    depends_on:
+      builder-vue: 
+        condition: service_completed_successfully
 
   postgres:
     container_name: postgres
     image: postgres:15.2
     env_file: ./aob/.env
     volumes:
-    - postgres-data:/var/lib/postgresql/data
+    - postgres-data-prod:/var/lib/postgresql/data
 
 volumes:
-  postgres-data:
+  postgres-data-prod:

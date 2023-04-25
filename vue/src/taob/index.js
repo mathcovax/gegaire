@@ -14,10 +14,12 @@ export const taob = new Toanotherback({
 	},
 	responseInterceptor: (response) => {
 		let tr = Dictionary.translate(response.response.headers.get("aob-info"));
-		if(tr !== response.response.headers.get("aob-info") && !response.response.url.endsWith("/api/user"))fixedStore().toasterPush(response.response.ok, tr);
+		if(tr !== response.response.headers.get("aob-info"))fixedStore().toasterPush(response.response.ok, tr);
 		return response;
-	}
+	},
 });
+
+taob.setHookInfo("expireAccessToken", () => router.push("/?callback=" + router.currentRoute.value.path));
 
 Dictionary.add("fr", fr);
 Dictionary.use("fr");

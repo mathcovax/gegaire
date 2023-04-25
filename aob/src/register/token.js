@@ -34,11 +34,13 @@ export default register(
 			);
 
 			if(result === null){
-				this.sender("not_found", "user.request.notfound");
+				this.sender("not_found", "user.notfound");
 			}
 			if(bcrypt.compareSync(this.pass("user_password"), result.password) === false){
 				this.sender("bad_request", "user.wrongPassword");
 			}
+
+			delete result.password;
 
 			this.token.generate("accessToken", result);
 			this.token.generate("refresh_accessToken", result.id);

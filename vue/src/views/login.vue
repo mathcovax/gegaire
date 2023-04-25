@@ -15,9 +15,9 @@
 
 				<TextInput
 				class="w-[240px]"
-				:label="$tr('email')"
+				:label="$tr('label.email')"
 				v-model="email"
-				:rules="[emailRule]"
+				:rules="emailRules"
 				name="gegaire-email"
 				:disabled="waitingResponse"
 				/>
@@ -25,9 +25,9 @@
 				<TextInput
 				:type="seePassword? 'text' : 'password'"
 				class="w-[240px]"
-				:label="$tr('password')"
+				:label="$tr('label.password')"
 				v-model="password"
-				:rules="[passwordRule]"
+				:rules="passwordRules"
 				name="gegaire-pwd"
 				:disabled="waitingResponse"
 				classInput="!pr-[30px]"
@@ -72,7 +72,21 @@ export default defineComponent({
 		};
 	},
 	computed: {
-
+		emailRules(value){
+			return [
+				this.$rules.required,
+				this.$rules.validEmail,
+				(value) => this.$rules.minLength(10, value),
+				(value) => this.$rules.maxLength(255, value),
+			];
+		},
+		passwordRules(){
+			return [
+				this.$rules.required,
+				(value) => this.$rules.minLength(8, value),
+				(value) => this.$rules.maxLength(25, value)
+			];
+		}
 	},
 	methods: {
 		async submited(e){
@@ -85,26 +99,12 @@ export default defineComponent({
 				"/token?callback=" + this.$route.query.callback || "", 
 				{email: this.email, password: this.password})
 			.s(() => {
-				this.$router.push(this.$route.query.callback || "/guide");
+				this.$router.push(this.$route.query.callback || "/guide/availability");
 			})
 			.result;
 			close();
 			this.waitingResponse = false;
 		},
-
-		emailRule(value){
-			if(value.length < 10 || value.length > 255){
-				return this.$trr("invalideInputEmail");
-			}
-			return true;
-		},
-
-		passwordRule(value){
-			if(value.length < 8 || value.length > 25){
-				return this.$trr("invalideInputPassword");
-			}
-			return true;
-		}
 	}
 });
 </script>
