@@ -1,7 +1,12 @@
 <template>
 	<div
 	:style="{'--fontSize': fontSize}"
-	:class="{[theme]: true, 'invalid': invalidMessage !== ''}"
+	:class="{
+		[theme]: true, 
+		'invalid': invalidMessage !== '',
+		'disabled': disabled,
+		'focus': focus,
+	}"
 	@click="clicked"
 	date-input
 	form-rules
@@ -21,6 +26,15 @@
 			>
 				calendar-month
 			</ico>
+
+			<label
+			:class="{
+				'focus': focus,
+				'valueNotEmpty': !focus && modelValue,
+			}"
+			>
+				{{ label }}
+			</label>
 		</div>
 
 		<div v-if="rules.length !== 0">
@@ -28,8 +42,6 @@
 				{{ invalidMessage }}
 			</p>
 		</div>
-        
-		<span>{{ label }}</span>
 
 		<input 
 		ref="input" 
@@ -78,6 +90,7 @@ export default defineComponent({
 		return {
 			displayValue: "",
 			invalidMessage: "",
+			focus: false,
 		};
 	},
 	methods: {
@@ -85,10 +98,14 @@ export default defineComponent({
 			this.$refs.input.focus();
 		},
 		focused(event){
+			console.log("f");
+			this.focus = true;
 			this.$refs.input.showPicker();
 			this.$emit("focus", event);
 		},
 		blured(event){
+			console.log("b");
+			this.focus = false;
 			this.$emit("blur", event);
 			this.validate();
 		},
@@ -111,6 +128,9 @@ export default defineComponent({
 
 			this.invalidMessage = "";
 		}
+	},
+	mounted(){
+		this.$el.formElement = this;
 	}
 });
 </script>
@@ -121,6 +141,10 @@ div[date-input]{
     position: relative;
     max-width: 100%;
     user-select: none;
+
+	&.disabled{
+        opacity: 0.5;
+    }
 
     *{
         box-sizing: border-box;
@@ -170,7 +194,7 @@ div[date-input]{
         }
     }
 
-    > span{
+    label{
         max-width: calc(100% - 16px  - 1.3em);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -211,7 +235,7 @@ div[date-input]{
         }
     }
 
-    &:has(> input:focus){
+    &.focus{
         .icon{
             color: var(--dateInput-highColor);
         }
@@ -220,7 +244,7 @@ div[date-input]{
             outline: 2px solid var(--dateInput-highColor);
         }
 
-        > span{
+        label{
             transform: translateY(-50%);
             z-index: 1;
             top: 0;
@@ -231,16 +255,14 @@ div[date-input]{
         }
     }
 
-    &:has(.display:not(:empty)){
-        > span{
-            transform: translateY(-50%);
-            z-index: 1;
-            top: 0;
-            font-size: calc(var(--fontSize)/1.2);
-            line-height: calc(var(--fontSize)/1.2);
-            font-weight: 600;
-        }
-    }
+    label.valueNotEmpty{
+		transform: translateY(-50%);
+		z-index: 1;
+		top: 0;
+		font-size: calc(var(--fontSize)/1.2);
+		line-height: calc(var(--fontSize)/1.2);
+		font-weight: 600;
+	}
 }
 
 </style>

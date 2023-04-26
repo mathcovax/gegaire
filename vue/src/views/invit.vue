@@ -18,6 +18,7 @@
 				:label="$tr('label.name') + '*'"
 				:rules="nameRules"
 				v-model="name"
+				autocompleteOff
 				/>
 
 				<TextInput
@@ -26,6 +27,7 @@
 				:label="$tr('label.tel') + '*'"
 				:rules="telRules"
 				v-model="tel"
+				autocompleteOff
 				/>
 
 				<PlaceInput
@@ -33,6 +35,7 @@
 				name="gegaire-address"
 				:label="$tr('label.address')"
 				v-model="address"
+				autocompleteOff
 				/>
 
 				<TextInput
@@ -45,7 +48,6 @@
 				classInput="!pr-[30px]"
 				:rules="passwordRules"
 				disabledAutoRules
-				autocompleteOff
 				>
 					<Btn
 					theme="none"
@@ -65,7 +67,6 @@
 				classInput="!pr-[30px]"
 				:rules="passwordRules"
 				disabledAutoRules
-				autocompleteOff
 				/>
 
 				<Btn

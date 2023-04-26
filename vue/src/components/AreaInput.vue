@@ -1,7 +1,12 @@
 <template>
 	<div
 	:style="{'--fontSize': fontSize}"
-	:class="{[theme]: true, 'invalid': invalidMessage !== ''}"
+	:class="{
+		[theme]: true, 
+		'invalid': invalidMessage !== '', 
+		'disabled': disabled,
+		'focus': focus,
+	}"
 	text-textarea
 	form-rules
 	>
@@ -22,6 +27,10 @@
 		<label
 		@click="$refs.textarea.focus()"
 		:for="name"
+		:class="{
+			'focus': focus,
+			'valueNotEmpty': !focus && modelValue,
+		}"
 		>
 			{{ label }}
 		</label>
@@ -37,7 +46,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
 	name: "AreaInput",
@@ -69,23 +78,28 @@ export default defineComponent({
 			default: false,
 		}
 	},
-	emits: ["update:modelValue", "focus", "blur", "input"],
+	emits: [
+		"update:modelValue", "focus", "blur", "input"
+	],
 	data(){
 		return {
 			invalidMessage: "",
+			focus: false
 		};
 	},
-	methods:{
+	methods: {
 		focused(event){
+			this.focus = true;
 			this.$emit("focus", event);
 			if(this.autoGrow !== false){
 				this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + "px";
 			}
 		},
 		blured(event){
+			this.focus = false;
 			this.$emit("blur", event);
 			this.validate();
-			if(this.autoGrow !== false)this.$refs.textarea.style.height = "auto";
+			if(this.autoGrow !== false) this.$refs.textarea.style.height = "auto";
 		},
 		inputed(event){
 			this.$emit("update:modelValue", event.target.value || "");
@@ -97,7 +111,7 @@ export default defineComponent({
 			}
 			this.$emit("input", event);
 		},
-		validate(value=this.modelValue){
+		validate(value = this.modelValue){
 			for(const rule of this.rules){
 				let result = rule(value);
 				if(result !== true){
@@ -107,6 +121,9 @@ export default defineComponent({
 			}
 			this.invalidMessage = "";
 		}
+	},
+	mounted(){
+		this.$el.formElement = this;
 	}
 });
 </script>
@@ -117,7 +134,7 @@ div[text-textarea]{
     max-width: 100%;
     padding: 0 0;
 
-    &:has(> textarea:disabled){
+    &.disabled{
         opacity: 0.5;
     }
 
@@ -140,24 +157,20 @@ div[text-textarea]{
         --areaInput-lowColor: rgba(255, 0, 0, 0.5);
     }
 
-    &:has(> textarea:focus){
-        > label{
-            transform: translateY(-50%);
-            top: 0;
-            font-size: calc(var(--fontSize)/1.2);
-            color: var(--areaInput-highColor);
-            font-weight: 600;
-        }
-    }
+    label.focus{
+		transform: translateY(-50%);
+		top: 0;
+		font-size: calc(var(--fontSize)/1.2);
+		color: var(--areaInput-highColor);
+		font-weight: 600;
+	}
 
-    &:has(> textarea:not(:placeholder-shown)){
-        > label{
-            transform: translateY(-50%);
-            top: 0;
-            font-size: calc(var(--fontSize)/1.2);
-            font-weight: 600;
-        }
-    }
+    label.valueNotEmpty{
+		transform: translateY(-50%);
+		top: 0;
+		font-size: calc(var(--fontSize)/1.2);
+		font-weight: 600;
+	}
 
     > label{
         max-width: calc(100% - 16px);
@@ -194,7 +207,7 @@ div[text-textarea]{
         }
     }
 
-    &:has(> textarea:not(:disabled):not(:focus)):hover {
+    &:not(.disabled):not(.focus):hover {
         > textarea{
             outline: 1px solid var(--areaInput-highColor);
         }

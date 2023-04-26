@@ -76,7 +76,7 @@
 				type="submit"
 				class="col-start-4 col-end-10"
 				>
-					{{ $route.params.id === "newactivity" ? $tr("btn.create") : $tr("btn.edit") }}
+					{{ $route.params.id === "newactivity" ? $tr("btn.create") : $tr("btn.save") }}
 				</Btn>
 			
 				<Btn

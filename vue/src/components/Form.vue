@@ -22,8 +22,8 @@ export default defineComponent({
 		validate(){
 			let result = true;
 			for(const el of this.$refs.form.querySelectorAll("[form-rules]")){
-				if(el.__vueParentComponent?.proxy?.disabled !== false) continue;
-				if(el.__vueParentComponent.proxy.validate() === false)result = false;
+				if(el.formElement.disabled !== false) continue;
+				if(el.formElement.validate() === false)result = false;
 			}
 			return result;
 		}

@@ -2,7 +2,7 @@
 	<div
 	select-input
 	:style="{'--fontSize': fontSize}"
-	:class="{[theme]: true, 'invalid': invalidMessage !== ''}"
+	:class="{[theme]: true, 'invalid': invalidMessage !== '', 'disabled': disabled}"
 	tabindex="0"
 	@click="isOpen = true"
 	@blur="isOpen = false"
@@ -107,7 +107,10 @@ export default defineComponent({
 			default(){
 				return [];
 			}
-		}
+		},
+		disabled: {
+			default: false
+		},
 	},
 	emits: ["update:modelValue"],
 	data(){
@@ -144,6 +147,7 @@ export default defineComponent({
 	},
 	mounted(){
 		this.value = this.modelValue;
+		this.$el.formElement = this;
 	}
 });
 </script>

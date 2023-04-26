@@ -1,19 +1,27 @@
 <template>
 	<div
 	:style="{'--fontSize': fontSize}"
-	:class="{[theme]: true, 'invalid': invalidMessage !== ''}"
+	:class="{
+		[theme]: true, 
+		'invalid': invalidMessage !== '',
+		'disabled': disabled,
+		'focus': focus,
+	}"
 	@click="clicked"
 	hour-input
 	form-rules
 	>  
 		<div>
-			<p class="display">
-				{{ (modelValue || displayValue) }}
-			</p>
-
-			<p class="keepSize">
-				p
-			</p>
+			<input 
+			ref="input" 
+			type="time"
+			:value="modelValue"
+			@input="inputed"
+			@focus="focused" 
+			@blur="blured"
+			placeholder=" "
+			:disabled="disabled"
+			/>
 
 			<ico
 			class="icon"
@@ -21,6 +29,15 @@
 			>
 				clock-outline
 			</ico>
+
+			<label
+			:class="{
+				'focus': focus,
+				'valueNotEmpty': !focus && modelValue,
+			}"
+			>
+				{{ label }}
+			</label>
 		</div>
 
 		<div v-if="rules.length !== 0">
@@ -28,19 +45,6 @@
 				{{ invalidMessage }}
 			</p>
 		</div>
-        
-		<span>{{ label }}</span>
-
-		<input 
-		ref="input" 
-		type="time" 
-		:value="modelValue"
-		@input="inputed"
-		@focus="focused" 
-		@blur="blured"
-		placeholder=" "
-		:disabled="disabled"
-		/>
 	</div>
 </template>
 
@@ -76,8 +80,8 @@ export default defineComponent({
 	],
 	data(){
 		return {
-			displayValue: "",
 			invalidMessage: "",
+			focus: false,
 		};
 	},
 	methods: {
@@ -85,15 +89,17 @@ export default defineComponent({
 			this.$refs.input.focus();
 		},
 		focused(event){
+			this.focus = true;
 			this.$refs.input.showPicker();
 			this.$emit("focus", event);
 		},
 		blured(event){
+			this.focus = false;
 			this.$emit("blur", event);
 			this.validate();
 		},
 		inputed(event){
-			this.displayValue = event.target.value;
+			console.log(event.target.value);
 			this.$emit("update:modelValue", event.target.value);
 			if(this.invalidMessage !== ""){
 				this.validate(event.target.value);
@@ -111,6 +117,9 @@ export default defineComponent({
 
 			this.invalidMessage = "";
 		}
+	},
+	mounted(){
+		this.$el.formElement = this;
 	}
 });
 </script>
@@ -140,8 +149,26 @@ div[hour-input]{
         --dateInput-highColor: red;
         --dateInput-lowColor: rgba(255, 0, 0, 0.5);
     }
+
+	input{
+        width: 100%;
+        border-radius: 5px;
+        font-size: var(--fontSize);
+        background-color: transparent;
+        line-height: normal;
+        border: none;
+        
+        &:focus {
+            outline: 2px solid var(--textInput-highColor);
+        }
+
+		&::-webkit-calendar-picker-indicator {
+			background: none;
+		}
+    }
     
     > div:nth-child(1){
+		height: 34px;
         position: relative;
         display: flex;
         justify-content: space-between;
@@ -155,22 +182,16 @@ div[hour-input]{
             outline: 1px solid var(--dateInput-highColor);
         }
 
-        .keepSize{
-            width: 0;
-            color: transparent;
-        }
-
         > .icon{
             position: absolute;
             transform: translateY(50%);
             bottom: 50%;
             right: 8px;
             color: black;
-
         }
     }
 
-    > span{
+    label{
         max-width: calc(100% - 16px  - 1.3em);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -186,16 +207,16 @@ div[hour-input]{
         line-height: normal;
     }
 
-    > input{
-        position: absolute;
-        width: 0;
-        height: 0;
-        bottom: 10px;
-        left: 0;
-        outline: none;
-        color: transparent;
-        border: none;
-    }
+    // > input{
+    //     position: absolute;
+    //     width: 0;
+    //     height: 0;
+    //     bottom: 10px;
+    //     left: 0;
+    //     outline: none;
+    //     color: transparent;
+    //     border: none;
+    // }
 
     > div:nth-child(2){
         width: 100%;
@@ -211,7 +232,7 @@ div[hour-input]{
         }
     }
 
-    &:has(> input:focus){
+    &.focus{
         .icon{
             color: var(--dateInput-highColor);
         }
@@ -220,7 +241,7 @@ div[hour-input]{
             outline: 2px solid var(--dateInput-highColor);
         }
 
-        > span{
+        label{
             transform: translateY(-50%);
             z-index: 1;
             top: 0;
@@ -231,16 +252,14 @@ div[hour-input]{
         }
     }
 
-    &:has(.display:not(:empty)){
-        > span{
-            transform: translateY(-50%);
-            z-index: 1;
-            top: 0;
-            font-size: calc(var(--fontSize)/1.2);
-            line-height: calc(var(--fontSize)/1.2);
-            font-weight: 600;
-        }
-    }
+    label.valueNotEmpty{
+		transform: translateY(-50%);
+		z-index: 1;
+		top: 0;
+		font-size: calc(var(--fontSize)/1.2);
+		line-height: calc(var(--fontSize)/1.2);
+		font-weight: 600;
+	}
 }
 
 </style>

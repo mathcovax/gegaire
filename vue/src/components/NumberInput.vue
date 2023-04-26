@@ -1,7 +1,12 @@
 <template>
 	<div
 	:style="{'--fontSize': fontSize}"
-	:class="{[theme]: true, 'invalid': invalidMessage !== ''}"
+	:class="{
+		[theme]: true, 
+		'invalid': invalidMessage !== '',
+		'disabled': disabled,
+		'focus': focus,
+	}"
 	number-input
 	form-rules
 	>
@@ -20,6 +25,10 @@
 		<label
 		@click="$refs.input.focus()"
 		:for="name"
+		:class="{
+			'focus': focus,
+			'valueNotEmpty': !focus && modelValue,
+		}"
 		>
 			{{ label }}
 		</label>
@@ -71,13 +80,16 @@ export default defineComponent({
 	data(){
 		return {
 			invalidMessage: "",
+			focus: false,
 		};
 	},
 	methods: {
 		focused(event){
+			this.focus = true;
 			this.$emit("focus", event);
 		},
 		blured(event){
+			this.focus = false;
 			this.$emit("blur", event);
 			this.validate();
 		},
@@ -98,6 +110,9 @@ export default defineComponent({
 			}
 			this.invalidMessage = "";
 		}
+	},
+	mounted(){
+		this.$el.formElement = this;
 	}
 });
 </script>
@@ -108,7 +123,7 @@ div[number-input]{
     max-width: 100%;
     padding: 0 0;
 
-    &:has(> input:disabled){
+    &.disabled{
         opacity: 0.5;
     }
 
@@ -131,24 +146,20 @@ div[number-input]{
         --numberInput-lowColor: rgba(255, 0, 0, 0.5);
     }
 
-    &:has(> input:focus){
-        > label{
-            transform: translateY(-50%);
-            top: 0;
-            font-size: calc(var(--fontSize)/1.2);
-            color: var(--numberInput-highColor);
-            font-weight: 600;
-        }
-    }
+    label.focus{
+		transform: translateY(-50%);
+		top: 0;
+		font-size: calc(var(--fontSize)/1.2);
+		color: var(--numberInput-highColor);
+		font-weight: 600;
+	}
 
-    &:has(> input:not(:placeholder-shown)){
-        > label{
-            transform: translateY(-50%);
-            top: 0;
-            font-size: calc(var(--fontSize)/1.2);
-            font-weight: 600;
-        }
-    }
+    label.valueNotEmpty{
+		transform: translateY(-50%);
+		top: 0;
+		font-size: calc(var(--fontSize)/1.2);
+		font-weight: 600;
+	}
 
     > label{
         max-width: calc(100% - 16px);
@@ -182,7 +193,7 @@ div[number-input]{
         }
     }
 
-    &:has(> input:not(:disabled):not(:focus)):hover {
+    &:not(.disabled):not(.focus):hover {
         > input{
             outline: 1px solid var(--numberInput-highColor);
         }

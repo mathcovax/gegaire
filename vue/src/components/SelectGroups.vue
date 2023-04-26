@@ -141,6 +141,7 @@ export default defineComponent({
 	},
 	mounted(){
 		this.getGroups();
+		this.$el.formElement = this;
 	}
 });
 </script>

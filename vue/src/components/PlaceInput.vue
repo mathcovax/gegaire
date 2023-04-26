@@ -28,18 +28,22 @@
 		@click="isOpen = false"
 		class="popup"
 		>
-			<div @click="$event.stopPropagation()">
+			<div
+			@click="$event.stopPropagation()"
+			class="h-[90%] lg:h-[500px]"
+			>
 				<Map
 				ref="map"
 				v-model="mapValue"
 				/>
 
-				<p v-if="this.mapValue.text !== undefined">
-					{{ this.mapValue.text }}
+				<p v-if="mapValue.text !== undefined">
+					{{ mapValue.text }}
 				</p>
 
 				<Btn
 				@click="clicked"
+				:disabled="!mapValue.text"
 				>
 					{{ $tr("btn.validate") }}
 				</Btn>
@@ -120,6 +124,7 @@ export default defineComponent({
 	},
 	mounted(){
 		this.init();
+		this.$el.formElement = this;
 	}
 });
 </script>
@@ -145,7 +150,7 @@ div[place-input]{
         > div {
             z-index: 10;
             width: 80%;
-            height: 500px;
+			max-height: 500px;
             background: white;
             padding: 10px;
             border-radius: 4px;
