@@ -15,6 +15,7 @@ export const fromUserIdByMonth = method(
 
 		let result = await Prisma.work.findMany({
 			where: {
+				userId,
 				date: {
 					gte: workDate,
 					lt: toDate

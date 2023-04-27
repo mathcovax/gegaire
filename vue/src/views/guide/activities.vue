@@ -28,7 +28,7 @@ export default defineComponent({
 	},
 	data(){
 		return {
-			page: 3,
+			page: 5,
 		};
 	},
 	computed: {
@@ -43,13 +43,13 @@ export default defineComponent({
 			let months = (date.getFullYear() - this.dateInStore.getFullYear()) * 12;
 			months += date.getMonth();
 			months -= this.dateInStore.getMonth();
-			this.page = months + 3;
+			this.page = months + 5;
 
 			setTimeout(() => {
 				let id = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
 				let top = document.getElementById(id).offsetTop - 30;
 				this.$refs.scrollView.scrollTo({top});
-			}, 200);
+			}, 500);
 		},
 
 		scrolled(e){
