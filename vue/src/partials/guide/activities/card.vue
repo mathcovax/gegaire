@@ -1,5 +1,6 @@
 <template>
 	<Frame
+	:id="id"
 	border="4px"
 	row
 	class="w-full"
@@ -61,14 +62,15 @@
 			</Btn>
 		</div>
 
-		<Btn
-		class="col-start-5 col-end-9"
-		small
-		v-if="isSame"
-		@click="$router.push(`/activity/${work.pmActivity.id}`)"
-		>
-			{{ $tr("btn.seeMore") }}
-		</Btn>
+		<div class="col-span-12 flex justify-center">
+			<Btn
+			small
+			v-if="isSame"
+			@click="$router.push(`/activity/${work.pmActivity.id}`)"
+			>
+				{{ $tr("btn.seeMore") }}
+			</Btn>
+		</div>
 	</Frame>
 </template>
 
@@ -90,6 +92,11 @@ export default defineComponent({
 			let day = this.$tr("/guide/availability.day")[(date.getDay() - 1) === -1 ? 6 : (date.getDay() - 1)];
 			let numDay = this.work.date.split("T")[0].split("-").reverse()[0];
 			return day + " " + numDay;
+		},
+
+		id(){
+			let date = new Date(this.work.date);
+			return date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
 		},
 		
 		isNotPast(){

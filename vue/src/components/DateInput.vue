@@ -98,13 +98,11 @@ export default defineComponent({
 			this.$refs.input.focus();
 		},
 		focused(event){
-			console.log("f");
 			this.focus = true;
 			this.$refs.input.showPicker();
 			this.$emit("focus", event);
 		},
 		blured(event){
-			console.log("b");
 			this.focus = false;
 			this.$emit("blur", event);
 			this.validate();

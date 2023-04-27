@@ -32,10 +32,8 @@ export default method(
 				note: true,
 				work: {
 					select: {
-						amActivity: true,
-						amLeader: true,
-						pmActivity: true,
-						pmLeader: true,
+						amActivityId: true,
+						pmActivityId: true,
 					}
 				},
 				group: {

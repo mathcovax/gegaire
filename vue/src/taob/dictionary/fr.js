@@ -241,6 +241,10 @@ export default {
 		placeAvailable: "Disponible",
 		placeUnAvailable: "Indisponible",
 		placeNote: "Note",
+		placeWorkedInfo: "Quantité de travail sur un intervalle de 30 jours avant et après la date de cette activité",
+		placeWorkedBefore: "Avant",
+		placeWorkedAfter: "Après",
+		placeWorkedDay: "jours",
 	},
 	invit: {
 		title: "Information a remplire."

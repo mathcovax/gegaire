@@ -132,6 +132,35 @@
 					</div>
 				</div>
 
+				<div class="w-[80%] flex flex-col itmes-center gap-[5px]">
+					<p class="text-center">
+						{{ $tr("placeActivity.placeWorkedInfo") }} :
+					</p>
+
+					<div
+					v-if="workedDayBefore !== false"
+					class="w-full flex justify-between"
+					>
+						<p>{{ $tr("placeActivity.placeWorkedBefore") }}</p>
+
+						<p>{{ workedDayBefore }} {{ $tr("placeActivity.placeWorkedDay") }}</p>
+					</div>
+
+					<div
+					v-if="workedDayBefore !== false"
+					class="w-full flex justify-between"
+					>
+						<p>{{ $tr("placeActivity.placeWorkedAfter") }}</p>
+
+						<p>{{ workedDayAfter }} {{ $tr("placeActivity.placeWorkedDay") }}</p>
+					</div>
+
+					<Loader
+					v-if="workedDayBefore === false && workedDayAfter === false"
+					size="50px"
+					/>
+				</div>
+
 				<Btn
 				v-if="showLeaderCheckbox"
 				@click="patch"
@@ -178,6 +207,9 @@ export default defineComponent({
 			am: undefined,
 			pm: undefined,
 			leader: false,
+
+			workedDayBefore: false,
+			workedDayAfter: false,
 			
 			isInActivity: false,
 		};
@@ -274,6 +306,31 @@ export default defineComponent({
 			.result;
 
 			close();
+		},
+
+		async getWorkQuantity(){
+			await taob.get(`/works?user_id=${this.guide.id}&date=${this.activity.date.split("T")[0]}`)
+			.s(data => {
+				let result = data.reduce(
+					(p, v) => {
+						if(v.amActivityId !== this.activity.id && v.amActivityId !== null){
+							if(new Date(v.date).getTime() > new Date(this.activity.date).getTime())p.a += 0.5;
+							else p.b += 0.5;
+						}
+						
+						if(v.pmActivityId !== this.activity.id && v.pmActivityId !== null){
+							if(new Date(v.date).getTime() > new Date(this.activity.date).getTime())p.a += 0.5;
+							else p.b += 0.5;
+						}
+						
+						return p;
+					},
+					{b: 0, a: 0}
+				);
+				this.workedDayAfter = result.a;
+				this.workedDayBefore = result.b;
+			})
+			.result;
 		}
 	},
 	mounted(){
@@ -309,6 +366,8 @@ export default defineComponent({
 			)
 		) this.leader = true;
 		else this.leader = false;
+
+		this.getWorkQuantity();
 	}
 });
 </script>
