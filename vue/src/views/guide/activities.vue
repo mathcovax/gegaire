@@ -12,6 +12,8 @@
 			v-for="m in page"
 			:month="m-1"
 			/>
+
+			<div class="h-[750px] shrink-0"/>
 		</div>
 	</main>
 </template>
@@ -28,7 +30,7 @@ export default defineComponent({
 	},
 	data(){
 		return {
-			page: 5,
+			page: 4,
 		};
 	},
 	computed: {
@@ -43,7 +45,7 @@ export default defineComponent({
 			let months = (date.getFullYear() - this.dateInStore.getFullYear()) * 12;
 			months += date.getMonth();
 			months -= this.dateInStore.getMonth();
-			this.page = months + 5;
+			this.page = months + 4;
 
 			setTimeout(() => {
 				let id = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
@@ -53,7 +55,7 @@ export default defineComponent({
 		},
 
 		scrolled(e){
-			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 100)){
+			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750)){
 				this.page++;
 			}
 		},

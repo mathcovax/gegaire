@@ -84,7 +84,7 @@
 
 				<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
 
-				<div class="flex flex-col w-full grow overflow-y-auto">
+				<div class="flex flex-col w-full grow overflow-y-auto gap-[5px]">
 					<SelectCard
 					v-for="guide of selectedGuides"
 					:guide="guide"

@@ -18,6 +18,8 @@
 			v-for="m in page"
 			:month="m-1"
 			/>
+
+			<div class="h-[750px] shrink-0"/>
 		</div>
 	</main>
 </template>
@@ -34,14 +36,14 @@ export default defineComponent({
 	},
 	data(){
 		return {
-			page: 3,
+			page: 4,
 		};
 	},
 	methods: {
 		...mapActions(planningStore, ["purgePlanningStore"]),
 
 		scrolled(e){
-			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 100)){
+			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750)){
 				this.page++;
 			}
 		},
