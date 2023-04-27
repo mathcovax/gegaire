@@ -144,6 +144,10 @@
 				v-if="work.amActivity?.id === activity.id || work.pmActivity?.id === activity.id"
 				theme="red"
 				@click="remove"
+				:popup="{
+					title: $tr('placeActivity.popupTitleRemove'),
+					subTitle: $tr('placeActivity.popupSubTitleRemove')
+				}"
 				>
 					{{ $tr("btn.remove") }}
 				</Btn>

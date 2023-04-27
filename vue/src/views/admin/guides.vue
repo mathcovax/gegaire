@@ -74,7 +74,7 @@ export default defineComponent({
 			if(this.isFetch === true || this.isAllFetch === true) return;
 			this.isFetch = true;
 
-			let result = await taob.get(`users?skip=${page * 10}&take=10&searchName=${this.name}`).sd();
+			let result = await taob.get(`users?skip=${page * 25}&take=25&searchName=${this.name}`).sd();
 
 			if(result === undefined || this.isFetch === false) return;
 

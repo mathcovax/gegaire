@@ -16,7 +16,7 @@
 		<div class="w-full grow overflow-hidden flex flex-col gap-[10px]">
 			<Frame
 			border="4px"
-			class="h-[70%]"
+			class="h-[70%] shrink-0"
 			classs="p-[5px] gap-[5px] flex flex-col items-center"
 			>
 				<div class="flex gap-[5px] items-center mt-[5px]">
@@ -137,7 +137,7 @@
 
 				<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
 
-				<div class="flex flex-col w-full grow overflow-y-auto">
+				<div class="flex flex-col w-full grow overflow-y-auto gap-[5px]">
 					<Loader
 					class="h-full"
 					size="75px"
@@ -230,8 +230,8 @@ export default defineComponent({
 
 			let result = await taob.get(
 				"/users/availability?" + 
-				`skip=${page * 10}` +
-				"&take=10" +
+				`skip=${page * 25}` +
+				"&take=25" +
 				`&searchName=${this.searchName || ""}` +
 				`&day=${day}` +
 				`&month=${month}` +

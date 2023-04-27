@@ -88,6 +88,10 @@
 				v-if="activity.isShow === false"
 				small
 				@click="showActivity"
+				:popup="{
+					title: $tr('placeActivity.popupTitleShow'),
+					subTitle: $tr('placeActivity.popupSubTitleShow')
+				}"
 				>
 					{{ $tr("placeActivity.btnToShow") }}
 				</Btn>

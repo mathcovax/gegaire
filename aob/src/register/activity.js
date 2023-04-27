@@ -237,6 +237,44 @@ export default register(
 			}
 		})
 		(async function(){
+			let {date, amGuide, pmGuide} = await this.method(
+				"activity.get::byId",
+				this.pass("activity_id"),
+				{
+					date: true,
+					amGuide: {
+						select: {
+							user: {
+								select: {
+									email: true
+								}
+							}
+						}
+					},
+					pmGuide: {
+						select: {
+							user: {
+								select: {
+									email: true
+								}
+							}
+						}
+					},
+				}
+			);
+
+			let emails = amGuide.map(v => {
+				if(pmGuide.find(vpm => vpm.user.email === v.user.email) !== undefined) pmGuide = pmGuide.filter(vpm => vpm.user.email !== v.user.email);
+				return v.user.email;
+			});
+			
+			await this.method(
+				"email.showActivity",
+				[...emails, ...pmGuide.map(v => v.user.email)],
+				this.pass("activity_id"),
+				date.toISOString()
+			);
+
 			await this.method(
 				"activity.edit::show",
 				this.pass("activity_id")

@@ -27,14 +27,13 @@ export default register(
 				this.pass("groups_id")
 			);
 
-			try {
-				this.method(
-					"email.createLink", 
-					result.email,
-					result.id
-				);
-			}
-			catch (e){
+
+			let resultMail = await this.method(
+				"email.createLink", 
+				result.email,
+				result.id
+			);
+			if(resultMail !== undefined){
 				await this.method("link.delete", result.id);
 				this.sender("failed_dep", "mailer.sendeError", e);
 			}

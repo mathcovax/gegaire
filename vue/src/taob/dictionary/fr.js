@@ -232,6 +232,12 @@ export default {
 		infoShow: "Visible",
 		btnToShow: "rendre visible",
 
+		popupTitleShow: "Rendre visible l'activité ?",
+		popupSubTitleShow: "Cette action est irréversible et on verra un mail à tous les guides de l'activité.",
+
+		popupTitleRemove: "Retirer le guide de l'activité ?",
+		popupSubTitleRemove: "Cela retirera entièrement le guide de l'activité.",
+
 		placeAvailable: "Disponible",
 		placeUnAvailable: "Indisponible",
 		placeNote: "Note",

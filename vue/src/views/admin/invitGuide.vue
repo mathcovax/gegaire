@@ -93,7 +93,7 @@ export default defineComponent({
 			if(this.isFetch === true || this.isAllFetch === true) return;
 			this.isFetch = true;
 
-			let result = await taob.get(`links?skip=${page * 10}&take=10&searchEmail=${this.email.toLocaleLowerCase()}`).sd();
+			let result = await taob.get(`links?skip=${page * 25}&take=25&searchEmail=${this.email.toLocaleLowerCase()}`).sd();
 
 			if(result === undefined || this.isFetch === false) return;
 
