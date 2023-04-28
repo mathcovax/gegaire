@@ -1,11 +1,14 @@
 <template>
-	<main class="absolute w-full h-full flex flex-col top-0 left-0">
-		<header class="w-full">
-			<h1 class="uppercase">
-				{{ $trr("title") }}
-			</h1>
+	<main class="absolute w-full h-full flex flex-col items-center top-0 left-0">
+		<h1 class="uppercase w-full lg:text-center">
+			{{ $trr("title") }}
+		</h1>
 
-			<section class="daylist mt-[10px] flex w-full justify-around select-none gap-[5px] overflow-hidden">
+		<section
+		@scroll="scrolled"
+		class="w-full grow overflow-y-auto flex flex-col gap-[4px] scrollbar lg:w-[800px]"
+		>
+			<section class="daylist left-0 w-full select-none gap-[5px] sticky top-0 z-[2] bg-[white]">
 				<p
 				v-for="n in 7"
 				:key="n"
@@ -13,12 +16,7 @@
 					{{ $trr("day")[n-1] }}
 				</p>
 			</section>
-		</header>
 
-		<section
-		@scroll="scrolled"
-		class="w-full grow overflow-y-auto flex flex-col gap-[4px] scrollbar"
-		>
 			<Week
 			v-for="week in weeks"
 			:key="week-1"

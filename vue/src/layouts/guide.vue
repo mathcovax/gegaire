@@ -7,7 +7,7 @@
 		/>
 
 		<nav 
-		class="bg-[var(--green1)] rounded-b-[4px] fixed max-w-full w-[400px] flex justify-center items-start pb-[10px] px-[10px] z-10"
+		class="bg-[var(--green1)] rounded-b-[4px] fixed max-w-full w-[500px] flex justify-center items-start pb-[10px] px-[10px] z-10"
 		:class="{'open': isOpen}"
 		>
 			<div class="absolute top-0 left-0 bg-[var(--orange2)] h-full w-[50px] rounded-br-[20px] rounded-bl-[4px]"/>
@@ -123,12 +123,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 nav{
     top: 0;
-    left: 0;
-    transform: translateY(-100%);
+    left: 50%;
+    transform: translate(-50%, -100%);
     transition: all 0.5s ease-in-out;
 
     &.open{
-        transform: translateY(0);
+        transform: translate(-50%, 0);
     }
 
     > ul{

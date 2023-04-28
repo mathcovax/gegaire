@@ -13,7 +13,10 @@
 			:month="m-1"
 			/>
 
-			<div class="h-[750px] shrink-0"/>
+			<div
+			class="h-[750px] shrink-0"
+			v-if="this.page < 8"
+			/>
 		</div>
 	</main>
 </template>
@@ -55,7 +58,7 @@ export default defineComponent({
 		},
 
 		scrolled(e){
-			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750)){
+			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750) && this.page < 8){
 				this.page++;
 			}
 		},
