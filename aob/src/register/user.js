@@ -198,9 +198,9 @@ export default register(
 			schema: {
 				query: {
 					"user_id?": "user::id",
-					"day?": "availability::day",
-					"month?": "availability::month",
-					"year?": "availability::year",
+					day: "availability::day",
+					month: "availability::month",
+					year: "availability::year",
 					"am?": "availability::am",
 					"pm?": "availability::pm",
 					"skip?": "type::number",

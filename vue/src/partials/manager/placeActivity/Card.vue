@@ -1,17 +1,21 @@
 <template>
 	<div
-	class="w-full grid grid-cols-12 h-[22px] hover:bg-[rgba(0,0,0,0.12)]"
+	class="w-full grid grid-cols-8 h-[22px] hover:bg-[rgba(0,0,0,0.12)]"
 	@click="selectGuide(guide)"
 	>
-		<div class="col-span-6 flex items-center">
+		<div class="col-span-3 flex items-center">
 			<p class="overflow-hidden whitespace-nowrap text-ellipsis">
 				{{ guide.name }}
 			</p>
 		</div>
 
+		<div class="col-span-1 flex justify-end">
+			{{ countWork.before }}:{{ countWork.after }}
+		</div>
+
 		<div
 		v-if="availability !== null"
-		class="col-span-3 flex justify-end"
+		class="col-span-2 flex justify-end"
 		>
 			<div
 			:class="{
@@ -26,7 +30,7 @@
 		
 		<div
 		v-if="availability !== null"
-		class="col-span-3 flex justify-end"
+		class="col-span-2 flex justify-end"
 		>
 			<div class="h-full aspect-square relative rounded-[4px] overflow-hidden p-[5px] ">
 				<div
@@ -84,11 +88,20 @@ export default defineComponent({
 	},
 	data(){
 		return {
-			availability: this.guide.availability[0] || {note: "", work: {pmActivity: null, amActivity: null}}
+			availability: this.guide.availability[0] || {note: "", work: {pmActivity: null, amActivity: null}},
 		};
 	},
 	computed: {
-		...mapState(activityPlaceStore, ["activity"])	
+		...mapState(activityPlaceStore, [
+			"activity", "amGuide", "pmGuide"
+		]),
+
+		countWork(){
+			let count = {...this.guide.countWork};
+			if(this.amGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
+			if(this.pmGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
+			return count;
+		},
 	},
 	methods: {
 		...mapActions(activityPlaceStore, ["selectGuide"])

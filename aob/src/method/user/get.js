@@ -22,7 +22,7 @@ export default method(
 
 export const withAvailability = method(
 	async function(id, day, month, year, am, pm, searchName, skip, take){
-		return await Prisma.user.findMany({
+		let result = await Prisma.user.findMany({
 			where: {
 				id,
 				name: searchName ? {contains: searchName} : undefined,
@@ -73,5 +73,53 @@ export const withAvailability = method(
 			skip,
 			take,
 		});
+
+		let date = new Date(year + "-" + month + "-" + day);
+		let fromDate = new Date(date);
+		fromDate.setDate(fromDate.getDate() - 30);
+		let toDate = new Date(date);
+		toDate.setDate(toDate.getDate() + 30);
+
+		let requests = [];
+
+		for(const [key, user] of Object.entries(result)){
+			requests.push((async() => {
+				let works = await Prisma.work.findMany({
+					where: {
+						userId: user.id,
+						date: {
+							gte: fromDate,
+							lte: toDate,
+						}
+					},
+					select: {
+						amActivityId: true,
+						pmActivityId: true,
+						date: true,
+					}
+				});
+
+				result[key].countWork = works.reduce(
+					(p, v) => {
+						if(v.amActivityId !== null){
+							if(v.date.getTime() > date.getTime())p.after += 0.5;
+							else p.before += 0.5;
+						}
+						
+						if(v.pmActivityId !== null){
+							if(v.date.getTime() > date.getTime())p.after += 0.5;
+							else p.before += 0.5;
+						}
+						
+						return p;
+					},
+					{before: 0, after: 0}
+				);
+			})());
+		}
+
+		await Promise.all(requests);
+
+		return result;
 	}
 );

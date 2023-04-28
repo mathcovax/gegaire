@@ -169,7 +169,7 @@ export default {
 		btnPopupSubTitle: "Cette action est définitive et elle aura pour conséquence la suppression totale du groupe et chaque guide l'ayant sans verra retirer",
 	},
 	"/admin/invits": {
-		title: "Invitaions",
+		title: "Invitations",
 		btnAddLink: "créée une invitation",
 		labelSearchLink: "Email",
 		delete: {
@@ -218,6 +218,7 @@ export default {
 		columnGuideSelectPM: "PM",
 
 		columnGuideName: "Nom",
+		columnGuideWork: "JDT",
 		columnGuideNote: "Note",
 		columnGuideAvailable: "Dispo",
 
@@ -241,10 +242,8 @@ export default {
 		placeAvailable: "Disponible",
 		placeUnAvailable: "Indisponible",
 		placeNote: "Note",
-		placeWorkedInfo: "Quantité de travail sur un intervalle de 30 jours avant et après la date de cette activité",
-		placeWorkedBefore: "Avant",
-		placeWorkedAfter: "Après",
-		placeWorkedDay: "jours",
+		placeWorkedBefore: "Travail 30 jours avant",
+		placeWorkedAfter: "Travail 30 jours aprés",
 	},
 	invit: {
 		title: "Information a remplire."

@@ -132,34 +132,9 @@
 					</div>
 				</div>
 
-				<div class="w-[80%] flex flex-col itmes-center gap-[5px]">
-					<p class="text-center">
-						{{ $tr("placeActivity.placeWorkedInfo") }} :
-					</p>
+				<p>{{ $tr("placeActivity.placeWorkedBefore") }} : {{ countWork?.before }}</p>
 
-					<div
-					v-if="workedDayBefore !== false"
-					class="w-full flex justify-between"
-					>
-						<p>{{ $tr("placeActivity.placeWorkedBefore") }}</p>
-
-						<p>{{ workedDayBefore }} {{ $tr("placeActivity.placeWorkedDay") }}</p>
-					</div>
-
-					<div
-					v-if="workedDayBefore !== false"
-					class="w-full flex justify-between"
-					>
-						<p>{{ $tr("placeActivity.placeWorkedAfter") }}</p>
-
-						<p>{{ workedDayAfter }} {{ $tr("placeActivity.placeWorkedDay") }}</p>
-					</div>
-
-					<Loader
-					v-if="workedDayBefore === false && workedDayAfter === false"
-					size="50px"
-					/>
-				</div>
+				<p>{{ $tr("placeActivity.placeWorkedAfter") }} : {{ countWork?.after }}</p>
 
 				<Btn
 				v-if="showLeaderCheckbox"
@@ -215,7 +190,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapState(activityPlaceStore, ["activity", "selectedGuide"]),
+		...mapState(activityPlaceStore, [
+			"activity", "selectedGuide", "amGuide", "pmGuide"
+		]),
 
 		showLeaderCheckbox(){
 			if(this.availability.am !== true && this.availability.pm !== true) return false;
@@ -247,6 +224,13 @@ export default defineComponent({
 			) return false;
 
 			else return true;
+		},
+
+		countWork(){
+			let count = {...this.guide.countWork};
+			if(this.amGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
+			if(this.pmGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
+			return count;
 		},
 	},
 	methods: {
@@ -307,31 +291,6 @@ export default defineComponent({
 
 			close();
 		},
-
-		async getWorkQuantity(){
-			await taob.get(`/works?user_id=${this.guide.id}&date=${this.activity.date.split("T")[0]}`)
-			.s(data => {
-				let result = data.reduce(
-					(p, v) => {
-						if(v.amActivityId !== this.activity.id && v.amActivityId !== null){
-							if(new Date(v.date).getTime() > new Date(this.activity.date).getTime())p.a += 0.5;
-							else p.b += 0.5;
-						}
-						
-						if(v.pmActivityId !== this.activity.id && v.pmActivityId !== null){
-							if(new Date(v.date).getTime() > new Date(this.activity.date).getTime())p.a += 0.5;
-							else p.b += 0.5;
-						}
-						
-						return p;
-					},
-					{b: 0, a: 0}
-				);
-				this.workedDayAfter = result.a;
-				this.workedDayBefore = result.b;
-			})
-			.result;
-		}
 	},
 	mounted(){
 		this.guide = this.selectedGuide;
@@ -366,8 +325,6 @@ export default defineComponent({
 			)
 		) this.leader = true;
 		else this.leader = false;
-
-		this.getWorkQuantity();
 	}
 });
 </script>

@@ -68,16 +68,20 @@
 					</div>
 				</div>
 
-				<div class="w-full grid grid-cols-12">
-					<p class="col-span-6">
+				<div class="w-full grid grid-cols-8">
+					<p class="col-span-3">
 						{{ $tr("placeActivity.columnGuideName") }}
 					</p>
 
-					<p class="col-span-3 flex justify-end">
+					<p class="col-span-1 flex justify-end">
+						{{ $tr("placeActivity.columnGuideWork") }}
+					</p>
+
+					<p class="col-span-2 flex justify-end">
 						{{ $tr("placeActivity.columnGuideNote") }}
 					</p>
 
-					<p class="col-span-3 flex justify-end">
+					<p class="col-span-2 flex justify-end">
 						{{ $tr("placeActivity.columnGuideAvailable") }}
 					</p>
 				</div>
