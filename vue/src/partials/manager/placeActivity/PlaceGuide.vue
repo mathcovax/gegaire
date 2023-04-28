@@ -12,7 +12,7 @@
 			<div class="w-full h-full flex flex-col gap-[10px] items-center">
 				<div class="flex justify-between w-full gap-[10px]">
 					<h3 class="max-w-[40%]">
-						{{ guide.name }} zd sqd zdqs
+						{{ guide.name }}
 					</h3>
 
 					<div class="flex gap-[5px] overflow-hidden justify-end">
