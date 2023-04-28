@@ -10,24 +10,38 @@
 		classs="p-[10px]"
 		>
 			<div class="w-full h-full flex flex-col gap-[10px] items-center">
-				<div class="flex justify-between w-full">
-					<h3>{{ guide.name }}</h3>
+				<div class="flex justify-between w-full gap-[10px]">
+					<h3 class="max-w-[40%]">
+						{{ guide.name }} zd sqd zdqs
+					</h3>
 
-					<div class="flex gap-[5px]">
-						<div class="flex flex-col justify-between">
-							<p v-if="availability.am === true">
+					<div class="flex gap-[5px] overflow-hidden justify-end">
+						<div class="flex flex-col justify-between overflow-hidden">
+							<p
+							v-if="availability.am === true"
+							class="whitespace-nowrap overflow-hidden text-ellipsis text-right"
+							>
 								{{ work.amActivity === null? $tr("placeActivity.placeAvailable") : work.amActivity.name }}
 							</p>
 
-							<p v-else>
+							<p
+							v-else
+							class="text-right"
+							>
 								{{ $tr("placeActivity.placeUnAvailable") }}
 							</p>
 
-							<p v-if="availability.pm === true">
+							<p
+							v-if="availability.pm === true"
+							class="whitespace-nowrap overflow-hidden text-ellipsis text-right"
+							>
 								{{ work.pmActivity === null? $tr("placeActivity.placeAvailable") : work.pmActivity.name }}
 							</p>
 
-							<p v-else>
+							<p
+							v-else
+							class="text-right"
+							>
 								{{ $tr("placeActivity.placeUnAvailable") }}
 							</p>
 						</div>
