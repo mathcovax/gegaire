@@ -27,7 +27,7 @@ export default register(
 			]
 		})
 		(async function(){
-			let result = await this.method(
+			let activity = await this.method(
 				"activity.create",
 				this.pass("activity_name"),
 				this.pass("address"),
@@ -39,7 +39,30 @@ export default register(
 				this.pass("activity_note"),
 			);
 
-			this.sender("ok", "activity.create", result);
+			let users = await this.method(
+				"user.getFromAnyValue::many", 
+				{
+					isManager: true
+				},
+				{
+					id: true,
+					name: true,
+					email: true,
+				}
+			);
+
+			let userCreate = users.find(u => u.id === this.pass("accessTokenValue").id);
+			let emails = users.filter(u => u.id !== this.pass("accessTokenValue").id).map(u => u.email);
+			
+			if(emails.length !== 0) this.method(
+				"sendEmail::createActivity",
+				emails,
+				activity.id,
+				this.pass("activity_date").toISOString(),
+				userCreate.name
+			);
+
+			this.sender("ok", "activity.create", activity);
 		});
 
 		reg({

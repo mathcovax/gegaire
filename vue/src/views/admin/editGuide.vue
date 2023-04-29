@@ -197,7 +197,7 @@ export default defineComponent({
 				tel: this.tel,
 				name: this.name,
 				groups: this.groups,
-				address: this.address,
+				address: JSON.stringify(this.address) === "{}" ? undefined : this.address,
 				pro_card: this.pro_card.from && this.pro_card.to ? this.pro_card : null,
 				isManager: this.isManager,
 			})

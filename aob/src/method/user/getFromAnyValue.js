@@ -9,3 +9,13 @@ export default method(
 		});
 	}
 );
+
+export const many = method(
+	async function(where, select){
+		return await Prisma.user.findMany({
+			where,
+			select,
+		});
+	}
+);
+

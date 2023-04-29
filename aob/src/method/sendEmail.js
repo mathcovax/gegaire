@@ -12,7 +12,7 @@ import {env} from "anotherback";
 export const invitation = method(
 	async function(email, id){
 		return await sendEmails(
-			[email],
+			email,
 			{
 				subject: "Invitation",
 				text: `Bonjour vous avez été invité à vous inscrire sur Gegaire, rendez-vous ici : ${env.HOST}/invit/${id}`
@@ -31,6 +31,18 @@ export const showActivity = method(
 			}
 		);
 		if(result !== undefined) console.log(result);
+	}
+);
+
+export const createActivity = method(
+	async function(emails, activityId, date, userName){
+		return await sendEmails(
+			emails,
+			{
+				subject: "Nouvelle activité",
+				text: `Une nouvelle activité qui se déroulant le ${date.split("T")[0].split("-").reverse().join("/")} vient d'être créé par ${userName}, retrouvez la juste ici : ${env.HOST}/manager/activities/${activityId}/place`
+			}
+		);
 	}
 );
 
