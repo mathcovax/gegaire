@@ -16,6 +16,7 @@ export default method(
 		if(result.address) await this.method("address.delete", result.address.id);
 		if(result.pro_card) await this.method("proCard.delete", result.pro_card.id);
 
+		await this.method("work.delete::fromUserId", id);
 		await this.method("availability.deleteManyFromUserId", id);
 		
 		await Prisma.user.delete({

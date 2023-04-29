@@ -62,6 +62,16 @@ export const fromActivityId = method(
 	}
 );
 
+export const fromUserId = method(
+	async function(userId){
+		await Prisma.work.deleteMany({
+			where: {
+				userId
+			}
+		});
+	}
+);
+
 // export const other = method(
 // 	function(arg){
 // 		console.log(arg);
