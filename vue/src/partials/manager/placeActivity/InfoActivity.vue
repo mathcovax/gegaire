@@ -76,30 +76,30 @@
 			</div>
 
 			<p class="col-span-4">
-				{{ $tr("placeActivity.infoShow") + " :" }}
+				{{ $tr("label.status") }} :
 			</p>
 
 			<div class="col-span-8 whitespace-pre-wrap flex justify-between items-center">
-				<p class="uppercase">
-					{{ activity.isShow === true? $tr("btn.yes") : $tr("btn.no") }}
+				<p>
+					{{ $tr("activity.status." + activity.status) }}
 				</p>
 
 				<Btn
-				v-if="activity.isShow === false"
 				small
-				@click="showActivity"
+				v-if="activity.status !== 'showning'"
+				theme="orange"
+				@click="setStatus"
 				:popup="{
-					title: $tr('placeActivity.popupTitleShow'),
-					subTitle: $tr('placeActivity.popupSubTitleShow')
+					title: activity.status === 'waiting'? $tr('placeActivity.popupTitleValidate') : $tr('placeActivity.popupTitleShow'),
+					subTitle: activity.status === 'waiting'? $tr('placeActivity.popupSubTitleValidate') : $tr('placeActivity.popupSubTitleShow')
 				}"
 				>
-					{{ $tr("placeActivity.btnToShow") }}
+					{{ activity.status === "waiting"? $tr("btn.validate") : $tr("placeActivity.btnToShow") }}
 				</Btn>
 			</div>
 
-			<div class="col-span-12 flex justify-center">
+			<div class="col-span-12 flex justify-center mt-[5px]">
 				<Btn
-				small
 				@click="$router.push('/manager/activities/' + activity.id + '/edit')"
 				>
 					{{ $tr("btn.edit") }}
@@ -119,7 +119,7 @@ export default defineComponent({
 		...mapState(activityPlaceStore, ["activity"])
 	},
 	methods: {
-		...mapActions(activityPlaceStore, ["showActivity"])
+		...mapActions(activityPlaceStore, ["setStatus"])
 	}
 });
 </script>

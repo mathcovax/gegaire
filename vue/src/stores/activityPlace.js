@@ -114,13 +114,22 @@ export const activityPlaceStore = defineStore(
 				this.selectedGuide = false;
 			},
 
-			async showActivity(){
+			async setStatus(){
+				if(this.activity.status === "waiting") var status = "validated";
+				else if(this.activity.status === "validated") var status = "showning";
+				else return;
+				
 				let {close} = fixedStore().requestLoader();
-				await taob.patch(`/activity/${this.activity.id}/show`)
+				await taob.patch(
+					`/activity/${this.activity.id}/status`,
+					{
+						status
+					}
+				)
 				.info(() => close())
 				.sd();
 
-				this.activity.isShow = true;
+				this.activity.status = status;
 			}
 		},
 	}

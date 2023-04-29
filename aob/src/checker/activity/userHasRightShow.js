@@ -7,7 +7,7 @@ export default checker(
 	async function({activity, user}){
 		if(user.isManager === true) return;
 
-		if(activity.isShow === false) this.sender("forbidden", "activity.hasNotRight");
+		if(activity.status !== "showning") this.sender("forbidden", "activity.hasNotRight");
 
 		activity = await this.method("activity.get::byId", activity.id, {amGuide: true, pmGuide: true});
 

@@ -47,5 +47,14 @@ export default register(
 
 			this.sender("ok", "generateAccessToken");
 		});
+
+		reg({
+			path: "oauth2callback",
+			ignoreRegisterPrefix: true,
+			method: "GET",
+		})
+		(function(){
+			console.log("test");
+		});
 	}
 );

@@ -1,8 +1,27 @@
 import {method} from "anotherback/cli";
-import {sendEmails} from "../../import/mailer.js";
+import {sendEmails} from "../import/mailer.js";
 import {env} from "anotherback";
 
-export default method(
+// export default method(
+// 	function(arg){
+// 		console.log(arg);
+// 		return false;
+// 	}
+// );
+
+export const invitation = method(
+	async function(email, id){
+		return await sendEmails(
+			[email],
+			{
+				subject: "Invitation",
+				text: `Bonjour vous avez été invité à vous inscrire sur Gegaire, rendez-vous ici : ${env.HOST}/invit/${id}`
+			}
+		);
+	}
+);
+
+export const showActivity = method(
 	async function(emails, activityId, date){
 		let result = await sendEmails(
 			emails,

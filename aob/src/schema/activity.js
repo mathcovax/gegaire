@@ -30,3 +30,8 @@ export const date = schema(
 	s.date(),
 	(sender) => sender("bad_request", "activity.date")
 );
+
+export const status = schema(
+	s.string().equal("waiting", "validated", "showning"),
+	(sender) => sender("bad_request", "activity.date")
+);

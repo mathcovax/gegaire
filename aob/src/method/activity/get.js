@@ -33,7 +33,7 @@ export const infoById = method(
 				hourStart: true,
 				hourEnd: true,
 				note: true,
-				isShow: true,
+				status: true,
 				address: {
 					select: {
 						text: true,
@@ -119,7 +119,7 @@ export const month = method(
 				hourStart: true,
 				hourEnd: true,
 				id: true,
-				isShow: true,
+				status: true,
 				address: {
 					select: {
 						text: true,

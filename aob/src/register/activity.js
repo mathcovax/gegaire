@@ -224,7 +224,7 @@ export default register(
 		});
 
 		reg({
-			path: "/:id/show",
+			path: "/:id/status",
 			method: "PATCH",
 			schema: {
 				params: {
@@ -233,54 +233,64 @@ export default register(
 						key: "id",
 						checkers: ["activity.existe<pass"]
 					}
+				},
+				body: {
+					activity_status: {
+						schema: "activity::status",
+						key: "status",
+						checkers: ["activity.status::order<pass"],
+					}
 				}
 			}
 		})
 		(async function(){
-			let {date, amGuide, pmGuide} = await this.method(
-				"activity.get::byId",
+			await this.method(
+				"activity.edit::status",
 				this.pass("activity_id"),
-				{
-					date: true,
-					amGuide: {
-						select: {
-							user: {
-								select: {
-									email: true
-								}
-							}
-						}
-					},
-					pmGuide: {
-						select: {
-							user: {
-								select: {
-									email: true
-								}
-							}
-						}
-					},
-				}
+				this.pass("activity_status")
 			);
-
-			let emails = amGuide.map(v => {
-				if(pmGuide.find(vpm => vpm.user.email === v.user.email) !== undefined) pmGuide = pmGuide.filter(vpm => vpm.user.email !== v.user.email);
-				return v.user.email;
-			});
 			
-			await this.method(
-				"email.showActivity",
-				[...emails, ...pmGuide.map(v => v.user.email)],
-				this.pass("activity_id"),
-				date.toISOString()
-			);
+			if(this.pass("activity_status") === "showning"){
+				let {date, amGuide, pmGuide} = await this.method(
+					"activity.get::byId",
+					this.pass("activity_id"),
+					{
+						date: true,
+						amGuide: {
+							select: {
+								user: {
+									select: {
+										email: true
+									}
+								}
+							}
+						},
+						pmGuide: {
+							select: {
+								user: {
+									select: {
+										email: true
+									}
+								}
+							}
+						},
+					}
+				);
+	
+				let emails = amGuide.map(v => {
+					if(pmGuide.find(vpm => vpm.user.email === v.user.email) !== undefined) pmGuide = pmGuide.filter(vpm => vpm.user.email !== v.user.email);
+					return v.user.email;
+				});
+				
+				await this.method(
+					"sendEmail::showActivity",
+					[...emails, ...pmGuide.map(v => v.user.email)],
+					this.pass("activity_id"),
+					date.toISOString()
+				);
+			}
 
-			await this.method(
-				"activity.edit::show",
-				this.pass("activity_id")
-			);
-
-			this.sender("no_content", "activity.show");
+			this.sender("no_content", "activity.status");
 		});
 	}
 );

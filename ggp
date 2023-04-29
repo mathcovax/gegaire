@@ -39,6 +39,15 @@ elif [ "$1" == "reset" ]
 then
 	$EXEC_AOB npx prisma migrate reset --force
 	$EXEC_AOB node src/prisma/dataFixtures.js
+
+elif [ "$1" == "deploy" ]
+then
+	$EXEC_AOB npx prisma migrate deploy
+
+elif [ "$1" == "push" ]
+then
+	$EXEC_AOB npx prisma db push
+
 elif [ "$1" == "save_db" ]
 then
 	$EXEC_POSTGRES pg_dumpall -c -U mathcovax > ./save_db/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql

@@ -107,16 +107,16 @@ model Work {
 model Activity {
     id Int @id @default(autoincrement())
 
-    name      String   @db.VarChar(30)
+    name      String         @db.VarChar(30)
     number    Int
     address   Address?
     date      DateTime
-    hourStart String?  @default("") @db.VarChar(5)
-    hourEnd   String?  @default("") @db.VarChar(5)
-    note      String?  @default("") @db.VarChar(1500)
-    group     Group    @relation(fields: [groupId], references: [id])
+    hourStart String?        @default("") @db.VarChar(5)
+    hourEnd   String?        @default("") @db.VarChar(5)
+    note      String?        @default("") @db.VarChar(1500)
+    group     Group          @relation(fields: [groupId], references: [id])
     groupId   Int
-    isShow    Boolean  @default(false)
+    status    ActivityStatus @default(waiting)
 
     createdAt DateTime @default(now())
     updatedAT DateTime @updatedAt
@@ -130,4 +130,10 @@ model Link {
     email     String   @unique @db.VarChar(255)
     createdAt DateTime @default(now())
     groups    Group[]
+}
+
+enum ActivityStatus {
+    waiting
+    validated
+    showning
 }

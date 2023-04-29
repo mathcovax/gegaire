@@ -24,14 +24,14 @@ export default method(
 	}
 );
 
-export const show = method(
-	async function(id){
+export const status = method(
+	async function(id, status){
 		return await Prisma.activity.update({
 			where: {
 				id
 			},
 			data: {
-				isShow: true
+				status
 			}
 		});
 	}

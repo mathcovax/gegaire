@@ -27,7 +27,7 @@ export const fromUserIdByMonth = method(
 					select: {
 						id: true,
 						name: true,
-						isShow: true,
+						status: true,
 					}
 				},
 				amLeader: true,
@@ -35,7 +35,7 @@ export const fromUserIdByMonth = method(
 					select: {
 						id: true,
 						name: true,
-						isShow: true,
+						status: true,
 					}
 				},
 				pmLeader: true,
@@ -47,8 +47,8 @@ export const fromUserIdByMonth = method(
 		});
 
 		return result.map(v => {
-			if(v.amActivity?.isShow === false)v.amActivity = true;
-			if(v.pmActivity?.isShow === false)v.pmActivity = true;
+			if(v.amActivity !== null && v.amActivity?.status !== "showning")v.amActivity = true;
+			if(v.pmActivity !== null && v.pmActivity?.status !== "showning")v.pmActivity = true;
 			return v;
 		});
 	}

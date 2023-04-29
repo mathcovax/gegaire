@@ -29,13 +29,13 @@ export default register(
 
 
 			let resultMail = await this.method(
-				"email.createLink", 
+				"sendEmail::invitation", 
 				result.email,
 				result.id
 			);
 			if(resultMail !== undefined){
 				await this.method("link.delete", result.id);
-				this.sender("failed_dep", "mailer.sendeError", e);
+				this.sender("failed_dep", "mailer.sendeError", resultMail);
 			}
 
 			this.sender("no_content", "link.create");

@@ -35,8 +35,9 @@
 				<div
 				class="h-[10px] w-[10px] rounded-full"
 				:class="{
-					'bg-[red]': activity.isShow === false,
-					'bg-[green]': activity.isShow === true,
+					'bg-[red]': activity.status === 'waiting',
+					'bg-[orange]': activity.status === 'validated',
+					'bg-[green]': activity.status === 'showning',
 				}"
 				/>
 			</div>

@@ -54,8 +54,14 @@ export default {
 		place: "Le guide a bien été placé dans l'activité.",
 		deletePlace: "Le guide a bien été retiré de l'activité.",
 		wrong_group: "Le groupe de la disponibilité ne correspond pas au groupe de l'activité.",
-		show: "L'activité a bien été rendu visible.",
+		status: "Le statut de l'activité a bien été mis à jour.",
 		hasNotRight: "Vous n'avez pas le droit de voir cette activité",
+
+		status: {
+			waiting: "En attente",
+			validated: "Valider",
+			showning: "Visible",
+		}
 	},
 
 	btn: {
@@ -84,6 +90,7 @@ export default {
 		hour: "Horaire",
 		date: "Date",
 		note: "Note",
+		status: "status",
 	},
 	rules: {
 		passwordIsnotsame: "Les mots de passe ne correspondent pas."
@@ -230,11 +237,12 @@ export default {
 		infoStart: "Com. à",
 		infoEnd: "fini à",
 		infoNote: "Note",
-		infoShow: "Visible",
 		btnToShow: "rendre visible",
 
+		popupTitleValidate: "Valider l'activité ?",
+		popupSubTitleValidate: "Cette action est irréversible et l'activité ne sera plus mise en avant pour signaler qu'elle n'est pas complète.",
 		popupTitleShow: "Rendre visible l'activité ?",
-		popupSubTitleShow: "Cette action est irréversible et on verra un mail à tous les guides de l'activité.",
+		popupSubTitleShow: "Cette action est irréversible et enverra un mail à tous les guides de l'activité.",
 
 		popupTitleRemove: "Retirer le guide de l'activité ?",
 		popupSubTitleRemove: "Cela retirera entièrement le guide de l'activité.",
