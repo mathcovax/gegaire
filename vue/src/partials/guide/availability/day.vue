@@ -1,7 +1,7 @@
 <template>
 	<div 
 	@click="clicked"
-	class="h-full p-[3px] relative overflow-hidden rounded-[4px] select-none"
+	class="p-[3px] relative overflow-hidden rounded-[4px] select-none"
 	:class="{
 		'opacity-[0.5]': isPast || hasWork,
 	}"

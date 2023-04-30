@@ -22,7 +22,7 @@ services:
       - ./aob/.env
     depends_on:
       - postgres
-  
+    
   builder-vue:
     container_name: builder-vue
     image: node:18.13.0-alpine

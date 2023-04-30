@@ -5,6 +5,7 @@ import component from "./components";
 import taob from "./taob";
 import router from "./router";
 import rules from "./rules";
+import "./tailwind.css";
 
 const pinia = createPinia();
 const app = createApp(App);

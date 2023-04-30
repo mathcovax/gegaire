@@ -6,7 +6,9 @@
 		class="w-[90%] lg:w-[500px]"
 		classs="flex flex-col items-center p-[5px] gap-[5px]"
 		>
-			<h1>{{ activity.name }}</h1>
+			<h1 class="text-center">
+				{{ activity.name }}
+			</h1>
 
 			<p class="w-full">
 				{{ $tr("label.address") }} : 
@@ -54,7 +56,7 @@
 
 		<Btn
 		theme="orange"
-		@click="$router.back()"
+		@click="back"
 		>
 			{{ $tr("btn.back") }}
 		</Btn>
@@ -112,6 +114,11 @@ export default defineComponent({
 				`&location=${this.activity.address.text}` +
 				`&details=${location.href}`
 			);
+		},
+
+		back(){
+			if(window.history.length > 2) this.$router.back();
+			else this.$router.push("/guide/availability");
 		}
 	},
 	mounted(){
