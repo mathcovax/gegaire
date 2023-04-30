@@ -49,12 +49,6 @@ export default defineComponent({
 			months += date.getMonth();
 			months -= this.dateInStore.getMonth();
 			this.page = months + 4;
-
-			setTimeout(() => {
-				let id = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-				let top = document.getElementById(id).offsetTop - 30;
-				this.$refs.scrollView.scrollTo({top});
-			}, 500);
 		},
 
 		scrolled(e){
@@ -64,10 +58,7 @@ export default defineComponent({
 		},
 	},
 	async mounted(){
-		if(this.$route.query.date){
-			this.initDate(this.$route.query.date);
-			this.$router.replace({query: null});
-		}
+		if(this.$route.query.date) this.initDate(this.$route.query.date);
 	},
 	unmounted(){
 		this.purgeActivitiesStore();

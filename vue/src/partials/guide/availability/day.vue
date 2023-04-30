@@ -29,7 +29,7 @@
 		<div
 		class="relative w-full h-full p-[2px] flex flex-col bg-[white] rounded-[4px] border-solid border-[2px] border-[black] gap-[5px]"
 		:class="{
-			'bg-[#ADD8E6]': hasWork && !isPast
+			'bg-[#ADD8E6]': hasWork
 		}"
 		>
 			<p class="w-full text-center text-[13px]">
@@ -113,9 +113,9 @@ export default defineComponent({
 		...mapActions(availabilityStore, ["getMonth", "startEditingDay"]),
 
 		clicked(){
-			if(this.avb === undefined || this.isPast === true) return;
-			else if(this.hasWork === true) this.$router.push(`/guide/activities?date=${this.avb.year}-${this.avb.month}-${this.avb.day}`);
-			else this.startEditingDay(this.toDate);
+			if(this.avb === undefined) return;
+			else if(this.hasWork === true) this.$router.push(`/guide/activities?date=${this.toDate.toISOString().split("T")[0]}`);
+			else if(this.isPast !== true) this.startEditingDay(this.toDate);
 		},
 
 		getDay(date){

@@ -9,7 +9,13 @@
 			<h1>{{ activity.name }}</h1>
 
 			<p class="w-full">
-				{{ $tr("label.address") }} : <b>{{ activity.address.text }}</b>
+				{{ $tr("label.address") }} : 
+				<a
+				:href="'https://www.google.com/maps?q=' + activity.address.text"
+				target="_blank"
+				>
+					{{ activity.address.text }}
+				</a>
 			</p>
 
 			<p class="w-full">
@@ -37,6 +43,13 @@
 					</p>
 				</div>
 			</div>
+
+			<Btn
+			small
+			@click="addToCalendar"
+			>
+				{{ $tr("activity.btnAddToCalendar") }}
+			</Btn>
 		</Frame>
 
 		<Btn
@@ -77,6 +90,28 @@ export default defineComponent({
 			.e(() => this.$router.push("/guide/activities"))
 			.info(() => close())
 			.result;
+		},
+
+		addToCalendar(){
+			let dateFrom = new Date(
+				this.activity.date.split("T")[0] + 
+				(this.activity.hourStart ? "T" + this.activity.hourStart + ":00" : "")
+			);
+			let dateTo = new Date(
+				this.activity.date.split("T")[0] + 
+				(this.activity.hourEnd ? "T" + this.activity.hourEnd + ":00" : "")
+			);
+			
+			dateFrom = dateFrom.toISOString().replace(/[-:.]/g, "");
+			dateTo = dateTo.toISOString().replace(/[-:.]/g, "");
+			
+			open(
+				"http://www.google.com/calendar/event?action=TEMPLATE" +
+				`&dates=${dateFrom}%2F${dateTo}` + 
+				`&text=${this.activity.name} - ${this.activity.number} P` + 
+				`&location=${this.activity.address.text}` +
+				`&details=${location.href}`
+			);
 		}
 	},
 	mounted(){

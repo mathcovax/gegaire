@@ -50,7 +50,7 @@ export default defineComponent({
 		monthWork(){
 			if(this.date === false) return false;
 			return this.work[this.date.toISOString().split("-").reverse().slice(1).join("-")] || false; 
-		}
+		},
 
 	},
 	methods: {

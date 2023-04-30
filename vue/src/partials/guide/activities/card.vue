@@ -1,6 +1,5 @@
 <template>
 	<Frame
-	:id="id"
 	border="4px"
 	row
 	class="w-full"
@@ -94,16 +93,6 @@ export default defineComponent({
 			return day + " " + numDay;
 		},
 
-		id(){
-			let date = new Date(this.work.date);
-			return date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-		},
-		
-		isNotPast(){
-			if(new Date(this.activity.date).getTime() > Date.now()) return true;
-			else return false;
-		},
-
 		isSame(){
 			if(
 				this.work.amActivity === null || 
@@ -116,7 +105,10 @@ export default defineComponent({
 		}
 	},
 	mounted(){
-
+		if(this.$route.query?.date === this.work.date.split("T")[0]){
+			this.$parent.$parent.$refs.scrollView.scrollTo({top: this.$el.offsetTop - 30});
+			this.$router.replace({query: null});
+		}
 	}
 });
 </script>

@@ -260,5 +260,8 @@ export default {
 		title: "Activités",
 		empty: "Aucun travaile ce mois-ci.",
 		activityNotShow: "Aucune info disponible."
+	},
+	activity: {
+		btnAddToCalendar: "ajouter à mon calendrier google"
 	}
 };
