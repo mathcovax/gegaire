@@ -27,9 +27,10 @@
 		/>
 
 		<div
-		class="relative w-full h-full p-[2px] flex flex-col bg-[white] rounded-[4px] border-solid border-[2px] border-[black] gap-[5px]"
+		class="relative w-full h-full p-[2px] flex flex-col rounded-[4px] border-solid border-[2px] border-[black] gap-[5px]"
 		:class="{
-			'bg-[#ADD8E6]': hasWork
+			'bg-[#ADD8E6]': hasWork,
+			'bg-[white]': !hasWork
 		}"
 		>
 			<p class="w-full text-center text-[13px]">

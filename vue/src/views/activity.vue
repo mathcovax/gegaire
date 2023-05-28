@@ -1,9 +1,9 @@
 <template>
-	<main class="w-full h-full flex flex-col gap-[10px] items-center justify-center">
+	<main class="w-full h-full flex flex-col gap-[10px] items-center justify-center p-[15px]">
 		<Frame
 		v-if="activity !== false"
 		border="4px"
-		class="w-[90%] lg:w-[500px]"
+		class="w-full lg:w-[500px]"
 		classs="flex flex-col items-center p-[5px] gap-[5px]"
 		>
 			<h1 class="text-center">
@@ -24,7 +24,10 @@
 				{{ $tr("label.date") }} : <b>{{ activity.date.split("T")[0].split("-").reverse().join("/") }}</b>
 			</p>
 
-			<p class="w-full">
+			<p
+			class="w-full"
+			v-if="activity.hourStart && activity.hourEnd"
+			>
 				{{ $tr("label.hour") }} : <b>{{ activity.hourStart.replace(":", "h") }}</b>
 
 				/ <b>{{ activity.hourEnd.replace(":", "h") }}</b>
@@ -34,7 +37,10 @@
 				{{ $tr("label.pepol") }} : <b>{{ activity.number }}</b>
 			</p>
 
-			<div class="w-full flex gap-[5px]">
+			<div
+			class="w-full flex gap-[5px]"
+			v-if="activity.note"
+			>
 				<p class="shrink-0">
 					{{ $tr("label.note") }} :
 				</p>
@@ -46,11 +52,45 @@
 				</div>
 			</div>
 
+			<Frame
+			row
+			border="4px"
+			class="grow overflow-hidden col-start-2 col-end-12 w-full"
+			classs="flex flex-col items-center gap-[5px] overflow-y-auto p-[5px] max-h-[150px]"
+			>
+				<div class="w-full grid grid-cols-12">
+					<p class="col-span-3">
+						{{ $tr("placeActivity.columnGuideSelectName") }}
+					</p>
+					
+					<p class="col-span-3 flex justify-end">
+						{{ $tr("placeActivity.columnGuideSelectLeader") }}
+					</p>
+
+					<p class="col-span-3 flex justify-end">
+						{{ $tr("placeActivity.columnGuideSelectAM") }}
+					</p>
+
+					<p class="col-span-3 flex justify-end">
+						{{ $tr("placeActivity.columnGuideSelectPM") }}
+					</p>
+				</div>
+
+				<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
+
+				<div class="flex flex-col w-full grow overflow-y-auto gap-[5px]">
+					<SelectCard
+					v-for="guide of selectedGuides"
+					:guide="guide"
+					/>
+				</div>
+			</Frame>
+
 			<Btn
 			small
 			@click="addToCalendar"
 			>
-				{{ $tr("activity.btnAddToCalendar") }}
+				{{ $tr("viewActivity.btnAddToCalendar") }}
 			</Btn>
 		</Frame>
 
@@ -67,8 +107,12 @@
 import {defineComponent} from "vue";
 import {fixedStore} from "../stores/fixed";
 import {taob} from "../taob";
+import SelectCard from "../partials/activity/SelectCard.vue";
 
 export default defineComponent({
+	components: {
+		SelectCard
+	},
 	data(){
 		return {
 			activity: false
@@ -80,7 +124,57 @@ export default defineComponent({
 		},
 		pmGuide(){
 			return this.activity.pmGuide;
-		}
+		},
+
+		selectedGuides(){
+			const guides = [];
+			const pmGuide = [...(this.activity.pmGuide || [])];
+
+			if(this.activity === false) return false;
+
+			for(const work of (this.activity.amGuide || [])){
+				let pmg = pmGuide.findIndex(v => v.user.id === work.user.id);
+				if(pmg !== -1)pmGuide.splice(pmg, 1);
+
+				guides.push({
+					name: work.user.name,
+					id: work.user.id,
+					leader: (
+						(
+							work.amActivityId === this.activity.id && 
+								work.amLeader === true
+						) || 
+							(
+								work.pmActivityId === this.activity.id &&
+								work.pmLeader === true
+							)
+					),
+					am: true,
+					pm: pmg !== -1
+				});
+			}
+
+			for(const work of pmGuide){
+				guides.push({
+					name: work.user.name,
+					id: work.user.id,
+					leader: (
+						(
+							work.amActivityId === this.activity.id && 
+								work.amLeader === true
+						) || 
+							(
+								work.pmActivityId === this.activity.id &&
+								work.pmLeader === true
+							)
+					),
+					am: false,
+					pm: true
+				});
+			}
+
+			return guides;
+		},
 	},
 	methods: {
 		async init(){
