@@ -31,7 +31,7 @@ services:
     environment:
       npm_config_cache: /home/node/cache
     working_dir: /home/node/vue
-    entrypoint: npm run build
+    entrypoint: npm i | npm run build
 
   vue:
     container_name: vue
