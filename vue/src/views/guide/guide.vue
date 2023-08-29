@@ -144,8 +144,8 @@ export default defineComponent({
 		telRules(){
 			return [
 				this.$rules.required,
-				(value) => this.$rules.minLength(10, value),
-				(value) => this.$rules.maxLength(12, value)
+				(value) => this.$rules.minLength(10, value.replace(/ /g, "")),
+				(value) => this.$rules.maxLength(12, value.replace(/ /g, ""))
 			];
 		},
 	},
@@ -162,7 +162,7 @@ export default defineComponent({
 		async submited(){
 			this.newName = this.newName.trim();
 			this.newEmail = this.newEmail.trim();
-			this.newTel = this.newTel.trim();
+			this.newTel = this.newTel.replace(/ /g, "").trim();
 
 			let body = {
 				user_name: this.newName !== this.name ? this.newName : undefined,

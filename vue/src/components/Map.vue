@@ -107,7 +107,9 @@ export default defineComponent({
 					})(),
 				});
 			}
-			catch {}
+			catch {
+				this.$emit("update:modelValue", false);
+			}
 		},
 	},
 	mounted(){

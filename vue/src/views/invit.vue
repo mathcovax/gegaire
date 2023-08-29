@@ -108,8 +108,8 @@ export default defineComponent({
 		telRules(){
 			return [
 				this.$rules.required,
-				(value) => this.$rules.minLength(10, value),
-				(value) => this.$rules.maxLength(12, value)
+				(value) => this.$rules.minLength(10, value.replace(/ /g, "")),
+				(value) => this.$rules.maxLength(12, value.replace(/ /g, ""))
 			];
 		},
 		passwordRules(){
@@ -136,7 +136,7 @@ export default defineComponent({
 				"user",
 				{
 					name: this.name,
-					tel: this.tel,
+					tel: this.tel.replace(/ /g, ""),
 					address: Object.keys(this.address).length === 0 ? null : this.address,
 					password: this.password,
 					link_id: this.$route.params.id

@@ -9,6 +9,8 @@ export const options = registerOptions(
 
 export default register(
 	function(reg, hook){
+
+		// create activity
 		reg({
 			path: "/",
 			method: "POST",
@@ -154,6 +156,7 @@ export default register(
 			this.sender("no_content", "activity.delete");
 		});
 
+		//add user to activity
 		reg({
 			path: "/:id/place",
 			method: "PATCH",
@@ -196,6 +199,7 @@ export default register(
 			this.sender("no_content", "activity.place");
 		});
 
+		// remove user from activity 
 		reg({
 			path: "/:id/place/:uid",
 			method: "DELETE",
@@ -246,6 +250,7 @@ export default register(
 			this.sender("ok", "activity.get", result);
 		});
 
+		// change activity status
 		reg({
 			path: "/:id/status",
 			method: "PATCH",
