@@ -37,13 +37,20 @@
 				v-model="mapValue"
 				/>
 
-				<p v-if="mapValue.text !== undefined">
+				<p v-if="mapValue?.text !== undefined">
 					{{ mapValue.text }}
+				</p>
+
+				<p
+				class="text-[red]"
+				v-if="mapValue === false"
+				>
+					{{ $tr("label.invalidAddress") }}
 				</p>
 
 				<Btn
 				@click="clicked"
-				:disabled="!mapValue.text"
+				:disabled="!mapValue?.text"
 				>
 					{{ $tr("btn.validate") }}
 				</Btn>

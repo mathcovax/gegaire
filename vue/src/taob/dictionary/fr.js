@@ -81,7 +81,7 @@ export default {
 	},
 	label: {
 		email: "Email",
-		name: "Nom",
+		name: "Nom & Prénom",
 		tel: "Numéro de téléphone",
 		address: "Addresse physique",
 		password: "Mot de passe",
@@ -91,6 +91,7 @@ export default {
 		date: "Date",
 		note: "Note",
 		status: "status",
+		invalidAddress: "Addresse invalide",
 	},
 	rules: {
 		passwordIsnotsame: "Les mots de passe ne correspondent pas."
