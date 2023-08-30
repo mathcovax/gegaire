@@ -100,6 +100,7 @@ export default register(
 			this.sender("ok", "user.get", result);
 		});
 
+		//add user from invit
 		reg({
 			path: "/",
 			method: "POST",

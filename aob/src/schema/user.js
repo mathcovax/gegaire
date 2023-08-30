@@ -12,7 +12,7 @@ export const id = schema(
 );
 
 export const name = schema(
-	s.string().trim().max(30).min(4),
+	s.string().trim().max(50).min(4),
 	(sender) => sender("bad_request", "user.name")
 );
 
