@@ -40,7 +40,7 @@ export const createActivity = method(
 			emails,
 			{
 				subject: "Nouvelle activité",
-				text: `Une nouvelle activité qui se déroulant le ${date.split("T")[0].split("-").reverse().join("/")} vient d'être créé par ${userName}, retrouvez la juste ici : ${env.HOST}/manager/activities/${activityId}/place`
+				text: `Une nouvelle activité qui se déroule le ${date.split("T")[0].split("-").reverse().join("/")} vient d'être créée par ${userName}, retrouvez-la juste ici : ${env.HOST}/manager/activities/${activityId}/place`
 			}
 		);
 	}

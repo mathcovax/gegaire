@@ -10,7 +10,7 @@ datasource db {
 model User {
     id Int @id @default(autoincrement())
 
-    name     String @unique @db.VarChar(30)
+    name     String @unique @db.VarChar(50)
     password String
     email    String @unique @db.VarChar(255)
     tel      String @unique @db.VarChar(12)
@@ -107,7 +107,7 @@ model Work {
 model Activity {
     id Int @id @default(autoincrement())
 
-    name      String         @db.VarChar(30)
+    name      String         @db.VarChar(50)
     number    Int
     address   Address?
     date      DateTime

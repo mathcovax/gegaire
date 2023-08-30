@@ -127,7 +127,7 @@ export default defineComponent({
 			return [
 				this.$rules.required,
 				(value) => this.$rules.minLength(4, value),
-				(value) => this.$rules.maxLength(30, value),
+				(value) => this.$rules.maxLength(50, value),
 			];
 		},
 		numberRules(){

@@ -131,21 +131,15 @@ export default defineComponent({
 			return [
 				this.$rules.required,
 				(value) => this.$rules.minLength(4, value),
-				(value) => this.$rules.maxLength(15, value),
-			];
-		},
-		idRules(){
-			return [
-				this.$rules.required,
-				(value) => this.$rules.minLength(5, value),
-				(value) => this.$rules.maxLength(20, value),
+				(value) => this.$rules.maxLength(50, value),
 			];
 		},
 		emailRules(){
 			return [
 				this.$rules.required,
 				this.$rules.validEmail,
-				(value) => this.$rules.maxLength(40, value),
+				(value) => this.$rules.minLength(10, value),
+				(value) => this.$rules.maxLength(255, value),
 			];
 		},
 		telRules(){
