@@ -9,6 +9,7 @@
 		>
 			<Month
 			class="lg:w-[800px]"
+			v-if="dateInStore"
 			v-for="m in page"
 			:month="m-1"
 			/>
@@ -40,11 +41,11 @@ export default defineComponent({
 		...mapState(activitiesStore, ["dateInStore"])
 	},
 	methods: {
-		...mapActions(activitiesStore, ["purgeActivitiesStore"]),
+		...mapActions(activitiesStore, ["purgeActivitiesStore", "initPlanningStore"]),
 
 		initDate(date){
 			date = new Date(date);
-			
+
 			let months = (date.getFullYear() - this.dateInStore.getFullYear()) * 12;
 			months += date.getMonth();
 			months -= this.dateInStore.getMonth();
@@ -58,6 +59,7 @@ export default defineComponent({
 		},
 	},
 	async mounted(){
+		this.initPlanningStore();
 		if(this.$route.query.date) this.initDate(this.$route.query.date);
 	},
 	unmounted(){

@@ -15,6 +15,7 @@
 		>
 			<Month
 			class="lg:w-[800px]"
+			v-if="dateInStore"
 			v-for="m in page"
 			:month="m-1"
 			/>
@@ -25,7 +26,7 @@
 </template>
 
 <script>
-import {mapActions} from "pinia";
+import {mapActions, mapState} from "pinia";
 import {defineComponent} from "vue";
 import Month from "../../partials/manager/planning/month.vue";
 import {planningStore} from "../../stores/planning";
@@ -39,14 +40,20 @@ export default defineComponent({
 			page: 4,
 		};
 	},
+	computed: {
+		...mapState(planningStore, ["dateInStore"]),
+	},
 	methods: {
-		...mapActions(planningStore, ["purgePlanningStore"]),
+		...mapActions(planningStore, ["purgePlanningStore", "initPlanningStore"]),
 
 		scrolled(e){
 			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750)){
 				this.page++;
 			}
 		},
+	},
+	mounted(){
+		this.initPlanningStore();
 	},
 	unmounted(){
 		this.purgePlanningStore();

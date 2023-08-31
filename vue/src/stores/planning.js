@@ -6,7 +6,7 @@ export const planningStore = defineStore(
 	{
 		state(){
 			return {
-				dateInStore: new Date(),
+				dateInStore: false,
 				activities: {},
 			};
 		},
@@ -14,8 +14,12 @@ export const planningStore = defineStore(
 			
 		},
 		actions: {
-			purgePlanningStore(){
+			initPlanningStore(){
 				this.dateInStore = new Date();
+				this.dateInStore.setDate(1);
+			},
+			purgePlanningStore(){
+				this.dateInStore = false;
 				this.activities = {};
 			},
 
