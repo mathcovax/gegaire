@@ -2,9 +2,8 @@
 
 DOCKER_COMPOSE="docker compose"
 
-AOB_CONTAINER_SERVICE="aob"
-AOB_WORKDIR="/api"
-EXEC_AOB="$DOCKER_COMPOSE exec -u node -w $AOB_WORKDIR $AOB_CONTAINER_SERVICE"
+EXEC_AOB="$DOCKER_COMPOSE exec -u node -w /api aob"
+EXEC_DUPLO="$DOCKER_COMPOSE exec -u node -w /home/node/duplo duplo"
 
 POSTGRES_CONTAINER_SERVICE="postgres"
 EXEC_POSTGRES="$DOCKER_COMPOSE exec $POSTGRES_CONTAINER_SERVICE"
@@ -29,10 +28,12 @@ elif [ "$1" == "migrate" ]
 then
 	$EXEC_AOB npx prisma migrate dev
 	$EXEC_AOB npx prisma generate
+	$EXEC_DUPLO npx prisma generate
 
 elif [ "$1" == "generate" ]
 then
 	$EXEC_AOB npx prisma generate
+	$EXEC_DUPLO npx prisma generate
 
 elif [ "$1" == "deploy" ]
 then

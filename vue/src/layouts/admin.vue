@@ -7,9 +7,9 @@
 		/>
 
 		<nav 
-		class="z-10 absolute transition duration-[400ms] -left-[200px] top-0 w-[200px] h-full p-[15px] pl-0 bg-[var(--green1)] rounded-r-[4px] flex justify-center items-center"
+		class="z-10 absolute transition duration-[400ms] -left-[200px] lg:-left-[250px] top-0 w-[200px] lg:w-[250px] h-full p-[15px] pl-0 bg-[var(--green1)] rounded-r-[4px] flex justify-center items-center"
 		:class="{
-			'translate-x-[200px]': isOpen
+			'translate-x-[200px] lg:translate-x-[250px]': isOpen
 		}"
 		>
 			<div class="absolute top-0 left-0 bg-[var(--orange2)] h-[60px] w-full rounded-br-[20px] rounded-tr-[4px]"/>

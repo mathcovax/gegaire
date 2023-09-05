@@ -98,6 +98,7 @@ export default defineComponent({
 
 		countWork(){
 			let count = {...this.guide.countWork};
+			if(!this.amGuide || !this.pmGuide) return 0;
 			if(this.amGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
 			if(this.pmGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
 			return count;

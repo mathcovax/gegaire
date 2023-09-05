@@ -220,7 +220,7 @@ export default defineComponent({
 		}
 	},
 	methods: {
-		...mapActions(activityPlaceStore, ["initActivityPlaceStore"]),
+		...mapActions(activityPlaceStore, ["initActivityPlaceStore", "purgeActivityPlaceStore"]),
 		
 		async findPage(page = this.page){
 			if(this.isFetch === true || this.isAllFetch === true) return;
@@ -297,7 +297,7 @@ export default defineComponent({
 		this.init();
 	},
 	unmounted(){
-
+		this.purgeActivityPlaceStore();
 	}
 
 });

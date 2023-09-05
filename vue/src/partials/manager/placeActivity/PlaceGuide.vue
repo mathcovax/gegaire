@@ -25,6 +25,13 @@
 							</p>
 
 							<p
+							v-else-if="availability.am === null"
+							class="whitespace-nowrap overflow-hidden text-ellipsis text-right"
+							>
+								{{ $tr("placeActivity.placeMaybeAvailable") }}
+							</p>
+
+							<p
 							v-else
 							class="text-right"
 							>
@@ -36,6 +43,13 @@
 							class="whitespace-nowrap overflow-hidden text-ellipsis text-right"
 							>
 								{{ work.pmActivity === null? $tr("placeActivity.placeAvailable") : work.pmActivity.name }}
+							</p>
+
+							<p
+							v-else-if="availability.am === null"
+							class="whitespace-nowrap overflow-hidden text-ellipsis text-right"
+							>
+								{{ $tr("placeActivity.placeMaybeAvailable") }}
 							</p>
 
 							<p
@@ -248,7 +262,7 @@ export default defineComponent({
 		},
 	},
 	methods: {
-		...mapActions(activityPlaceStore, ["unSelectGuide", "purgeStore"]),
+		...mapActions(activityPlaceStore, ["unSelectGuide"]),
 
 		setAMPM(am, pm){
 			if(this.am === am && this.pm === pm){
@@ -284,9 +298,8 @@ export default defineComponent({
 				}
 			)
 			.s(() => {
-				this.purgeStore();
-				this.$parent.init();
 				this.unSelectGuide();
+				this.$parent.init();
 			})
 			.result;
 

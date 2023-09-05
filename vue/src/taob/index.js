@@ -19,10 +19,36 @@ export const taob = new Toanotherback({
 	},
 });
 
-taob.setHookInfo("expireAccessToken", () => router.push("/?callback=" + router.currentRoute.value.path));
+taob.addHookInfo("expireAccessToken", () => router.push("/?callback=" + router.currentRoute.value.path));
 
 Dictionary.add("fr", fr);
 Dictionary.use("fr");
+
+export const duplo = new Toanotherback({
+	prefix: "/duplo",
+	// https: true,
+	parameters: {
+		credentials: "include"
+	},
+	hookError(error){
+		console.error(error);
+	},
+	requestInterceptor: (request, interParams) => {
+		if(request.parameters.loader === true){
+			delete request.parameters.loader;
+			interParams.closeLoader = fixedStore().requestLoader().close;
+		}
+		return request;
+	},
+	responseInterceptor: (response, request, interParams) => {
+		if(interParams.closeLoader !== undefined){
+			interParams.closeLoader();
+		}
+		let tr = Dictionary.translate(response.response.headers.get("aob-info"));
+		if(tr !== response.response.headers.get("aob-info"))fixedStore().toasterPush(response.response.ok, tr);
+		return response;
+	},
+});
 
 export default {
 	install(vue){
@@ -31,3 +57,5 @@ export default {
 		vue.config.globalProperties.$useDico = dico => Dictionary.use(dico);
 	},
 };
+
+

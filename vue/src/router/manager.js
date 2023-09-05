@@ -17,5 +17,10 @@ export default {
 			name: "placeActivity",
 			component: () => import("@/views/manager/placeActivity.vue"),
 		},
+		{
+			path: "/manager/availabilitys",
+			name: "availabilitys",
+			component: () => import("@/views/manager/availabilitys.vue"),
+		},
 	]
 };

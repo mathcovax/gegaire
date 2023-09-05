@@ -78,7 +78,8 @@ export const activityPlaceStore = defineStore(
 				this.activity = activity;
 			},
 
-			purgeStore(){
+			purgeActivityPlaceStore(){
+				this.selectedGuide = false;
 				this.activity = false;
 				this.pmGuide = false;
 				this.amGuide = false;

@@ -77,7 +77,8 @@ export default {
 		remove: "retirer",
 		seeMore: "voir plus",
 		back: "retour",
-		save: "sauvgarder"
+		save: "sauvgarder",
+		search: "cherher",
 	},
 	label: {
 		email: "Email",
@@ -103,11 +104,12 @@ export default {
 			account: "Profile",
 
 			planning: "Planning",
-			admin: "Administration"
+			admin: "Administration",
 		},
 
 		manager: {
 			planning: "Planning",
+			availability: "Vue d'ensemble",
 			
 			admin: "Administration",
 			back: "Retour",
@@ -249,6 +251,7 @@ export default {
 		popupSubTitleRemove: "Cela retirera entièrement le guide de l'activité.",
 
 		placeAvailable: "Disponible",
+		placeMaybeAvailable: "À confirmer",
 		placeUnAvailable: "Indisponible",
 		placeNote: "Note",
 		placeWorkedBefore: "Travail 30 jours avant",
@@ -264,5 +267,10 @@ export default {
 	},
 	viewActivity: {
 		btnAddToCalendar: "ajouter à mon calendrier google"
+	},
+	"/manager/availabilitys": {
+		searchInput: "Chercher un guide...",
+		beforeMonth: "Mois avant",
+		afterMonth: "Mois après",
 	}
 };

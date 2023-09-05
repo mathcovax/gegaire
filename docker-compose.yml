@@ -21,7 +21,38 @@ services:
       - ./aob:/api
     depends_on:
       - postgres
+
+  installer-duplo:
+    container_name: installer-duplo
+    image: node:20.3.1-alpine
+    volumes:
+      - ./duplo:/home/node/duplo
+    environment:
+      npm_config_cache: /home/node/cache
+    working_dir: /home/node/duplo
+    entrypoint: npm i
+
+  duplo:
+    container_name: duplo
+    image: node:20.3.1-alpine
+    volumes:
+      - ./duplo:/home/node/duplo
+    working_dir: /home/node/duplo
+    command: npm run dev
+    depends_on:
+      installer-duplo: 
+        condition: service_completed_successfully
   
+  installer-vue:
+    container_name: installer-vue
+    image: node:18.13.0-alpine
+    volumes:
+      - ./vue:/home/node/vue
+    environment:
+      npm_config_cache: /home/node/cache
+    working_dir: /home/node/vue
+    entrypoint: npm i
+
   vue:
     container_name: vue
     image: node:18.13.0-alpine
@@ -29,6 +60,9 @@ services:
       - ./vue:/home/node/vue
     working_dir: /home/node/vue
     command: npm run dev
+    depends_on:
+      installer-vue: 
+        condition: service_completed_successfully
 
   postgres:
     container_name: postgres

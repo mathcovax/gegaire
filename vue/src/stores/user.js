@@ -39,8 +39,8 @@ export const userStore = defineStore(
 	}
 );
 
-taob.setHookInfo("generateAccessToken", () => userStore().initUserStore());
+taob.addHookInfo("generateAccessToken", () => userStore().initUserStore());
 
-taob.setHookInfo("user.edit", () => userStore().initUserStore());
+taob.addHookInfo("user.edit", () => userStore().initUserStore());
 
 userStore().initUserStore();

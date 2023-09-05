@@ -16,6 +16,12 @@ server.register(proxy, {
 });
 
 server.register(proxy, {
+	upstream: "http://duplo:80",
+	prefix: "/duplo",
+	websocket: true,
+});
+
+server.register(proxy, {
 	upstream: "http://vue:8080",
 	websocket: true,
 });

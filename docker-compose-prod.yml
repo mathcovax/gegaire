@@ -10,6 +10,7 @@ services:
     depends_on:
       - aob
       - vue
+      - duplo
 
   aob:
     container_name: aob
@@ -26,6 +27,27 @@ services:
     #   - 5555
     # ports:
     #   - 5555:5555
+
+  installer-duplo:
+    container_name: installer-duplo
+    image: node:20.3.1-alpine
+    volumes:
+      - ./duplo:/home/node/duplo
+    environment:
+      npm_config_cache: /home/node/cache
+    working_dir: /home/node/duplo
+    entrypoint: npm i
+
+  duplo:
+    container_name: duplo
+    image: node:20.3.1-alpine
+    volumes:
+      - ./duplo:/home/node/duplo
+    working_dir: /home/node/duplo
+    command: npm run dev
+    depends_on:
+      installer-duplo: 
+        condition: service_completed_successfully
 
   installer-vue:
     container_name: installer-vue

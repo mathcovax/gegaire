@@ -6,7 +6,7 @@
 
 		<section
 		@scroll="scrolled"
-		class="w-full grow overflow-y-auto flex flex-col gap-[4px] scrollbar lg:w-[800px]"
+		class="w-full grow overflow-y-auto flex flex-col gap-[4px] lg:w-[800px]"
 		>
 			<section class="daylist left-0 w-full select-none gap-[5px] sticky top-0 z-[2] bg-[white]">
 				<p
@@ -65,10 +65,6 @@ export default defineComponent({
 
 
 <style lang="scss" scoped>
-.scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
 .daylist {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
