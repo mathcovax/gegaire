@@ -91,6 +91,8 @@ services:
     env_file: ./aob/.env
     volumes:
     - postgres-data-prod:/var/lib/postgresql/data
+    # ports:
+    #   - 5432:5432
 
 volumes:
   postgres-data-prod:
