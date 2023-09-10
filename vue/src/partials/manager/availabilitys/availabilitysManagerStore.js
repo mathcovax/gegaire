@@ -29,6 +29,7 @@ export const availabilitysManagerStore = defineStore(
 						query: {
 							user: true,
 							work: true,
+							activity: true,
 						},
 						loader: true
 					} 

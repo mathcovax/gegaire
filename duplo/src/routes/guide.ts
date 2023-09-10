@@ -11,7 +11,7 @@ mustBeConnected({options: {isManager: true}})
 	}
 })
 .handler(async({pickup}, request) => {
-	const searchName = pickup<string>("searchName");
+	const searchName = pickup("searchName");
 
 	const count = await Prisma.user.count({
 		where: {

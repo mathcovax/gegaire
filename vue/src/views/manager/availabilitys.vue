@@ -60,7 +60,8 @@
 							<div class="flex gap-[2px] bg-[black] px-[2px]">
 								<div
 								v-for="day in month.getDate()"
-								class="w-[50px] bg-[white]"
+								class="w-[50px] bg-[white] hover:opacity-[0.8]"
+								@click="openStatsDay([month.getFullYear(),month.getMonth()+1,day].join('-'))"
 								>
 									<div class="pl-[5px]">
 										{{ day }}
@@ -96,6 +97,12 @@
 		</Frame>
 
 		<AvailabilityMenu v-if="menuIsOpen"/>
+
+		<StatsDay
+		v-if="stats"
+		:stats="stats"
+		@close="stats = false"
+		/>
 	</main>
 </template>
 
@@ -104,12 +111,15 @@ import {mapActions, mapState} from "pinia";
 import {defineComponent} from "vue";
 import Loader from "../../components/Loader.vue";
 import AvailabilityMenu from "../../partials/manager/availabilitys/availabilityMenu.vue";
+import StatsDay from "../../partials/manager/availabilitys/statsDay.vue";
 import Row from "../../partials/manager/availabilitys/row.vue";
 import {duplo} from "../../taob";
 import {availabilitysManagerStore} from "../../partials/manager/availabilitys/availabilitysManagerStore";
 
 export default defineComponent({
-	components: {Row, Loader, AvailabilityMenu},
+	components: {
+		Row, Loader, AvailabilityMenu, StatsDay
+	},
 	data(){
 		return {
 			months: [],
@@ -120,6 +130,7 @@ export default defineComponent({
 			searchName: "",
 			beforeMonth: 0,
 			afterMonth: 0,
+			stats: false,
 		};
 	},
 	computed: {
@@ -193,6 +204,16 @@ export default defineComponent({
 			
 			this.months = month.sort((date1, date2) => date1 - date2);
 			this.months.forEach(value => this.getAvailabilitys(value, 0));
+		},
+
+		async openStatsDay(stringDate){
+			this.stats = await duplo.get(
+				"/availability/stats/{date}",
+				{
+					params: {date: stringDate},
+					loader: true,
+				}
+			).sd();
 		}
 	},
 	mounted(){

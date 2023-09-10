@@ -14,12 +14,12 @@ export const accessToken = duplo.createChecker(
 			try {
 				return output(
 					"validToken", 
-					(jwt.verify(value, process.env.KEY_ACCESS_TOKEN as string) as JwtPayload).info
+					(jwt.verify(value, process.env.KEY_ACCESS_TOKEN as string) as JwtPayload).info as ContentAccessToken
 				);
 			}
 			catch (error){
-				if(error instanceof TokenExpiredError) return output("invalidToken");
-				else return output("invalidToken");
+				if(error instanceof TokenExpiredError) return output("invalidToken", undefined);
+				else return output("invalidToken", undefined);
 				
 			}
 		},

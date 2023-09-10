@@ -156,7 +156,7 @@ export default register(
 			this.sender("no_content", "activity.delete");
 		});
 
-		//add user to activity
+		//(oldVersion) add user to activity
 		reg({
 			path: "/:id/place",
 			method: "PATCH",

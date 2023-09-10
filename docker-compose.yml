@@ -25,6 +25,7 @@ services:
   installer-duplo:
     container_name: installer-duplo
     image: node:20.3.1-alpine
+    user: node
     volumes:
       - ./duplo:/home/node/duplo
     environment:
@@ -46,6 +47,7 @@ services:
   installer-vue:
     container_name: installer-vue
     image: node:18.13.0-alpine
+    user: node
     volumes:
       - ./vue:/home/node/vue
     environment:

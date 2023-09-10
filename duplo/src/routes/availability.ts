@@ -1,6 +1,7 @@
-import {zod} from "@duplojs/duplojs";
+import {CheckerExport, ReturnCheckerType, zod} from "@duplojs/duplojs";
 import {mustBeConnected} from "../security/connected";
 import {Prisma} from "../prisma/prisma";
+import {availabilityExist} from "../checkers/availability";
 
 // get all availabilitys by user on one month
 mustBeConnected({options: {isManager: true}})
@@ -8,13 +9,13 @@ mustBeConnected({options: {isManager: true}})
 .extract({
 	query: {
 		date: zod.coerce.date(),
-		page: zod.coerce.number().default(0),
+		page: zod.coerce.number(),
 		searchName: zod.string().optional(),
 	}
 })
 .handler(async({pickup}, response) => {
-	const date = pickup<Date>("date");
-	const searchName = pickup<string>("searchName");
+	const date = pickup("date");
+	const searchName = pickup("searchName");
 	const month = date.getMonth() + 1;
 	const year = date.getFullYear();
 
@@ -72,55 +73,90 @@ mustBeConnected({options: {isManager: true}})
 		id: zod.coerce.number(),
 	},
 	query: {
-		user: zod.coerce.boolean().default(false),
-		work: zod.coerce.boolean().default(false),
+		user: zod.string().containBool.optional(),
+		work: zod.string().containBool.optional(),
+		activity: zod.string().containBool.optional(),
+	}
+})
+.check<{availability: ReturnCheckerType<typeof availabilityExist, undefined>}, typeof availabilityExist>(
+	availabilityExist,
+	{
+		input: (pickup) => pickup("id"),
+		validate: (info) => info === "availabilityExist",
+		catch: (response, info) => response.code(404).info(info).send(),
+		output: (drop, info, data) => drop("availability", data as ReturnCheckerType<typeof availabilityExist, undefined>),
+		options: (pickup) => ({
+			activity: pickup("activity"),
+			user: pickup("user"),
+			work: pickup("work"),
+		})
+	}
+)
+.handler(async({pickup}, response) => {
+	const availability = pickup("availability");
+
+	response.code(200).info("availability.get").send(availability);
+});
+
+// get stast availability of date
+mustBeConnected({options: {isManager: true}})
+.declareRoute("GET", "/availability/stats/{date}")
+.extract({
+	params: {
+		date: zod.coerce.date()
 	}
 })
 .handler(async({pickup}, response) => {
-	const id = pickup<number>("id");
-	const user = pickup<boolean>("user");
-	const work = pickup<boolean>("work");
-
-	const availability = await Prisma.availability.findUnique({
+	const availability = await Prisma.availability.findMany({
 		where: {
-			id,
+			date: pickup("date"),
+			OR: [
+				{am: true},
+				{pm: true},
+				{am: null, pm: null}, 
+			]
 		},
 		select: {
-			id: true,
-			user: user ? 
-				{
-					select: {
-						name: true, 
-						id: true
-					}
-				} : 
-				undefined,
-			work: work ?
-				{
-					select: {
-						amActivity: {
-							select: {
-								id: true,
-								name: true
-							}
-						},
-						pmActivity: {
-							select: {
-								id: true,
-								name: true
-							}
-						},
-						amLeader: true,
-						pmLeader: true,
-					}
-				} : 
-				undefined,
 			am: true,
 			pm: true,
-			date: true,
-			note: true,
+			work: {
+				select: {
+					amActivity: true,
+					pmActivity: true,
+				}
+			},
 		}
 	});
 
-	response.code(200).info("availability.get").send(availability);
+	const stats = availability.reduce(
+		(p, c) => {
+			if(c.am && c.pm){
+				p.total++;
+				if(c.work === null)p.totalFree++;
+			}
+			else if(c.am && !c.pm){
+				p.totalAm++;
+				if(c.work === null || c.work.amActivity === null)p.totalAmFree++;
+			}
+			else if(!c.am && c.pm){
+				p.totalPm++;
+				if(c.work === null || c.work.pmActivity === null)p.totalPmFree++;
+			}
+			else if(c.am === null && c.pm === null)p.totalMaybe++;
+
+			return p;
+		}, 
+		{
+			total: 0,
+			totalAm: 0,
+			totalPm: 0,
+			totalMaybe: 0,
+			totalFree: 0,
+			totalAmFree: 0,
+			totalPmFree: 0,
+			date: pickup("date"),
+		}
+	);
+
+	response.code(200).info("availability.stats").send(stats);
 });

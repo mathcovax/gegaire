@@ -7,6 +7,7 @@
 		border="4px"
 		class="lg:w-auto w-[90%]"
 		classs="flex flex-col p-[10px] gap-[10px]"
+		@click="$event.stopPropagation()"
 		>
 			<h2 class="text-center">
 				{{ date }}

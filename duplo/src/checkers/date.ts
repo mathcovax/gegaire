@@ -20,12 +20,12 @@ export const compareDates = duplo.createChecker(
 			const timeDate1 = date1.getTime();
 			const timeDate2 = date2.getTime();
 			
-			if(timeDate1 > timeDate2) return output("data1MoreThanDate2");
+			if(timeDate1 > timeDate2) return output("data1MoreThanDate2", undefined);
 			
-			if(options.maxBetween && timeDate2 - timeDate1 > options.maxBetween * units[options.unit || "day"]) return output("toMuchBetween");
-			if(options.minBetween && timeDate2 - timeDate1 < options.minBetween * units[options.unit || "day"]) return output("notEnoughBetween");
+			if(options.maxBetween && timeDate2 - timeDate1 > options.maxBetween * units[options.unit || "day"]) return output("toMuchBetween", undefined);
+			if(options.minBetween && timeDate2 - timeDate1 < options.minBetween * units[options.unit || "day"]) return output("notEnoughBetween", undefined);
 			
-			return output("validCompare");
+			return output("validCompare", undefined);
 		},
 		outputInfo: [
 			"data1MoreThanDate2", "notEnoughBetween", "toMuchBetween", "validCompare"

@@ -14,10 +14,10 @@ export default checker(
 			this.pass("month"),
 			this.pass("year")
 		);
-		
-		if(this.pass("activity").groupId !== availability.groupId) this.sender("conflict", "activity.wrong_group");
-		
+				
 		if(availability === null) this.sender("not_found", "availability.notFound");
+
+		if(this.pass("activity").groupId !== availability.groupId) this.sender("conflict", "activity.wrong_group");
 
 		if(this.pass("work_am") === true){
 			if(availability.am !== true) this.sender("conflict", "user.work_am");
