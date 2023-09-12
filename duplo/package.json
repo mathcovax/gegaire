@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@duplojs/cookie": "^0.2.5",
-    "@duplojs/duplojs": "^0.6.7",
+    "@duplojs/duplojs": "^0.6.8",
     "@prisma/client": "^5.2.0",
     "@types/jsonwebtoken": "^9.0.2",
     "dotenv": "^16.3.1",
