@@ -1,7 +1,7 @@
 <template>
 	<div
-	class="w-full grid grid-cols-8 h-[22px] hover:bg-[rgba(0,0,0,0.12)]"
-	@click="selectGuide(guide)"
+	class="w-full grid grid-cols-11 h-[22px] hover:bg-[rgba(0,0,0,0.12)]"
+	@click="selectGuide(guide.id)"
 	>
 		<div class="col-span-3 flex items-center">
 			<p class="overflow-hidden whitespace-nowrap text-ellipsis">
@@ -9,8 +9,12 @@
 			</p>
 		</div>
 
-		<div class="col-span-1 flex justify-end">
-			{{ countWork.before }}:{{ countWork.after }}
+		<div class="col-span-2 flex justify-end">
+			{{ guide.stats.ratio }}%
+		</div>
+
+		<div class="col-span-2 flex justify-end">
+			{{ guide.stats.countWork }}
 		</div>
 
 		<div
@@ -78,7 +82,7 @@
 <script>
 import {mapActions, mapState} from "pinia";
 import {defineComponent} from "vue";
-import {activityPlaceStore} from "../../../stores/activityPlace";
+import {activityPlaceStore} from "./activityPlacesStore";
 
 export default defineComponent({
 	props: {
@@ -95,14 +99,6 @@ export default defineComponent({
 		...mapState(activityPlaceStore, [
 			"activity", "amGuide", "pmGuide"
 		]),
-
-		countWork(){
-			let count = {...this.guide.countWork};
-			if(!this.amGuide || !this.pmGuide) return 0;
-			if(this.amGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
-			if(this.pmGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
-			return count;
-		},
 	},
 	methods: {
 		...mapActions(activityPlaceStore, ["selectGuide"])

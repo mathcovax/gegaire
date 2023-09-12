@@ -112,7 +112,7 @@
 <script>
 import {defineComponent} from "vue";
 import {mapActions, mapState} from "pinia";
-import {activityPlaceStore} from "../../../stores/activityPlace";
+import {activityPlaceStore} from "./activityPlacesStore";
 
 export default defineComponent({
 	computed: {

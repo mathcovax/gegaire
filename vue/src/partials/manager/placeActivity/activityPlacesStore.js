@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
-import {taob} from "../taob";
-import {fixedStore} from "./fixed";
+import {duplo, taob} from "../../../taob";
+import {fixedStore} from "../../../stores/fixed";
 
 export const activityPlaceStore = defineStore(
 	"activityPlace",
@@ -85,30 +85,23 @@ export const activityPlaceStore = defineStore(
 				this.amGuide = false;
 			},
 			
-			async selectGuide(guide){
-				if(typeof guide === "number"){
-					let {close} = fixedStore().requestLoader();
-
-					let [
-						year,
-						month, 
-						day
-					] = this.activity.date.split("T")[0].split("-");
-
-					await taob.get(
-						"/users/availability?" +
-						"&take=1" +
-						`&user_id=${guide}` +
-						`&day=${day}` +
-						`&month=${month}` +
-						`&year=${year}`
-					)
-					.s(data => guide = data[0])
-					.info(() => close())
-					.result;
-				}
-
-				this.selectedGuide = guide;
+			async selectGuide(userId){
+				const user = await duplo.get(
+					"/users",
+					{
+						query: {
+							userId,
+							skip: 0,
+							take: 1,
+							date: this.activity.date,
+							stats: true,
+							availability: true,
+						},
+						loader: true
+					}
+				).sd();
+				
+				this.selectedGuide = user[0];
 			},
 
 			unSelectGuide(){
@@ -131,6 +124,43 @@ export const activityPlaceStore = defineStore(
 				.sd();
 
 				this.activity.status = status;
+			},
+			
+			async placeGuide({activityId, userId, workAm, workPm, workLeader}){
+				const result = await duplo.patch(
+					"/activity/{activityId}/place",
+					{
+						userId,
+						workAm,
+						workPm,
+						workLeader,
+					},
+					{
+						params: {activityId},
+						loader: true,
+					}
+				).sd();
+
+				this.unSelectGuide();
+			},
+
+			findUser({page, searchName, date, am, pm}){
+				return duplo.get(
+					"/users",
+					{
+						query: {
+							skip: page * 25,
+							take: 25,
+							searchName,
+							date,
+							am,
+							pm,
+							stats: true,
+							availability: true,
+						},
+						loader: true
+					}
+				).sd();
 			}
 		},
 	}

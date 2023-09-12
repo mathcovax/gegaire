@@ -16,9 +16,9 @@ export const activityExist = duplo.createChecker(
 				}
 			});
 
-			if(!activity) return output("activityNotExist", undefined);
-			else return output("activityNotExist", activity);
+			if(!activity) return output("activity.notfound", undefined);
+			else return output("activity.exist", activity);
 		},
-		outputInfo: ["activityExit", "activityNotExist"]
+		outputInfo: ["activity.exist", "activity.notfound"]
 	}
 );

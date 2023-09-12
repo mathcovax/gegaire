@@ -68,30 +68,37 @@
 					</div>
 				</div>
 
-				<div class="w-full grid grid-cols-8">
-					<p class="col-span-3">
-						{{ $tr("placeActivity.columnGuideName") }}
-					</p>
-
-					<p class="col-span-1 flex justify-end">
-						{{ $tr("placeActivity.columnGuideWork") }}
-					</p>
-
-					<p class="col-span-2 flex justify-end">
-						{{ $tr("placeActivity.columnGuideNote") }}
-					</p>
-
-					<p class="col-span-2 flex justify-end">
-						{{ $tr("placeActivity.columnGuideAvailable") }}
-					</p>
-				</div>
-
-				<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
-
 				<div
 				class="flex flex-col w-full grow overflow-y-auto gap-[5px]"
 				@scroll="scrolled"
 				>
+					<div class="w-full sticky top-0 z-[1]">
+						<div class="w-full grid grid-cols-11 bg-[white]">
+							<p class="col-span-3">
+								{{ $tr("placeActivity.columnGuideName") }}
+							</p>
+
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideRatio") }}
+							</p>
+
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideWork") }}
+							</p>
+
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideNote") }}
+							</p>
+
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideAvailable") }}
+							</p>
+						</div>
+
+						<div class="w-full bg-[var(--green1)] h-[2px] shrink-0 rounded-full"/>
+					</div>
+					
+				
 					<Loader
 					class="h-full"
 					v-if="guides === false"
@@ -117,31 +124,33 @@
 			class="grow overflow-hidden"
 			classs="flex flex-col items-center gap-[5px] overflow-y-auto p-[5px]"
 			>
-				<div class="w-full grid grid-cols-12">
-					<p class="col-span-4">
-						{{ $tr("placeActivity.columnGuideSelectName") }}
-					</p>
-					
-					<p class="col-span-2 flex justify-end">
-						{{ $tr("placeActivity.columnGuideSelectLeader") }}
-					</p>
-
-					<p class="col-span-2 flex justify-end">
-						{{ $tr("placeActivity.columnGuideSelectNote") }}
-					</p>
-
-					<p class="col-span-2 flex justify-end">
-						{{ $tr("placeActivity.columnGuideSelectAM") }}
-					</p>
-
-					<p class="col-span-2 flex justify-end">
-						{{ $tr("placeActivity.columnGuideSelectPM") }}
-					</p>
-				</div>
-
-				<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
-
 				<div class="flex flex-col w-full grow overflow-y-auto gap-[5px]">
+					<div class="w-full sticky top-0 z-[1]">
+						<div class="w-full grid grid-cols-12">
+							<p class="col-span-4">
+								{{ $tr("placeActivity.columnGuideSelectName") }}
+							</p>
+					
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideSelectLeader") }}
+							</p>
+
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideSelectNote") }}
+							</p>
+
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideSelectAM") }}
+							</p>
+
+							<p class="col-span-2 flex justify-end">
+								{{ $tr("placeActivity.columnGuideSelectPM") }}
+							</p>
+						</div>
+
+						<div class="w-full bg-[var(--green1)] h-[2px] rounded-full"/>
+					</div>
+
 					<Loader
 					class="h-full"
 					size="75px"
@@ -160,9 +169,13 @@
 		<InfoActivity
 		v-if="showInfo === true"
 		@close="showInfo = false"
+		class="z-[1]"
 		/>
 
-		<PlaceGuide v-if="selectedGuide !== false"/>
+		<PlaceGuide
+		v-if="selectedGuide !== false"
+		class="z-[1]"
+		/>
 	</main>
 </template>
 
@@ -175,7 +188,7 @@ import PlaceGuide from "@/partials/manager/placeActivity/PlaceGuide.vue";
 import SelectCard from "../../partials/manager/placeActivity/SelectCard.vue";
 import {taob} from "../../taob";
 import {mapActions, mapState} from "pinia";
-import {activityPlaceStore} from "../../stores/activityPlace";
+import {activityPlaceStore} from "../../partials/manager/placeActivity/activityPlacesStore";
 import {fixedStore} from "../../stores/fixed";
 
 export default defineComponent({
@@ -217,32 +230,30 @@ export default defineComponent({
 		searchName(){
 			this.reset();
 			this.findPage();
+		},
+		$route(){
+			if(/\/manager\/activities\/[0-9]+\/place/.test(this.$route.fullPath)){
+				this.unSelectGuide();
+				this.init();
+			}
 		}
 	},
 	methods: {
-		...mapActions(activityPlaceStore, ["initActivityPlaceStore", "purgeActivityPlaceStore"]),
+		...mapActions(activityPlaceStore, [
+			"initActivityPlaceStore", "purgeActivityPlaceStore", "findUser", "unSelectGuide"
+		]),
 		
 		async findPage(page = this.page){
 			if(this.isFetch === true || this.isAllFetch === true) return;
 			this.isFetch = true;
 
-			let [
-				year,
-				month, 
-				day
-			] = this.activity.date.split("T")[0].split("-");
-
-			let result = await taob.get(
-				"/users/availability?" + 
-				`skip=${page * 25}` +
-				"&take=25" +
-				`&searchName=${this.searchName || ""}` +
-				`&day=${day}` +
-				`&month=${month}` +
-				`&year=${year}` +
-				`${this.am !== undefined ? "&am=" + this.am : ""}` +
-				`${this.pm !== undefined ? "&pm=" + this.pm : ""}`
-			).sd();
+			const result = await this.findUser({
+				date: this.activity.date,
+				am: this.am,
+				pm: this.pm,
+				page,
+				searchName: this.searchName,
+			});
 
 			if(result === undefined || this.isFetch === false) return;
 

@@ -8,23 +8,23 @@ import {Prisma} from "../prisma/prisma";
 
 //place user to activity
 mustBeConnected({options: {isManager: true}})
-.declareRoute("PATCH", "/activity/{activity_id}/place")
+.declareRoute("PATCH", "/activity/{activityId}/place")
 .extract({
 	params: {
-		activity_id: zod.coerce.number()
+		activityId: zod.coerce.number()
 	},
 	body: {
-		user_id: zod.number(),
-		work_am: zod.boolean(),
-		work_pm: zod.boolean(),
-		work_leader: zod.boolean(),
+		userId: zod.number(),
+		workAm: zod.boolean(),
+		workPm: zod.boolean(),
+		workLeader: zod.boolean(),
 	}
 })
 .check<{activity: ReturnCheckerType<typeof activityExist, undefined>}, typeof activityExist>(
 	activityExist, 
 	{
-		input: (pickup) => pickup("activity_id"),
-		validate: (info) => info === "activityExit",
+		input: (pickup) => pickup("activityId"),
+		validate: (info) => info === "activity.exist",
 		catch: (response, info) => response.code(404).info(info).send(),
 		output: (drop, info, data) => drop("activity", data as Exclude<typeof data, undefined>)
 	}
@@ -43,7 +43,7 @@ mustBeConnected({options: {isManager: true}})
 .check(
 	userExist,
 	{
-		input: (pickup) => pickup("user_id"),
+		input: (pickup) => pickup("userId"),
 		validate: (info) => info === "userExist",
 		catch: (response, info) => response.code(404).info(info).send()
 	}
@@ -51,7 +51,10 @@ mustBeConnected({options: {isManager: true}})
 .check<{availability: ReturnCheckerType<typeof availabilityExist, undefined>}, typeof availabilityExist>(
 	availabilityExist,
 	{
-		input: (pickup) => pickup("activity").date,
+		input: (pickup) => ({
+			date: pickup("activity").date,
+			userId: pickup("userId")
+		}),
 		validate: (info) => info === "availabilityExist",
 		catch: (response, info) => response.code(404).info(info).send(),
 		output: (drop, info, data) => drop("availability", data as Exclude<typeof data, undefined>),
@@ -66,9 +69,9 @@ mustBeConnected({options: {isManager: true}})
 
 	if(activity.groupId !== availability.groupId) response.code(409).info("activity.wrong_group").send();
 
-	if(pickup("work_am") === true && availability.am !== true) response.code(409).info("user.notAvailable.am").send();
+	else if(pickup("workAm") === true && availability.am !== true) response.code(409).info("user.notAvailable.am").send();
 
-	if(pickup("work_pm") === true && availability.pm !== true) response.code(409).info("user.notAvailable.pm").send();
+	else if(pickup("workPm") === true && availability.pm !== true) response.code(409).info("user.notAvailable.pm").send();
 })
 .handler(async({pickup}, response) => {
 	const activity = pickup("activity");
@@ -78,26 +81,30 @@ mustBeConnected({options: {isManager: true}})
 	if(work === null) await Prisma.work.create({
 		data: {
 			availabilityId: availability.id,
-			userId: pickup("user_id"),
+			userId: pickup("userId"),
 			date: activity.date,
 
-			amActivityId: pickup("work_am") ? activity.id : undefined,
-			amLeader: pickup("work_am") ? pickup("work_leader") : undefined,
-			pmActivityId: pickup("work_pm") ? activity.id : undefined,
-			pmLeader: pickup("work_pm") ? pickup("work_leader") : undefined,
+			amActivityId: pickup("workAm") ? activity.id : undefined,
+			amLeader: pickup("workAm") ? pickup("workLeader") : undefined,
+			pmActivityId: pickup("workPm") ? activity.id : undefined,
+			pmLeader: pickup("workPm") ? pickup("workLeader") : undefined,
 		}
 	});
 
-	else if(work.amActivityId === work.pmActivityId) await Prisma.work.update({
+	else if(
+		work.amActivityId === work.pmActivityId || 
+		(pickup("workAm") === true && work.pmActivityId === activity.id) ||
+		(pickup("workPm") === true && work.amActivityId === activity.id)
+	) await Prisma.work.update({
 		where: {
 			id: work.id,
 		},
 
 		data: {
-			amActivityId: pickup("work_am") ? activity.id : null,
-			amLeader: pickup("work_am") ? pickup("work_leader") : null,
-			pmActivityId: pickup("work_pm") ? activity.id : null,
-			pmLeader: pickup("work_pm") ? pickup("work_leader") : null, 
+			amActivityId: pickup("workAm") ? activity.id : null,
+			amLeader: pickup("workAm") ? pickup("workLeader") : null,
+			pmActivityId: pickup("workPm") ? activity.id : null,
+			pmLeader: pickup("workPm") ? pickup("workLeader") : null, 
 		}
 	});
 
@@ -107,12 +114,12 @@ mustBeConnected({options: {isManager: true}})
 		},
 
 		data: {
-			amActivityId: pickup("work_am") ? activity.id : undefined,
-			amLeader: pickup("work_am") ? pickup("work_leader") : undefined,
-			pmActivityId: pickup("work_pm") ? activity.id : undefined,
-			pmLeader: pickup("work_pm") ? pickup("work_leader") : undefined, 
+			amActivityId: pickup("workAm") ? activity.id : undefined,
+			amLeader: pickup("workAm") ? pickup("workLeader") : undefined,
+			pmActivityId: pickup("workPm") ? activity.id : undefined,
+			pmLeader: pickup("workPm") ? pickup("workLeader") : undefined, 
 		}
 	});
 
-	response.code(202).info("activity.place");
+	response.code(202).info("activity.place").send();
 });

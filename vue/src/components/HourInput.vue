@@ -99,7 +99,6 @@ export default defineComponent({
 			this.validate();
 		},
 		inputed(event){
-			console.log(event.target.value);
 			this.$emit("update:modelValue", event.target.value);
 			if(this.invalidMessage !== ""){
 				this.validate(event.target.value);

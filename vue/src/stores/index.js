@@ -1,6 +1,6 @@
 import "./user";
 import "./availability";
 import "./fixed";
-import "./activityPlace";
+import "../partials/manager/placeActivity/activityPlacesStore";
 import "./planning";
 import "../partials/manager/availabilitys/availabilitysManagerStore";

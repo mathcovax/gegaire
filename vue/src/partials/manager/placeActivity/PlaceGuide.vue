@@ -17,12 +17,25 @@
 
 					<div class="flex gap-[5px] overflow-hidden justify-end">
 						<div class="flex flex-col justify-between overflow-hidden">
-							<p
+							<div
 							v-if="availability.am === true"
-							class="whitespace-nowrap overflow-hidden text-ellipsis text-right"
+							class="whitespace-nowrap overflow-hidden text-ellipsis text-right select-none"
 							>
-								{{ work.amActivity === null? $tr("placeActivity.placeAvailable") : work.amActivity.name }}
-							</p>
+								<router-link
+								v-if="work?.amActivity && work?.amActivity.id !== activity.id"
+								:to="'/manager/activities/' + work.amActivity.id + '/place'"
+								>
+									{{ work.amActivity.name }}
+								</router-link>
+
+								<p v-else-if="work?.amActivity?.id === activity.id">
+									{{ work.amActivity.name }}
+								</p>
+
+								<p v-else>
+									{{ $tr("placeActivity.placeAvailable") }}
+								</p>
+							</div>
 
 							<p
 							v-else-if="availability.am === null"
@@ -38,12 +51,25 @@
 								{{ $tr("placeActivity.placeUnAvailable") }}
 							</p>
 
-							<p
+							<div
 							v-if="availability.pm === true"
-							class="whitespace-nowrap overflow-hidden text-ellipsis text-right"
+							class="whitespace-nowrap overflow-hidden text-ellipsis text-right select-none"
 							>
-								{{ work.pmActivity === null? $tr("placeActivity.placeAvailable") : work.pmActivity.name }}
-							</p>
+								<router-link
+								v-if="work?.pmActivity && work?.pmActivity.id !== activity.id"
+								:to="'/manager/activities/' + work.pmActivity.id + '/place'"
+								>
+									{{ work.pmActivity.name }}
+								</router-link>
+
+								<p v-else-if="work?.pmActivity?.id === activity.id">
+									{{ work.pmActivity.name }}
+								</p>
+								
+								<p v-else>
+									{{ $tr("placeActivity.placeAvailable") }}
+								</p>
+							</div>
 
 							<p
 							v-else-if="availability.am === null"
@@ -60,8 +86,8 @@
 							</p>
 						</div>
 
-						<div>
-							<div class="h-[40px] w-[20px] relative rounded-[4px] overflow-hidden p-[5px] ">
+						<div class="h-full">
+							<div class="h-full w-[20px] relative rounded-[4px] overflow-hidden p-[5px] ">
 								<div
 								:class="{
 									'bg-[green]': availability.am === true,
@@ -120,7 +146,7 @@
 				<div class="flex items-center w-full justify-between">
 					<div
 					class="flex gap-[5px]"
-					:class="{'invisible': !showLeaderCheckbox}"
+					:class="{'invisible': availability.am === false && availability.pm === false}"
 					>
 						<p>Leader :</p>
 
@@ -133,7 +159,7 @@
 					<div class="flex gap-[10px] justify-center">
 						<AvailableBtn
 						class="h-[30px]"
-						:class="{'invisible': !(showAMCheckbox && showPMCheckbox)}"
+						:class="{'invisible': availability.am !== true || availability.pm !== true}"
 						@click="setAMPM(true, true)"
 						:am="true"
 						:pm="true"
@@ -141,7 +167,7 @@
 						/>
 
 						<AvailableBtn
-						:class="{'invisible': !showAMCheckbox}"
+						:class="{'invisible': availability.am !== true}"
 						class="h-[30px]"
 						@click="setAMPM(true, false)"
 						:am="true"
@@ -150,7 +176,7 @@
 						/>
 
 						<AvailableBtn
-						:class="{'invisible': !showPMCheckbox}"
+						:class="{'invisible': availability.pm !== true}"
 						class="h-[30px]"
 						@click="setAMPM(false, true)"
 						:am="null"
@@ -160,14 +186,23 @@
 					</div>
 				</div>
 
-				<p>{{ $tr("placeActivity.placeWorkedBefore") }} : {{ countWork?.before }}</p>
+				<p>{{ $tr("placeActivity.columnGuideWork") }} : {{ guide.stats?.countWork }}</p>
 
-				<p>{{ $tr("placeActivity.placeWorkedAfter") }} : {{ countWork?.after }}</p>
+				<p>{{ $tr("placeActivity.columnGuideRatio") }} : {{ guide.stats?.ratio }}%</p>
 
 				<Btn
-				v-if="showLeaderCheckbox"
+				v-if="availability.am === true || availability.pm === true"
 				@click="patch"
 				:disabled="am === undefined || pm === undefined"
+				:popup="
+					(am === true && work?.amActivity && work.amActivity.id !== activity.id) ||
+						(pm === true && work?.pmActivity && work.pmActivity.id !== activity.id) ? 
+							{
+								title: $tr('placeActivity.popupTitleSwitch'),
+								subTitle: $tr('placeActivity.popupSubTitleSwitch')
+							} : 
+							undefined
+				"
 				>
 					{{ $tr("btn.validate") }}
 				</Btn>
@@ -193,7 +228,7 @@
 import {defineComponent} from "vue";
 import AvailableBtn from "@/components/AvailableBtn.vue";
 import {mapActions, mapState} from "pinia";
-import {activityPlaceStore} from "../../../stores/activityPlace";
+import {activityPlaceStore} from "./activityPlacesStore";
 import {taob} from "../../../taob";
 import {fixedStore} from "../../../stores/fixed";
 
@@ -253,16 +288,9 @@ export default defineComponent({
 
 			else return true;
 		},
-
-		countWork(){
-			let count = {...this.guide.countWork};
-			if(this.amGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
-			if(this.pmGuide.find(v => v.user.id === this.guide.id) !== undefined) count.before -= 0.5;
-			return count;
-		},
 	},
 	methods: {
-		...mapActions(activityPlaceStore, ["unSelectGuide"]),
+		...mapActions(activityPlaceStore, ["unSelectGuide", "placeGuide"]),
 
 		setAMPM(am, pm){
 			if(this.am === am && this.pm === pm){
@@ -276,34 +304,15 @@ export default defineComponent({
 		},
 
 		async patch(){
-			let {close} = fixedStore().requestLoader();
+			await this.placeGuide({
+				activityId: this.activity.id,
+				userId: this.guide.id,
+				workAm: this.am,
+				workPm: this.pm,
+				workLeader: this.leader,
+			});
 
-			let [
-				year,
-				month, 
-				day
-			] = this.activity.date.split("T")[0].split("-").map(v => parseInt(v));
-
-			await taob.patch(
-				`/activity/${this.activity.id}/place`,
-				{
-					user_id: this.guide.id,
-					day,
-					month,
-					year,
-
-					work_am: this.am,
-					work_pm: this.pm,
-					work_leader: this.leader,
-				}
-			)
-			.s(() => {
-				this.unSelectGuide();
-				this.$parent.init();
-			})
-			.result;
-
-			close();
+			this.$parent.init();
 		},
 
 		async remove(){

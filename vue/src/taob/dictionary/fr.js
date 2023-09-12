@@ -18,10 +18,12 @@ export default {
 		password: "Le format du mot de passe n'est pas conforme.",
 		searchName: "Le format de 'searchName' n'est pas conforme.",
 		tel: "Le format du numéro de téléphone n'est pas conforme.",
-		work_am: "La personne n'est pas disponible sur la période indiquée.",
-		work_pm: "La personne n'est pas disponible sur la période indiquée.",
 		wrongPassword: "Le mot de passe n'est pas correct.",
-		edit: "Les informations ont bien été modifiés."
+		edit: "Les informations ont bien été modifiés.",
+		notAvailable: {
+			am: "La personne n'est pas disponible sur la période indiquée.",
+			pm: "La personne n'est pas disponible sur la période indiquée.",
+		}
 	},
 	group: {
 		create: "Le groupe a bien été créé.",
@@ -229,6 +231,7 @@ export default {
 
 		columnGuideName: "Nom",
 		columnGuideWork: "JDT",
+		columnGuideRatio: "RATIO",
 		columnGuideNote: "Note",
 		columnGuideAvailable: "Dispo",
 
@@ -249,6 +252,9 @@ export default {
 
 		popupTitleRemove: "Retirer le guide de l'activité ?",
 		popupSubTitleRemove: "Cela retirera entièrement le guide de l'activité.",
+
+		popupTitleSwitch: "Utiliser ce guide ?",
+		popupSubTitleSwitch: "Ce guide a déjà été sélectionné sur une activité, si vous confirmez il sera changé d'activité.",
 
 		placeAvailable: "Disponible",
 		placeMaybeAvailable: "À confirmer",

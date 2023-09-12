@@ -27,6 +27,7 @@ Dictionary.use("fr");
 export const duplo = new Toanotherback({
 	prefix: "/duplo",
 	// https: true,
+	indexInfo: "info",
 	parameters: {
 		credentials: "include"
 	},

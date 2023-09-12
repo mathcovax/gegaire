@@ -10,7 +10,7 @@ export const userExist = duplo.createChecker(
 					id
 				},
 				select: {
-
+					id: true
 				}
 			});
 
