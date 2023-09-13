@@ -78,7 +78,7 @@ model Availability {
     am    Boolean?
     pm    Boolean?
     note  String   @db.VarChar(1500)
-    date  DateTime
+    date  DateTime @db.Date
 
     work Work?
 

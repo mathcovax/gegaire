@@ -13,3 +13,14 @@ export const stringBoolOrNull = zod
 			false : 
 			null
 );
+
+export const dateWithoutTime = zod
+.coerce
+.date()
+.transform(
+	(arg) => new Date(
+		arg.getFullYear(), 
+		arg.getMonth(), 
+		arg.getDate()
+	)
+);

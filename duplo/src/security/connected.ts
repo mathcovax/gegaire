@@ -24,13 +24,13 @@ export const mustBeConnected = duplo.declareAbstractRoute(
 	},
 	(response) => response.code(403).info("noAccessToken").send()
 )
-.check<{contentAccessToken: ReturnCheckerType<typeof accessToken>}, typeof accessToken>(
+.check<{contentAccessToken: ReturnCheckerType<typeof accessToken, undefined>}, typeof accessToken>(
 	accessToken,
 	{
 		input: (pickup) => pickup("accessToken"),
 		validate: (info) => info === "validToken",
 		catch: (response, info) => response.code(403).info(info).send(),
-		output: (drop, info, data) => drop("contentAccessToken", data),
+		output: (drop, info, data) => drop("contentAccessToken", data as Exclude<typeof data, undefined>),
 	}
 )
 .cut((floor, response) => {

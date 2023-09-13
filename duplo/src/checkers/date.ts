@@ -3,7 +3,7 @@ import {duplo} from "../../main";
 export interface CompareDatesOptions{
 	maxBetween?: number;
 	minBetween?: number;
-	unit?: "day" | "week" | "month" | "year";
+	unit?: keyof typeof units;
 }
 
 const units = {

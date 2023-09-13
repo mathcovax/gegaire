@@ -7,7 +7,12 @@ export const availabilityExist =  duplo.createChecker(
 		async handler(input: number | {date: Date, userId: number}, output, {user, work, activity}){
 			let where;
 			if(typeof input === "number") where = {id: input};
-			else where = input;
+			else where = {
+				userId: input.userId,
+				day: input.date.getDate(),
+				month: input.date.getMonth() + 1,
+				year: input.date.getFullYear()
+			};
 
 			const availability = await Prisma.availability.findFirst({
 				where,

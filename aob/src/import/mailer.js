@@ -2,14 +2,20 @@ import nodemailer from "nodemailer";
 import {env} from "anotherback";
 import Queue from "./queue.js";
 
-const transporter = nodemailer.createTransport({
-	service: "gmail",
-	auth: {
-		user: env.GMAIL_ADRESSE,
-		pass: env.GMAIL_PASSWORD
-	}
-});
-
+const transporter = nodemailer.createTransport(
+	env.DEV ?
+		{
+			service: "gmail",
+			auth: {
+				user: env.GMAIL_ADRESSE,
+				pass: env.GMAIL_PASSWORD
+			}
+		} :
+		{
+			host: env.MAIL_HOST,
+			port: env.MAIL_PORT,
+		}
+);
 export default transporter;
 
 const transporterQueue = new Queue(100);

@@ -1,7 +1,7 @@
 import {zod} from "@duplojs/duplojs";
 import {mustBeConnected} from "../security/connected";
 import {Prisma} from "../prisma/prisma";
-import {stringBoolOrNull} from "../utils/shortZod";
+import {dateWithoutTime, stringBoolOrNull} from "../utils/shortZod";
 
 // get users
 mustBeConnected({options: {isManager: true}})
@@ -14,7 +14,7 @@ mustBeConnected({options: {isManager: true}})
 		userId: zod.coerce.number().optional(),
 
 		availability: zod.string().containBool.optional(),
-		date: zod.coerce.date().optional(),
+		date: dateWithoutTime.optional(),
 		am: stringBoolOrNull.optional(),
 		pm: stringBoolOrNull.optional(),
 		stats: zod.string().containBool.optional(),

@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
-import {taob} from "../taob";
+import {duplo, taob} from "../taob";
 import {fixedStore} from "./fixed";
+import {userStore} from "./user";
 
 export const availabilityStore = defineStore(
 	"availability",
@@ -42,26 +43,26 @@ export const availabilityStore = defineStore(
 			stopEditingDay(){
 				this.editDay = false;
 			},
-			async postDay(am, pm, group, note){
-				let {close} = fixedStore().requestLoader();
-				await taob.post(
-					"/availability",
+			async postDay(am, pm, groupId, note){
+				const availability = await duplo.post(
+					"/user/{userId}/availability",
 					{
 						am,
 						pm,
-						group_id: group, 
+						groupId, 
 						note,
-
-						day: this.editDay.getDate(),
-						month: this.editDay.getMonth() + 1,
-						year: this.editDay.getFullYear(),
+						date: `${this.editDay.getFullYear()}-${this.editDay.getMonth() + 1}-${this.editDay.getDate()}`,
+					},
+					{
+						params: {
+							userId: userStore().id
+						},
+						loader: true,
 					}
 				)
-				.s(rep => {
-					this.availability[this.editDay.getMonth() + 1 + "-" + this.editDay.getFullYear()][this.editDay.getDate()] = rep;
-				})
-				.result;
-				close();
+				.sd();
+
+				this.availability[this.editDay.getMonth() + 1 + "-" + this.editDay.getFullYear()][this.editDay.getDate()] = availability;
 			}
 		}
 	}
