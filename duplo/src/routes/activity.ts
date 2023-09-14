@@ -20,7 +20,7 @@ mustBeConnected({options: {isManager: true}})
 		workLeader: zod.boolean(),
 	}
 })
-.check<{activity: ReturnCheckerType<typeof activityExist, undefined>}, typeof activityExist>(
+.check<typeof activityExist, "activity", "activity.exist">(
 	activityExist, 
 	{
 		input: (pickup) => pickup("activityId"),
@@ -48,7 +48,7 @@ mustBeConnected({options: {isManager: true}})
 		catch: (response, info) => response.code(404).info(info).send()
 	}
 )
-.check<{availability: ReturnCheckerType<typeof availabilityExist, undefined>}, typeof availabilityExist>(
+.check<typeof availabilityExist, "availability", "availabilityExist">(
 	availabilityExist,
 	{
 		input: (pickup) => ({

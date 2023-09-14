@@ -89,6 +89,23 @@
 					:rules="rulesArea"
 					/>
 
+					<div class="text-[12px] flex items-center gap-[5px]">
+						<input
+						type="checkbox"
+						v-model="checkedToDate"
+						/>
+
+						{{ $trr('label.checkedToDate') }}
+					</div>
+
+					<DateInput
+					class="w-[200px]"
+					:label="$trr('label.toDate')"
+					v-model="toDate"
+					v-if="checkedToDate"
+					:rules="toDateRules"
+					/>
+
 					<Btn type="submit">
 						{{ $tr("btn.validate") }}
 					</Btn>
@@ -117,6 +134,9 @@ export default defineComponent({
 			group: undefined,
 			note: "",
 
+			checkedToDate: false,
+			toDate: undefined,
+
 			day: undefined,
 			month: undefined,
 			year: undefined,
@@ -132,6 +152,13 @@ export default defineComponent({
 
 		rulesArea(){
 			return [(value) => this.$rules.maxLength(255, value)];
+		},
+
+		toDateRules(){
+			return [
+				value => new Date(value).getTime() > this.editDay.getTime() || this.$trr("toDateIsPast"),
+				value => Math.ceil((new Date(value).getTime() - this.editDay.getTime()) / 86400000) < 22 || this.$trr("toDateTooLarge"),
+			];
 		}
 	},
 	watch: {
@@ -156,6 +183,14 @@ export default defineComponent({
 					this.group = this.groups[0];
 				}
 			}
+			else {
+				this.checkedToDate = false;
+				this.toDate = undefined;
+			}
+		},
+		checkedToDate(){
+			if(this.checkedToDate) this.toDate = this.editDay.toISOString().split("T")[0];
+			else this.toDate = undefined;
 		}
 	},
 	methods: {
@@ -166,7 +201,7 @@ export default defineComponent({
 				return;
 			}
 			
-			await this.postDay(this.am, this.pm, this.group.id, this.note);
+			await this.postDay(this.am, this.pm, this.group.id, this.note, this.toDate);
 			this.stopEditingDay();
 		}
 	}

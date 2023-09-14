@@ -45,8 +45,8 @@ export const duplo = new Toanotherback({
 		if(interParams.closeLoader !== undefined){
 			interParams.closeLoader();
 		}
-		let tr = Dictionary.translate(response.response.headers.get("aob-info"));
-		if(tr !== response.response.headers.get("aob-info"))fixedStore().toasterPush(response.response.ok, tr);
+		let tr = Dictionary.translate(response.response.headers.get("info"));
+		if(tr !== response.response.headers.get("info"))fixedStore().toasterPush(response.response.ok, tr);
 		return response;
 	},
 });

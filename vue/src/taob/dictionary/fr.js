@@ -148,6 +148,12 @@ export default {
 		labelSelectGroup: "Groupe",
 		labelNote: "Note",
 		toatsAMPMUndefined: "Vous devez cocher une case de disponibilité.",
+		label: {
+			toDate: "Jusqu'au",
+			checkedToDate: "Définir sur plusieurs jours.",
+		},
+		toDateIsPast: "La date sélectionnée est antérieur à la date de disponibilité.",
+		toDateTooLarge: "L'intervalle des dates doit être de maximum 3 semaines.",
 	},
 	"/admin/guides": {
 		title: "Gestionnaire des Guides.",

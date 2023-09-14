@@ -23,8 +23,8 @@ export const availabilityStore = defineStore(
 				this.editDay = false;
 			},
 
-			async getMonth(my){
-				if(this.availability[my] !== undefined) return;
+			async getMonth(my, force){
+				if(this.availability[my] !== undefined && !force) return;
 				this.availability[my] = false;
 				
 				let [month, year] = my.split("-"); 
@@ -43,7 +43,7 @@ export const availabilityStore = defineStore(
 			stopEditingDay(){
 				this.editDay = false;
 			},
-			async postDay(am, pm, groupId, note){
+			async postDay(am, pm, groupId, note, toDate){
 				const availability = await duplo.post(
 					"/user/{userId}/availability",
 					{
@@ -54,15 +54,20 @@ export const availabilityStore = defineStore(
 						date: `${this.editDay.getFullYear()}-${this.editDay.getMonth() + 1}-${this.editDay.getDate()}`,
 					},
 					{
-						params: {
-							userId: userStore().id
-						},
+						params: {userId: userStore().id},
+						query: {toDate},
 						loader: true,
 					}
 				)
 				.sd();
 
 				this.availability[this.editDay.getMonth() + 1 + "-" + this.editDay.getFullYear()][this.editDay.getDate()] = availability;
+				
+				if(toDate){
+					toDate = new Date(toDate);
+					this.getMonth(`${this.editDay.getMonth() + 1}-${this.editDay.getFullYear()}`, true);
+					if(toDate.getMonth() !== this.editDay.getMonth()) this.getMonth(`${toDate.getMonth() + 1}-${toDate.getFullYear()}`, true);
+				}
 			}
 		}
 	}

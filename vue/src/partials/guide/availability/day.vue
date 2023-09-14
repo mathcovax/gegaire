@@ -125,7 +125,7 @@ export default defineComponent({
 		}
 	},
 	mounted(){
-		this.toDate = new Date(this.date.toString());
+		this.toDate = new Date(this.date.toISOString().split("T")[0]);
 		this.toDate.setDate(this.date.getDate() - this.getDay(this.date) + (this.week * 7) + this.day);
 		this.month = this.toDate.getMonth() + 1;
 		this.toDay = this.toDate.getDate();

@@ -35,13 +35,12 @@
 			{{ label }}
 		</label>
 
-		<div
-		v-if="rules.length !== 0"
+		<p
+		v-if="invalidMessage"
+		:title="invalidMessage"
 		>
-			<p :title="invalidMessage">
-				{{ invalidMessage }}
-			</p>
-		</div>
+			{{ invalidMessage }}
+		</p>
 	</div>
 </template>
 

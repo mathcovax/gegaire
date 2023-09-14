@@ -1,4 +1,4 @@
-import {CheckerExport, ReturnCheckerType, zod} from "@duplojs/duplojs";
+import {zod} from "@duplojs/duplojs";
 import {mustBeConnected} from "../security/connected";
 import {Prisma} from "../prisma/prisma";
 import {availabilityExist} from "../checkers/availability";
@@ -6,8 +6,11 @@ import {compareDates} from "../checkers/date";
 import {userExist} from "../checkers/user";
 import {groupExist} from "../checkers/groups";
 import {dateWithoutTime} from "../utils/shortZod";
+import {log} from "console";
 
+//
 // get all availabilitys by user on one month
+//
 mustBeConnected({options: {isManager: true}})
 .declareRoute("GET", "/availabilitys")
 .extract({
@@ -69,7 +72,9 @@ mustBeConnected({options: {isManager: true}})
 	response.code(200).info("availabilitys.get").send(users);
 });
 
+//
 // get one availability by id
+//
 mustBeConnected({options: {isManager: true}})
 .declareRoute("GET", "/availability/{id}")
 .extract({
@@ -82,7 +87,7 @@ mustBeConnected({options: {isManager: true}})
 		activity: zod.string().containBool.optional(),
 	}
 })
-.check<{availability: ReturnCheckerType<typeof availabilityExist, undefined>}, typeof availabilityExist>(
+.check<typeof availabilityExist, "availability", "availabilityExist">(
 	availabilityExist,
 	{
 		input: (pickup) => pickup("id"),
@@ -102,7 +107,9 @@ mustBeConnected({options: {isManager: true}})
 	response.code(200).info("availability.get").send(availability);
 });
 
+//
 // get stast availability of date
+//
 mustBeConnected({options: {isManager: true}})
 .declareRoute("GET", "/availability/stats/{date}")
 .extract({
@@ -165,22 +172,25 @@ mustBeConnected({options: {isManager: true}})
 	response.code(200).info("availability.stats").send(stats);
 });
 
+//
 // post availability
+//
 mustBeConnected({pickup: ["contentAccessToken"]})
 .declareRoute("POST", "/user/{userId}/availability")
 .extract({
 	params: {
 		userId: zod.coerce.number()
 	},
+	query: {
+		toDate: dateWithoutTime.optional(),
+	},
 	body: {
 		date: dateWithoutTime,
-		toDate: dateWithoutTime.optional(),
-
 		am: zod.boolean().nullable(),
 		pm: zod.boolean().nullable(),
 		note: zod.string().max(1500),
 		groupId: zod.number(),
-	}
+	},
 })
 .cut(({pickup}, response) => {
 	const contentAccessToken = pickup("contentAccessToken");
@@ -230,7 +240,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 		}
 	}
 )
-.check<{availability: ReturnCheckerType<typeof availabilityExist>}, typeof availabilityExist>(
+.check<typeof availabilityExist, "availability">(
 	availabilityExist,
 	{
 		input: pickup => ({
@@ -294,10 +304,12 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 	if(toDate){
 		const availabilitys = await Prisma.availability.findMany({
 			where: {
+				userId,
 				date: {
 					gt: date,
 					lte: toDate,
-				}
+				},
+				note: {not: ""}
 			},
 			select: {
 				id: true,
@@ -309,18 +321,16 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 		});
 
 		const incDate = new Date(date);
-		incDate.setDate(incDate.getDate() + 1);
-		const dayLoop = (toDate.getTime() - incDate.getTime()) / 86400000;
+		const dayLoop = Math.ceil((toDate.getTime() - incDate.getTime()) / 86400000);
 		const newAvailabilitys: (Exclude<Parameters<typeof Prisma["availability"]["createMany"]>[0], undefined>["data"]) = [];
-
+		
 		for(let inc = 0; inc < dayLoop; inc++){
-			incDate.setDate(date.getDate() + 1 + inc);
+			incDate.setDate(incDate.getDate() + 1);
 			if(availabilitys[0]?.date.getTime() === incDate.getTime()){
 				availabilitys.splice(0, 1);
 				continue;
 			}
-			else if(incDate.getDay() === 0 || incDate.getDay() === 6) continue;
-
+			
 			newAvailabilitys.push({
 				userId,
 				groupId,
@@ -330,10 +340,19 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 				day: incDate.getDate(),
 				month: incDate.getMonth() + 1,
 				year: incDate.getFullYear(),
-				date: incDate
+				date: incDate.toISOString(),
 			});
 		}
-
+		await Prisma.availability.deleteMany({
+			where: {
+				userId, 
+				date: {
+					gt: date,
+					lte: toDate,
+				},
+				note: ""
+			}
+		});
 		await Prisma.availability.createMany({data: newAvailabilitys});
 	}
 

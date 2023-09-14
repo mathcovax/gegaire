@@ -1,4 +1,4 @@
-import {ReturnCheckerType, zod} from "@duplojs/duplojs";
+import {zod} from "@duplojs/duplojs";
 import {duplo} from "../../main";
 import {accessToken} from "../checkers/token";
 
@@ -24,13 +24,13 @@ export const mustBeConnected = duplo.declareAbstractRoute(
 	},
 	(response) => response.code(403).info("noAccessToken").send()
 )
-.check<{contentAccessToken: ReturnCheckerType<typeof accessToken, undefined>}, typeof accessToken>(
+.check<typeof accessToken, "contentAccessToken", "validToken">(
 	accessToken,
 	{
 		input: (pickup) => pickup("accessToken"),
 		validate: (info) => info === "validToken",
 		catch: (response, info) => response.code(403).info(info).send(),
-		output: (drop, info, data) => drop("contentAccessToken", data as Exclude<typeof data, undefined>),
+		output: (drop, info, data) => drop("contentAccessToken", data),
 	}
 )
 .cut((floor, response) => {
