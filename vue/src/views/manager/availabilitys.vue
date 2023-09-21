@@ -129,7 +129,7 @@ export default defineComponent({
 			inputSearchName: "",
 			searchName: "",
 			beforeMonth: 0,
-			afterMonth: 0,
+			afterMonth: 1,
 			stats: false,
 		};
 	},

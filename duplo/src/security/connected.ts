@@ -3,8 +3,9 @@ import {duplo} from "../../main";
 import {accessToken} from "../checkers/token";
 
 export interface MustBeConnectedOptions{
-	isManager?: boolean,
-	isAdmin?: boolean
+	isManager?: boolean;
+	isAdmin?: boolean;
+	isAdminOrManager?: boolean;
 }
 
 export const mustBeConnected = duplo.declareAbstractRoute(
@@ -13,6 +14,7 @@ export const mustBeConnected = duplo.declareAbstractRoute(
 		options: {
 			isManager: false,
 			isAdmin: false,
+			isAdminOrManager: false,
 		} as MustBeConnectedOptions
 	}
 )
@@ -37,6 +39,11 @@ export const mustBeConnected = duplo.declareAbstractRoute(
 	const options = floor.pickup("options");
 	const contentAccessToken = floor.pickup("contentAccessToken");
 	if(options.isAdmin && !contentAccessToken?.isAdmin)response.code(403).info("errorAccessTokenAdmin").send();
-	if(options.isManager && !contentAccessToken?.isManager)response.code(403).info("errorAccessTokenManager").send();
+	else if(options.isManager && !contentAccessToken?.isManager)response.code(403).info("errorAccessTokenManager").send();
+	else if(
+		options.isAdminOrManager && 
+		!contentAccessToken?.isManager && 
+		!contentAccessToken?.isAdmin
+	)response.code(403).info("errorAccessToken").send();
 })
 .build(["contentAccessToken"]);

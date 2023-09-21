@@ -84,7 +84,7 @@ export default {
 	},
 	label: {
 		email: "Email",
-		name: "Nom & Prénom",
+		name: "Prénom & Nom",
 		tel: "Numéro de téléphone",
 		address: "Addresse physique",
 		password: "Mot de passe",

@@ -4,11 +4,11 @@ import {Prisma} from "../prisma/prisma";
 import {dateWithoutTime, stringBoolOrNull} from "../utils/shortZod";
 
 // get users
-mustBeConnected({options: {isManager: true}})
+mustBeConnected({options: {isAdminOrManager: true}})
 .declareRoute("GET", "/users")
 .extract({
 	query: {
-		skip: zod.coerce.number().max(30).min(0),
+		skip: zod.coerce.number().min(0),
 		take: zod.coerce.number().max(30).min(1),
 		searchName: zod.string().optional(),
 		userId: zod.coerce.number().optional(),
@@ -34,7 +34,7 @@ mustBeConnected({options: {isManager: true}})
 				contains: pickup("searchName"),
 				mode: "insensitive",
 			},
-			availability: availability && am !== undefined && pm !== undefined && date ?
+			availability: availability && am !== undefined && pm !== undefined && date !== undefined ?
 				{
 					some: {
 						date: {

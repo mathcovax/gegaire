@@ -39,7 +39,7 @@
 <script>
 import {defineComponent} from "vue";
 import Card from "../../partials/admin/guides/card.vue";
-import {taob} from "../../taob";
+import {duplo, taob} from "../../taob";
 
 export default defineComponent({
 	components: {
@@ -74,7 +74,16 @@ export default defineComponent({
 			if(this.isFetch === true || this.isAllFetch === true) return;
 			this.isFetch = true;
 
-			let result = await taob.get(`users?skip=${page * 25}&take=25&searchName=${this.name}`).sd();
+			let result = await duplo.get(
+				"/users",
+				{
+					query: {
+						skip: page * 25,
+						take: 25,
+						searchName: this.name
+					}
+				}
+			).sd();
 
 			if(result === undefined || this.isFetch === false) return;
 
