@@ -58,7 +58,7 @@ export default {
 		wrong_group: "Le groupe de la disponibilité ne correspond pas au groupe de l'activité.",
 		status: "Le statut de l'activité a bien été mis à jour.",
 		hasNotRight: "Vous n'avez pas le droit de voir cette activité",
-
+		isPast: "L'activité est déjà passé.",
 		status: {
 			waiting: "En attente",
 			validated: "Valider",

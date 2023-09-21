@@ -158,7 +158,7 @@
 					
 					<div class="flex gap-[10px] justify-center">
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						:class="{'invisible': availability.am !== true || availability.pm !== true}"
 						@click="setAMPM(true, true)"
 						:am="true"
@@ -168,7 +168,7 @@
 
 						<AvailableBtn
 						:class="{'invisible': availability.am !== true}"
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="setAMPM(true, false)"
 						:am="true"
 						:pm="null"
@@ -177,7 +177,7 @@
 
 						<AvailableBtn
 						:class="{'invisible': availability.pm !== true}"
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="setAMPM(false, true)"
 						:am="null"
 						:pm="true"

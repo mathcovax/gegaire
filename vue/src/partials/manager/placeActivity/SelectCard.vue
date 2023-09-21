@@ -1,6 +1,6 @@
 <template>
 	<div
-	class="w-full grid grid-cols-12 h-[22px] hover:bg-[rgba(0,0,0,0.12)]"
+	class="w-full grid grid-cols-12 h-[24px] text-[20px] hover:bg-[rgba(0,0,0,0.12)]"
 	@click="selectGuide(guide.id)"
 	>
 		<p class="col-span-4 overflow-hidden text-ellipsis">
@@ -10,7 +10,7 @@
 		<p class="col-span-2 flex justify-end">
 			<ico
 			v-if="guide.leader === true"
-			size="20px"
+			size="24px"
 			>
 				close
 			</ico>
@@ -31,7 +31,7 @@
 		<p class="col-span-2 flex justify-end">
 			<ico
 			v-if="guide.am === true"
-			size="20px"
+			size="24px"
 			>
 				close
 			</ico>
@@ -40,7 +40,7 @@
 		<p class="col-span-2 flex justify-end">
 			<ico
 			v-if="guide.pm === true"
-			size="20px"
+			size="24px"
 			>
 				close
 			</ico>

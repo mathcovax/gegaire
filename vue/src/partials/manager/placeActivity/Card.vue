@@ -1,6 +1,6 @@
 <template>
 	<div
-	class="w-full grid grid-cols-11 h-[22px] hover:bg-[rgba(0,0,0,0.12)]"
+	class="grid grid-cols-11 h-[24px] hover:bg-[rgba(0,0,0,0.12)] items-stretch text-[20px]"
 	@click="selectGuide(guide.id)"
 	>
 		<div class="col-span-3 flex items-center">
@@ -36,7 +36,7 @@
 		v-if="availability !== null"
 		class="col-span-2 flex justify-end"
 		>
-			<div class="h-full aspect-square relative rounded-[4px] overflow-hidden p-[5px] ">
+			<div class="h-[24px] w-[24px] relative rounded-[4px] overflow-hidden p-[5px] ">
 				<div
 				:class="{
 					'bg-[green]': availability.am === true,

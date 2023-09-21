@@ -1,6 +1,6 @@
 <template>
 	<div
-	class="p-[5px] relative rounded-[4px] overflow-hidden aspect-square"
+	class="p-[5px] relative rounded-[4px] overflow-hidden"
 	@click="$emit('click')"
 	availability-card
 	>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
 	props: {

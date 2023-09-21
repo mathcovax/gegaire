@@ -16,9 +16,9 @@
 
 			<div class="absolute bottom-0 left-0 bg-[var(--orange2)] h-[60px] w-full rounded-tr-[20px] rounded-br-[4px]"/>
 
-			<div class="absolute top-[50px] left-[calc(100%-1px)] h-[40px] aspect-square bg-[var(--green1)] rounded-r-full flex justify-center items-center">
+			<div class="absolute top-[50px] left-[calc(100%-1px)] h-[40px] w-[40px] bg-[var(--green1)] rounded-r-full flex justify-center items-center">
 				<div 
-				class="bg-[var(--orange1)] transition duration-[400ms] rounded-full aspect-square w-[30px] flex flex-col justify-center items-center hover:bg-5"
+				class="bg-[var(--orange1)] transition duration-[400ms] rounded-full h-[30px] w-[30px] flex flex-col justify-center items-center hover:bg-5"
 				:class="{
 					'rotate-180': isOpen
 				}"

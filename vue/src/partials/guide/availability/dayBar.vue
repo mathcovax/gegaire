@@ -30,7 +30,7 @@
 
 					<div class="flex gap-[15px]">
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="am = true; pm = true"
 						:am="true"
 						:pm="true"
@@ -38,7 +38,7 @@
 						/>
 
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="am = true; pm = false"
 						:am="true"
 						:pm="false"
@@ -46,7 +46,7 @@
 						/>
 
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="am = false; pm = true"
 						:am="false"
 						:pm="true"
@@ -56,7 +56,7 @@
 
 					<div class="flex gap-[15px]">
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="am = false; pm = false"
 						:am="false"
 						:pm="false"
@@ -64,7 +64,7 @@
 						/>
 
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="am = null; pm = null"
 						:am="null"
 						:pm="null"

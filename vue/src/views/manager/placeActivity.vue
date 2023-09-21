@@ -27,7 +27,7 @@
 
 					<div class="flex gap-[5px]">
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="setAMPM(true, true)"
 						:am="true"
 						:pm="true"
@@ -35,7 +35,7 @@
 						/>
 
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="setAMPM(true, false)"
 						:am="true"
 						:pm="false"
@@ -43,7 +43,7 @@
 						/>
 
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="setAMPM(false, true)"
 						:am="false"
 						:pm="true"
@@ -51,7 +51,7 @@
 						/>
 
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="setAMPM(false, false)"
 						:am="false"
 						:pm="false"
@@ -59,7 +59,7 @@
 						/>
 
 						<AvailableBtn
-						class="h-[30px]"
+						class="h-[30px] w-[30px]"
 						@click="setAMPM(null, null)"
 						:am="null"
 						:pm="null"
@@ -109,7 +109,7 @@
 					v-for="guide of guides"
 					:key="guide.id"
 					:guide="guide"
-					class="w-full"
+					class="w-full shrink-0"
 					/>
 
 					<Loader

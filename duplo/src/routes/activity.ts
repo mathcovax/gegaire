@@ -26,7 +26,7 @@ mustBeConnected({options: {isManager: true}})
 		input: (pickup) => pickup("activityId"),
 		validate: (info) => info === "activity.exist",
 		catch: (response, info) => response.code(404).info(info).send(),
-		output: (drop, info, data) => drop("activity", data as Exclude<typeof data, undefined>)
+		output: (drop, info, data) => drop("activity", data)
 	}
 )
 .check(
@@ -57,7 +57,7 @@ mustBeConnected({options: {isManager: true}})
 		}),
 		validate: (info) => info === "availabilityExist",
 		catch: (response, info) => response.code(404).info(info).send(),
-		output: (drop, info, data) => drop("availability", data as Exclude<typeof data, undefined>),
+		output: (drop, info, data) => drop("availability", data),
 		options: {
 			work: true
 		}
