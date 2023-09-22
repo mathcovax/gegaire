@@ -3,7 +3,9 @@ import {mustBeConnected} from "../security/connected";
 import {Prisma} from "../prisma/prisma";
 import {dateWithoutTime, stringBoolOrNull} from "../utils/shortZod";
 
+//
 // get users
+// 
 mustBeConnected({options: {isAdminOrManager: true}})
 .declareRoute("GET", "/users")
 .extract({

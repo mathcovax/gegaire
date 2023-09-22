@@ -186,7 +186,7 @@ import Card from "@/partials/manager/placeActivity/Card.vue";
 import InfoActivity from "../../partials/manager/placeActivity/InfoActivity.vue";
 import PlaceGuide from "@/partials/manager/placeActivity/PlaceGuide.vue";
 import SelectCard from "../../partials/manager/placeActivity/SelectCard.vue";
-import {taob} from "../../taob";
+import {duplo, taob} from "../../taob";
 import {mapActions, mapState} from "pinia";
 import {activityPlaceStore} from "../../partials/manager/placeActivity/activityPlacesStore";
 import {fixedStore} from "../../stores/fixed";
@@ -290,8 +290,14 @@ export default defineComponent({
 		},
 
 		async init(){
-			let {close} = fixedStore().requestLoader();
-			await taob.get("/activity/" + this.$route.params.id + "?all=true")
+			await duplo.get(
+				"/activity/{id}",
+				{
+					params: {id: this.$route.params.id},
+					query: {all: true},
+					loader: true,
+				}
+			)
 			.s(data => {
 				this.initActivityPlaceStore(data);
 				this.reset();
@@ -301,7 +307,6 @@ export default defineComponent({
 				this.$router.push("/manager/planning");
 			})
 			.result;
-			close();
 		}
 	},
 	mounted(){

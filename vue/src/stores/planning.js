@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {taob} from "../taob";
+import {duplo, taob} from "../taob";
 
 export const planningStore = defineStore(
 	"planning",
@@ -29,7 +29,7 @@ export const planningStore = defineStore(
 				if(this.activities[my] !== undefined) return;
 				this.activities[my] = false;
 
-				this.activities[my] = await taob.get(`activities?activity_date=${date}`).sd();
+				this.activities[my] = await duplo.get("activities", {query: {date}}).sd();
 			}
 		}
 	}

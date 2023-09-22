@@ -13,10 +13,10 @@
 			<p class="w-full">
 				{{ $tr("label.address") }} : 
 				<a
-				:href="'https://www.google.com/maps?q=' + activity.address.text"
+				:href="'https://www.google.com/maps?q=' + activity.address"
 				target="_blank"
 				>
-					{{ activity.address.text }}
+					{{ activity.address }}
 				</a>
 			</p>
 
@@ -205,7 +205,7 @@ export default defineComponent({
 				"http://www.google.com/calendar/event?action=TEMPLATE" +
 				`&dates=${dateFrom}%2F${dateTo}` + 
 				`&text=${this.activity.name} - ${this.activity.number} P` + 
-				`&location=${this.activity.address.text}` +
+				`&location=${this.activity.address}` +
 				`&details=${location.href}`
 			);
 		},

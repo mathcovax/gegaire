@@ -2,7 +2,9 @@ import {zod} from "@duplojs/duplojs";
 import {mustBeConnected} from "../security/connected";
 import {Prisma} from "../prisma/prisma";
 
+//
 //count user with criteria
+//
 mustBeConnected({options: {isManager: true}})
 .declareRoute("GET", "/guides/count")
 .extract({

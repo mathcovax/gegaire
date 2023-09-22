@@ -38,7 +38,7 @@
 			</p>
 
 			<p class="col-span-8 overflow-hidden whitespace-nowrap text-ellipsis">
-				{{ activity.address.text }}
+				{{ activity.address }}
 			</p>
 
 			<p class="col-span-4">

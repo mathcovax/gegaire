@@ -15,7 +15,7 @@
 				<TextInput
 				class="col-span-6"
 				name="gegaire-name"
-				:label="$tr('editGuide.form.name') + '*'"
+				:label="$tr('label.name') + '*'"
 				:rules="nameRules"
 				v-model="name"
 				/>

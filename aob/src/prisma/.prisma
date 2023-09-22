@@ -32,10 +32,8 @@ model User {
 model Address {
     id Int @id @default(autoincrement())
 
-    activity   Activity? @relation(fields: [activityId], references: [id])
-    activityId Int?      @unique
-    user       User?     @relation(fields: [userId], references: [id])
-    userId     Int?      @unique
+    user   User? @relation(fields: [userId], references: [id])
+    userId Int?  @unique
 
     postcode String @db.VarChar(6)
     text     String @db.VarChar(255)
@@ -109,8 +107,8 @@ model Activity {
 
     name      String         @db.VarChar(50)
     number    Int
-    address   Address?
-    date      DateTime
+    address   String         @db.VarChar(500)
+    date      DateTime       @db.Date
     hourStart String?        @default("") @db.VarChar(5)
     hourEnd   String?        @default("") @db.VarChar(5)
     note      String?        @default("") @db.VarChar(1500)

@@ -34,6 +34,19 @@ export const showActivity = method(
 	}
 );
 
+export const validatedActivity = method(
+	async function(emails, activityId, date){
+		let result = await sendEmails(
+			emails,
+			{
+				subject: "Info activité",
+				text: `Vous avez été sélectionné pour une activité le ${date.split("T")[0].split("-").reverse().join("/")}`
+			}
+		);
+		if(result !== undefined) console.log(result);
+	}
+);
+
 export const createActivity = method(
 	async function(emails, activityId, date, userName){
 		return await sendEmails(

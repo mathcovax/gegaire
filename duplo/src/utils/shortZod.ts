@@ -14,6 +14,13 @@ export const stringBoolOrNull = zod
 			null
 );
 
+export const stringBool = zod
+.union([
+	zod.literal("true"), 
+	zod.literal("false"),
+])
+.transform((value) => value === "true" ? true : false);
+
 export const dateWithoutTime = zod
 .coerce
 .date()

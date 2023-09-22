@@ -26,13 +26,13 @@
 				Leader
 			</b>
 
-			<Btn
+			<!-- <Btn
 			small
 			@click="$router.push(`/activity/${work.amActivity.id}`)"
 			v-if="work.amActivity !== true && work.amActivity !== null && !isSame"
 			>
 				{{ $tr("btn.seeMore") }}
-			</Btn>
+			</Btn> -->
 		</div>
 
 		<div
@@ -52,23 +52,23 @@
 				Leader
 			</b>
 
-			<Btn
+			<!-- <Btn
 			small
 			@click="$router.push(`/activity/${work.pmActivity.id}`)"
 			v-if="work.pmActivity !== true && work.pmActivity !== null && !isSame"
 			>
 				{{ $tr("btn.seeMore") }}
-			</Btn>
+			</Btn> -->
 		</div>
 
 		<div class="col-span-12 flex justify-center">
-			<Btn
+			<!-- <Btn
 			small
 			v-if="isSame"
 			@click="$router.push(`/activity/${work.pmActivity.id}`)"
 			>
 				{{ $tr("btn.seeMore") }}
-			</Btn>
+			</Btn> -->
 		</div>
 	</Frame>
 </template>

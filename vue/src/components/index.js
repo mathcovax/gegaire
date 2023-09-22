@@ -27,7 +27,7 @@ const components = [
 	selectInput,
 	areaInput,
 	numberInput,
-	hourInput
+	hourInput,
 ];
 
 export default {

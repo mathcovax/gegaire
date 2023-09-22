@@ -10,7 +10,7 @@ export const options = registerOptions(
 export default register(
 	function(reg, hook){
 
-		// create activity
+		//(oldVersion) create activity
 		reg({
 			path: "/",
 			method: "POST",
@@ -96,6 +96,7 @@ export default register(
 			this.sender("ok", "activity.get", result);
 		});
 
+		//(oldVersion) edit activity
 		reg({
 			path: "/:id",
 			method: "PUT",
@@ -278,7 +279,7 @@ export default register(
 				this.pass("activity_status")
 			);
 			
-			if(this.pass("activity_status") === "showning"){
+			if(this.pass("activity_status") === "validated"){
 				let {date, amGuide, pmGuide} = await this.method(
 					"activity.get::byId",
 					this.pass("activity_id"),
@@ -311,7 +312,7 @@ export default register(
 				});
 				
 				await this.method(
-					"sendEmail::showActivity",
+					"sendEmail::validatedActivity",
 					[...emails, ...pmGuide.map(v => v.user.email)],
 					this.pass("activity_id"),
 					date.toISOString()

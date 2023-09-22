@@ -19,7 +19,7 @@
 				:rules="nameRules"
 				/>
 
-				<PlaceInput
+				<TextInput
 				:label="$tr('editActivity.form.loc')"
 				class="col-span-12"
 				v-model="loc"
@@ -106,8 +106,7 @@
 
 <script>
 import {defineComponent} from "vue";
-import {fixedStore} from "../../stores/fixed";
-import {taob} from "../../taob";
+import {duplo, taob} from "../../taob";
 
 export default defineComponent({
 	data(){
@@ -179,22 +178,21 @@ export default defineComponent({
 		}
 	},
 	methods: {
-
 		async submited(){
-			let {close} = fixedStore().requestLoader();
 			if(this.$route.params.id === "newactivity"){
-				await taob.post(
+				await duplo.post(
 					"/activity", 
 					{
-						activity_name: this.name,
-						activity_number: parseInt(this.number),
+						name: this.name,
+						number: parseInt(this.number),
 						address: this.loc,
-						activity_date: this.date,
-						activity_hourStart: this.hourStart,
-						activity_hourEnd: this.hourEnd,
-						activity_note: this.note,
-						group_id: this.group[0].id,
-					}
+						date: this.date,
+						hourStart: this.hourStart,
+						hourEnd: this.hourEnd,
+						note: this.note,
+						groupId: this.group[0].id,
+					},
+					{loader: true}
 				)
 				.s(data => {
 					this.$router.push("/manager/activities/" + data.id + "/place");
@@ -202,28 +200,30 @@ export default defineComponent({
 				.result;
 			}
 			else {
-				await taob.put(
-					"/activity/" + this.$route.params.id, 
+				await duplo.put(
+					"/activity/{id}", 
 					{
-						activity_name: this.name,
-						activity_number: parseInt(this.number),
+						name: this.name,
+						number: parseInt(this.number),
 						address: this.loc,
-						activity_hourStart: this.hourStart,
-						activity_hourEnd: this.hourEnd,
-						activity_note: this.note,
+						hourStart: this.hourStart,
+						hourEnd: this.hourEnd,
+						note: this.note,
+					},
+					{
+						params: {id: this.$route.params.id},
+						loader: true
 					}
 				)
-				.s(data => {
-					this.$router.push("/manager/activities/" + data.id + "/place");
+				.s(() => {
+					this.$router.push("/manager/activities/" + this.$route.params.id + "/place");
 				})
 				.result;
 			}
-			close();
 		},
 
 		async initEdit(){
-
-			await taob.get("/activity/" + this.$route.params.id)
+			await duplo.get("/activity/{id}", {params: {id: this.$route.params.id}})
 			.s(data => {
 				this.name = data.name;
 				this.number = data.number;

@@ -48,7 +48,7 @@
 		class="grid grid-cols-12 gap-[5px]"
 		>
 			<p class="col-span-12">
-				{{ $trr("address") }} : <b>{{ activity.address.text }}</b>
+				{{ $trr("address") }} : <b>{{ activity.address }}</b>
 			</p>
 
 			<p class="col-span-12">
