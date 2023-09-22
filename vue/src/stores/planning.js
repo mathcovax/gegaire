@@ -23,6 +23,11 @@ export const planningStore = defineStore(
 				this.activities = {};
 			},
 
+			previousMonth(){
+				this.dateInStore.setMonth(this.dateInStore.getMonth() - 1);
+				this.dateInStore = new Date(this.dateInStore);
+			},
+
 			async getMonth(date){
 				let my = date.split("-").reverse().slice(1).join("-");
 				

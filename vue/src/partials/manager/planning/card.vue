@@ -96,10 +96,9 @@
 			<Btn
 			small
 			class="col-start-5 col-end-9"
-			v-if="isNotPast"
 			@click="$router.push('/manager/activities/' + this.activity.id + '/place')"
 			>
-				{{ $tr("btn.edit") }}
+				{{ isNotPast ? $tr("btn.edit") : $tr("btn.see") }}
 			</Btn>
 		</div>
 	</Frame>

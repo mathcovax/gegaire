@@ -39,32 +39,30 @@ export default defineComponent({
 	props: {
 		month: {}
 	},
-	data(){
-		return {
-			date: false 
-		};
-	},
 	computed: {
 		...mapState(planningStore, ["dateInStore", "activities"]),
+
+		date(){
+			const date = new Date(this.dateInStore);
+			date.setMonth(date.getMonth() + this.month);
+			return date;
+		},
 
 		monthActivities(){
 			if(this.date === false) return false;
 			return this.activities[this.date.toISOString().split("-").reverse().slice(1).join("-")] || false; 
-		}
+		},
 
+	},
+	watch: {
+		dateInStore(){
+			this.getMonth(this.date.toISOString().split("T")[0]);
+		}
 	},
 	methods: {
 		...mapActions(planningStore, ["getMonth"]),
-
-		init(){
-
-		}
 	},
 	mounted(){
-		let date = new Date(this.dateInStore.toISOString());
-		date.setMonth(date.getMonth() + this.month);
-		this.date = date;
-
 		this.getMonth(this.date.toISOString().split("T")[0]);
 	}
 });

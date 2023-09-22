@@ -13,6 +13,15 @@
 		class="w-full grow overflow-y-auto flex flex-col lg:items-center gap-[10px] p-[10px] pt-0"
 		@scroll="scrolled"
 		>
+			<Btn
+			@click="previousMonth"
+			theme="orange"
+			class="self-center"
+			small
+			>
+				{{ $trr("btnSeeMonthBefore") }}
+			</Btn>
+
 			<Month
 			class="lg:w-[800px]"
 			v-if="dateInStore"
@@ -44,7 +53,9 @@ export default defineComponent({
 		...mapState(planningStore, ["dateInStore"]),
 	},
 	methods: {
-		...mapActions(planningStore, ["purgePlanningStore", "initPlanningStore"]),
+		...mapActions(planningStore, [
+			"purgePlanningStore", "initPlanningStore", "previousMonth"
+		]),
 
 		scrolled(e){
 			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750)){

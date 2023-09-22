@@ -17,6 +17,7 @@
 				class="col-span-12"
 				v-model="name"
 				:rules="nameRules"
+				name="activity-name"
 				/>
 
 				<TextInput
@@ -187,8 +188,8 @@ export default defineComponent({
 						number: parseInt(this.number),
 						address: this.loc,
 						date: this.date,
-						hourStart: this.hourStart,
-						hourEnd: this.hourEnd,
+						hourStart: this.hourStart || undefined,
+						hourEnd: this.hourEnd || undefined,
 						note: this.note,
 						groupId: this.group[0].id,
 					},
@@ -206,8 +207,8 @@ export default defineComponent({
 						name: this.name,
 						number: parseInt(this.number),
 						address: this.loc,
-						hourStart: this.hourStart,
-						hourEnd: this.hourEnd,
+						hourStart: this.hourStart || undefined,
+						hourEnd: this.hourEnd || undefined,
 						note: this.note,
 					},
 					{

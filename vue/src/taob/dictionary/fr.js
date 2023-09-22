@@ -78,6 +78,7 @@ export default {
 		info: "information",
 		remove: "retirer",
 		seeMore: "voir plus",
+		see: "voir",
 		back: "retour",
 		save: "sauvgarder",
 		search: "cherher",
@@ -205,6 +206,7 @@ export default {
 		date: "Date",
 		address: "Addresse",
 		group: "Group",
+		btnSeeMonthBefore: "mois précédent",
 	},
 	editActivity: {
 		titleCreate: "Création d'une activité.",
