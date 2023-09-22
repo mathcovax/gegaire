@@ -39,13 +39,14 @@ export default defineComponent({
 	props: {
 		month: {}
 	},
-	data(){
-		return {
-			date: false 
-		};
-	},
 	computed: {
 		...mapState(activitiesStore, ["dateInStore", "work"]),
+
+		date(){
+			const date = new Date(this.dateInStore);
+			date.setMonth(date.getMonth() + this.month);
+			return date;
+		},
 
 		monthWork(){
 			if(this.date === false) return false;
@@ -53,18 +54,15 @@ export default defineComponent({
 		},
 
 	},
-	methods: {
-		...mapActions(activitiesStore, ["getMonth"]),
-
-		init(){
-
+	watch: {
+		dateInStore(){
+			this.getMonth(this.date.toISOString().split("T")[0]);
 		}
 	},
+	methods: {
+		...mapActions(activitiesStore, ["getMonth"]),
+	},
 	mounted(){
-		let date = new Date(this.dateInStore.toISOString());
-		date.setMonth(date.getMonth() + this.month);
-		this.date = date;
-
 		this.getMonth(this.date.toISOString().split("T")[0]);
 	}
 });

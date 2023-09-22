@@ -7,6 +7,7 @@ export const activitiesStore = defineStore(
 		state(){
 			return {
 				dateInStore: false,
+				countPreviousMonth: 0,
 				work: {},
 			};
 		},
@@ -18,10 +19,15 @@ export const activitiesStore = defineStore(
 				this.dateInStore = new Date();
 				this.dateInStore.setDate(1);
 			},
-
 			purgeActivitiesStore(){
 				this.dateInStore = false;
 				this.work = {};
+			},
+
+			previousMonth(){
+				this.dateInStore.setMonth(this.dateInStore.getMonth() - 1);
+				this.dateInStore = new Date(this.dateInStore);
+				this.countPreviousMonth++;
 			},
 
 			async getMonth(date){

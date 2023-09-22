@@ -7,6 +7,15 @@
 		@scroll="scrolled"
 		ref="scrollView"
 		>
+			<Btn
+			@click="previousMonth"
+			theme="orange"
+			class="self-center"
+			small
+			>
+				{{ $tr("/manager/planning.btnSeeMonthBefore") }}
+			</Btn>
+
 			<Month
 			class="lg:w-[800px]"
 			v-if="dateInStore"
@@ -38,10 +47,12 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapState(activitiesStore, ["dateInStore"])
+		...mapState(activitiesStore, ["dateInStore", "countPreviousMonth"])
 	},
 	methods: {
-		...mapActions(activitiesStore, ["purgeActivitiesStore", "initPlanningStore"]),
+		...mapActions(activitiesStore, [
+			"purgeActivitiesStore", "initPlanningStore", "previousMonth"
+		]),
 
 		initDate(date){
 			date = new Date(date);
@@ -53,9 +64,10 @@ export default defineComponent({
 		},
 
 		scrolled(e){
-			if(e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750) && this.page < 8){
-				this.page++;
-			}
+			if(
+				e.target.scrollTop >= (e.target.scrollHeight - e.target.clientHeight - 750) && 
+				this.page < (8 + this.countPreviousMonth)
+			) this.page++;
 		},
 	},
 	async mounted(){
