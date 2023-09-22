@@ -90,23 +90,16 @@ export default defineComponent({
 		focused(event){
 			this.focus = true;
 			this.$emit("focus", event);
-			if(this.autoGrow !== false){
-				this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + "px";
-			}
 		},
 		blured(event){
 			this.focus = false;
 			this.$emit("blur", event);
 			this.validate();
-			if(this.autoGrow !== false) this.$refs.textarea.style.height = "auto";
 		},
 		inputed(event){
 			this.$emit("update:modelValue", event.target.value || "");
 			if(this.invalidMessage !== ""){
 				this.validate(event.target.value);
-			}
-			if(this.autoGrow !== false){
-				this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + "px";
 			}
 			this.$emit("input", event);
 		},
@@ -199,6 +192,7 @@ div[text-textarea]{
         outline: 1px solid var(--areaInput-lowColor);
         border: none;
 		font-family: inherit;
+		height: 100%;
 		max-height: 100%;
 			
         &:focus {

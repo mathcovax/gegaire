@@ -66,10 +66,9 @@
 				/>
 
 				<AreaInput
-				class="col-span-6 max-h-[130px]"
+				class="col-span-6 h-[130px]"
 				label="Note"
 				v-model="note"
-				auto-grow
 				:rules="areaRules"
 				/>
 

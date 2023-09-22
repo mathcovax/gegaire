@@ -82,7 +82,7 @@
 					/>
 
 					<AreaInput
-					class="w-[200px] max-h-[200px]"
+					class="w-[200px] h-[150px]"
 					auto-grow
 					:label="$trr('labelNote')"
 					v-model="note"
@@ -109,6 +109,13 @@
 					<Btn type="submit">
 						{{ $tr("btn.validate") }}
 					</Btn>
+
+					<p
+					v-if="info"
+					class="text-center text-[red] text-[12px]"
+					>
+						{{ info }}
+					</p>
 				</Form>
 			</div>
 		</section>
@@ -140,6 +147,8 @@ export default defineComponent({
 			day: undefined,
 			month: undefined,
 			year: undefined,
+
+			info: undefined
 		};
 	},
 	computed: {
@@ -186,21 +195,24 @@ export default defineComponent({
 			else {
 				this.checkedToDate = false;
 				this.toDate = undefined;
+				this.info = undefined;
 			}
 		},
 		checkedToDate(){
 			if(this.checkedToDate) this.toDate = this.editDay.toISOString().split("T")[0];
 			else this.toDate = undefined;
+		},
+		am(){
+			if(this.am) this.info = undefined;
 		}
 	},
 	methods: {
 		...mapActions(availabilityStore, ["stopEditingDay", "postDay"]),
 
 		async submited(){
-			if(this.am === undefined || this.pm === undefined || this.group === undefined){
-				return;
-			}
-			
+			if(this.am === undefined || this.pm === undefined) this.info = this.$trr("mustSelectAvailability");
+			if(this.group === undefined) return; 
+
 			await this.postDay(this.am, this.pm, this.group.id, this.note, this.toDate);
 			this.stopEditingDay();
 		}

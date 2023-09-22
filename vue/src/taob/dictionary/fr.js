@@ -155,6 +155,7 @@ export default {
 		},
 		toDateIsPast: "La date sélectionnée est antérieur à la date de disponibilité.",
 		toDateTooLarge: "L'intervalle des dates doit être de maximum 3 semaines.",
+		mustSelectAvailability: "Veuillez sélectionner une disponibilité.",
 	},
 	"/admin/guides": {
 		title: "Gestionnaire des Guides.",
