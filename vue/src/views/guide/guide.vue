@@ -1,5 +1,5 @@
 <template>
-	<main class="w-full h-full flex justify-center items-center">
+	<main class="w-full h-full flex flex-col justify-center items-center gap-[10px]">
 		<Frame
 		border="4px"
 		class="w-[95%] lg:w-[500px]"
@@ -66,11 +66,19 @@
 				</div>
 			</Form>
 		</Frame>
+
+		<Btn
+		theme="red"
+		small
+		@click="disconnect"
+		>
+			{{ $trr("btnDisconnect") }}
+		</Btn>
 	</main>
 </template>
 
 <script>
-import {mapState} from "pinia";
+import {mapActions, mapState} from "pinia";
 import {defineComponent} from "vue";
 import Form from "../../components/Form.vue";
 import {fixedStore} from "../../stores/fixed";
@@ -150,6 +158,8 @@ export default defineComponent({
 		},
 	},
 	methods: {
+		...mapActions(userStore, ["disconnect"]),
+
 		startEdit(){
 			this.newName = this.name;
 			this.newEmail = this.email;
@@ -185,7 +195,7 @@ export default defineComponent({
 			.sd();
 
 			this.edit = false;
-		}
+		},
 	}
 });
 </script>

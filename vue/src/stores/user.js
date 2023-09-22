@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {taob} from "../taob";
+import {duplo, taob} from "../taob";
 
 export const userStore = defineStore(
 	"user",
@@ -34,6 +34,10 @@ export const userStore = defineStore(
 				this.isManager = user.isManager;
 				this.isAdmin = user.isAdmin;
 				this.address = user.address;
+			},
+
+			disconnect(){
+				duplo.get("/user/disconnect", {loader: true}).s(() => location.reload());
 			}
 		}
 	}

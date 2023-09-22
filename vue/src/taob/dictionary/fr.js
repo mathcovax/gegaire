@@ -287,5 +287,8 @@ export default {
 		searchInput: "Chercher un guide...",
 		beforeMonth: "Mois avant",
 		afterMonth: "Mois après",
+	}, 
+	"/guide": {
+		btnDisconnect: "se déconnecter"
 	}
 };

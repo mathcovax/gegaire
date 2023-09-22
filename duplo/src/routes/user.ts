@@ -134,3 +134,12 @@ mustBeConnected({options: {isAdminOrManager: true}})
 
 	response.code(200).info("users.get").send(users);
 });
+
+// 
+//disconnect user
+// 
+mustBeConnected()
+.declareRoute("GET", "/user/disconnect")
+.handler(({}, response) => {
+	response.deleteCookie("accessToken").code(202).info("user.disconnect").send();
+});
