@@ -2,7 +2,7 @@
 	<section
 	class="flex flex-col items-center gap-[10px]"
 	>
-		<h3 class="sticky top-0 z-[1] bg-[white] w-full text-center">
+		<h3 class="sticky top-[-1px] z-[1] bg-[white] w-full text-center">
 			{{ this.$tr("/guide/availability.month")[this.date?.getMonth?.() || 0] + " " + this.date?.getFullYear?.() }}
 		</h3>
 		

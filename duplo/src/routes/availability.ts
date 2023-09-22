@@ -6,7 +6,6 @@ import {compareDates} from "../checkers/date";
 import {userExist} from "../checkers/user";
 import {groupExist} from "../checkers/groups";
 import {dateWithoutTime} from "../utils/shortZod";
-import {log} from "console";
 
 //
 // get all availabilitys by user on one month
@@ -309,7 +308,10 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 					gt: date,
 					lte: toDate,
 				},
-				note: {not: ""}
+				OR: [
+					{note: {not: ""}},
+					{work: {isNot: null}},
+				],
 			},
 			select: {
 				id: true,
@@ -350,7 +352,8 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 					gt: date,
 					lte: toDate,
 				},
-				note: ""
+				note: "",
+				work: {is: null},
 			}
 		});
 		await Prisma.availability.createMany({data: newAvailabilitys});
