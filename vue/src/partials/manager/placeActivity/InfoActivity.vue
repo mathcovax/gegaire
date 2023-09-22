@@ -98,12 +98,19 @@
 				</Btn>
 			</div>
 
-			<div class="col-span-12 flex justify-center mt-[5px]">
+			<div class="col-span-12 flex items-center mt-[5px] flex-col gap-[5px]">
 				<Btn
 				@click="$router.push('/manager/activities/' + activity.id + '/edit')"
 				>
 					{{ $tr("btn.edit") }}
 				</Btn>
+
+				<p
+				@click="addToCalendar"
+				class="text-[12px] underline text-[blue] cursor-pointer"
+				>
+					{{ $tr("viewActivity.btnAddToCalendar") }}
+				</p>
 			</div>
 		</Frame>
 	</div>
@@ -119,8 +126,30 @@ export default defineComponent({
 		...mapState(activityPlaceStore, ["activity"])
 	},
 	methods: {
-		...mapActions(activityPlaceStore, ["setStatus"])
-	}
+		...mapActions(activityPlaceStore, ["setStatus"]),
+
+		addToCalendar(){
+			let dateFrom = new Date(
+				this.activity.date.split("T")[0] + 
+				(this.activity.hourStart ? "T" + this.activity.hourStart + ":00" : "")
+			);
+			let dateTo = new Date(
+				this.activity.date.split("T")[0] + 
+				(this.activity.hourEnd ? "T" + this.activity.hourEnd + ":00" : "")
+			);
+			
+			dateFrom = dateFrom.toISOString().replace(/[-:.]/g, "");
+			dateTo = dateTo.toISOString().replace(/[-:.]/g, "");
+			
+			open(
+				"http://www.google.com/calendar/event?action=TEMPLATE" +
+				`&dates=${dateFrom}%2F${dateTo}` + 
+				`&text=${this.activity.name} - ${this.activity.number} P` + 
+				`&location=${this.activity.address}` +
+				`&details=${location.href}`
+			);
+		},
+	}, 
 });
 </script>
 
