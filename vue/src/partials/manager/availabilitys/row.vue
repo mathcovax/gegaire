@@ -13,7 +13,7 @@
 				v-for="day in date.getDate()"
 				class="w-[50px]"
 				:day="data.find(a => a.day === day)"
-				:date="date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + day"
+				:date="new Date(date.getFullYear(), date.getMonth(), day, 2)"
 				:userId="{id: guide.id, name: guide.name}"
 				/>
 			</div>

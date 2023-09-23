@@ -1,7 +1,7 @@
 <template>
 	<div
 	class="bg-[white] flex justify-between hover:opacity-[0.8] text-[15px] relative "
-	@click="day.id ? openMenu(day.id) : openEmptyEditAvailabilityMenu(userId, new Date(date))"
+	@click="day.id ? openMenu(day.id) : openEmptyEditAvailabilityMenu(userId, date)"
 	>
 		<div
 		class="w-[24.5px] h-full flex items-center justify-center"

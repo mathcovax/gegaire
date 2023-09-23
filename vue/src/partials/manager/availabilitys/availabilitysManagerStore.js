@@ -57,7 +57,6 @@ export const availabilitysManagerStore = defineStore(
 
 			async openEmptyEditAvailabilityMenu(user, date){
 				if(date.getTime() < Date.now()) return;
-				console.log({user, date});
 				this.editAvailabilityDay = {user, date};
 			},
 
