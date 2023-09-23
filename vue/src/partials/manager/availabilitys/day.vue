@@ -1,7 +1,7 @@
 <template>
 	<div
 	class="bg-[white] flex justify-between hover:opacity-[0.8] text-[15px] relative "
-	@click="openMenu(day.id)"
+	@click="day.id ? openMenu(day.id) : openEmptyEditAvailabilityMenu(userId, new Date(date))"
 	>
 		<div
 		class="w-[24.5px] h-full flex items-center justify-center"
@@ -49,10 +49,12 @@ export default defineComponent({
 			default(){
 				return {};
 			}
-		}
+		},
+		date: {},
+		userId: {},
 	},
 	methods: {
-		...mapActions(availabilitysManagerStore, ["openMenu"])
+		...mapActions(availabilitysManagerStore, ["openMenu", "openEmptyEditAvailabilityMenu"])
 	}
 });
 </script>

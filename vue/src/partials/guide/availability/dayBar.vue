@@ -210,7 +210,10 @@ export default defineComponent({
 		...mapActions(availabilityStore, ["stopEditingDay", "postDay"]),
 
 		async submited(){
-			if(this.am === undefined || this.pm === undefined) this.info = this.$trr("mustSelectAvailability");
+			if(this.am === undefined || this.pm === undefined){
+				this.info = this.$trr("mustSelectAvailability");
+				return;
+			}
 			if(this.group === undefined) return; 
 
 			await this.postDay(this.am, this.pm, this.group.id, this.note, this.toDate);

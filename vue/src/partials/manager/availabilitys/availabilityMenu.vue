@@ -114,6 +114,14 @@
 			<div v-if="availability.note">
 				<u>Note</u> : {{ availability.note }}
 			</div>
+			
+			<Btn
+			v-if="!work && new Date(this.availability?.date).getTime() > Date.now()"
+			@click="openEditAvailabilityMenu(this.availability.id).then(closeMenu)"
+			class="self-center"
+			>
+				{{ $tr("btn.edit") }}
+			</Btn>
 		</Frame>
 	</div>
 </template>
@@ -145,7 +153,7 @@ export default defineComponent({
 		}
 	},
 	methods: {
-		...mapActions(availabilitysManagerStore, ["closeMenu"]),
+		...mapActions(availabilitysManagerStore, ["closeMenu", "openEditAvailabilityMenu"]),
 	},
 	mounted(){
 		

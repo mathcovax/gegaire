@@ -8,6 +8,7 @@ export const availabilitysManagerStore = defineStore(
 			return {
 				menuIsOpen: false,
 				availability: undefined,
+				editAvailabilityDay: undefined,
 			};
 		},
 		getters: {
@@ -41,6 +42,48 @@ export const availabilitysManagerStore = defineStore(
 			closeMenu(){
 				this.menuIsOpen = false;
 				this.availability = undefined;
+			},
+
+			async openEditAvailabilityMenu(id){
+				this.editAvailabilityDay = await duplo.get(
+					"availability/{id}",
+					{
+						params: {id},
+						query: {group: true, user: true},
+						loader: true,
+					}
+				).sd();
+			},
+
+			async openEmptyEditAvailabilityMenu(user, date){
+				if(date.getTime() < Date.now()) return;
+				console.log({user, date});
+				this.editAvailabilityDay = {user, date};
+			},
+
+			closeEditAvailabilityMenu(){
+				this.editAvailabilityDay = undefined;
+			},
+
+			async postAvailability(am, pm, groupId, note, date, toDate){
+				await duplo.post(
+					"/user/{userId}/availability",
+					{
+						am,
+						pm,
+						groupId, 
+						note,
+						date,
+					},
+					{
+						params: {userId: this.editAvailabilityDay.user.id},
+						query: {toDate},
+						loader: true,
+					}
+				)
+				.sd();
+
+				this.closeEditAvailabilityMenu();
 			}
 		}
 	}

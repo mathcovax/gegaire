@@ -84,6 +84,7 @@ mustBeConnected({options: {isManager: true}})
 		user: zod.string().containBool.optional(),
 		work: zod.string().containBool.optional(),
 		activity: zod.string().containBool.optional(),
+		group: zod.string().containBool.optional(),
 	}
 })
 .check<typeof availabilityExist, "availability", "availabilityExist">(
@@ -97,6 +98,7 @@ mustBeConnected({options: {isManager: true}})
 			activity: pickup("activity"),
 			user: pickup("user"),
 			work: pickup("work"),
+			group: pickup("group"),
 		})
 	}
 )
@@ -193,7 +195,9 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 })
 .cut(({pickup}, response) => {
 	const contentAccessToken = pickup("contentAccessToken");
-	if(!contentAccessToken.isManager && contentAccessToken.id !== pickup("userId")) response.code(403).info("errorAccessTokenManager").send();
+	if(!contentAccessToken.isManager && contentAccessToken.id !== pickup("userId")){
+		response.code(403).info("errorAccessTokenManager").send();
+	}
 })
 .check(
 	userExist,

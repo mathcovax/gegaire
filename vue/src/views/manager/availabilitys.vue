@@ -98,6 +98,8 @@
 
 		<AvailabilityMenu v-if="menuIsOpen"/>
 
+		<EditAvailabilityDay v-if="editAvailabilityDay"/>
+
 		<StatsDay
 		v-if="stats"
 		:stats="stats"
@@ -115,10 +117,11 @@ import StatsDay from "../../partials/manager/availabilitys/statsDay.vue";
 import Row from "../../partials/manager/availabilitys/row.vue";
 import {duplo} from "../../taob";
 import {availabilitysManagerStore} from "../../partials/manager/availabilitys/availabilitysManagerStore";
+import EditAvailabilityDay from "../../partials/manager/availabilitys/editAvailabilityDay.vue";
 
 export default defineComponent({
 	components: {
-		Row, Loader, AvailabilityMenu, StatsDay
+		Row, Loader, AvailabilityMenu, StatsDay, EditAvailabilityDay
 	},
 	data(){
 		return {
@@ -134,7 +137,7 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapState(availabilitysManagerStore, ["menuIsOpen"])
+		...mapState(availabilitysManagerStore, ["menuIsOpen", "editAvailabilityDay"])
 	},
 	watch: {
 		page(){

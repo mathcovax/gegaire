@@ -96,6 +96,7 @@ export default {
 		note: "Note",
 		status: "status",
 		invalidAddress: "Addresse invalide",
+		group: "Groupe"
 	},
 	rules: {
 		passwordIsnotsame: "Les mots de passe ne correspondent pas."

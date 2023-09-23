@@ -4,7 +4,7 @@ import {Prisma} from "../prisma/prisma";
 export const availabilityExist =  duplo.createChecker(
 	"availabilityExist",
 	{
-		async handler(input: number | {date: Date, userId: number}, output, {user, work, activity}){
+		async handler(input: number | {date: Date, userId: number}, output, {user, work, activity, group}){
 			let where;
 			if(typeof input === "number") where = {id: input};
 			else where = {
@@ -55,6 +55,8 @@ export const availabilityExist =  duplo.createChecker(
 						} : 
 						undefined,
 					
+					group: group,
+					userId: true,
 					groupId: true,
 					am: true,
 					pm: true,
@@ -71,6 +73,7 @@ export const availabilityExist =  duplo.createChecker(
 			user?: boolean,
 			work?: boolean,
 			activity?: boolean,
+			group?: boolean,
 		}
 	}
 );
