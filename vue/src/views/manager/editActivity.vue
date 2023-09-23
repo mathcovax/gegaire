@@ -70,6 +70,7 @@
 				label="Note"
 				v-model="note"
 				:rules="areaRules"
+				@click="toShowNote"
 				/>
 
 				<Btn
@@ -101,6 +102,33 @@
 				</Btn>
 			</Form>
 		</Frame>
+
+		<div
+		v-if="showNote"
+		class="absolute z-10 top-0 left-0 w-full h-full flex justify-center items-center p-[20px] bg-[rgba(0,0,0,0.30)]"
+		@click="showNote = false"
+		>
+			<Frame
+			class="w-full h-full lg:w-[600px] lg:h-[80%]"
+			classs="p-[10px] flex flex-col items-center gap-[10px]"
+			@click="$event.stopPropagation()"
+			>
+				<AreaInput
+				ref="note"
+				class="w-full grow"
+				label="Note"
+				v-model="note"
+				:rules="areaRules"
+				/>
+
+				<Btn
+				theme="red"
+				@click="showNote = false"
+				>
+					{{ $tr("btn.close") }}
+				</Btn>
+			</Frame>
+		</div>
 	</main>
 </template>
 
@@ -119,6 +147,7 @@ export default defineComponent({
 			hourEnd: "",
 			note: "",
 			group: [],
+			showNote: false,
 		};
 	}, 
 	computed: {
@@ -253,6 +282,11 @@ export default defineComponent({
 		cancel(){
 			if(this.$route.params.id !== "newactivity") this.$router.push("/manager/activities/" + this.$route.params.id + "/place");
 			else this.$router.push("/manager/planning");
+		},
+
+		toShowNote(){
+			this.showNote = true;
+			setTimeout(() => this.$refs.note.$refs.textarea.focus(), 100);
 		}
 	},
 	mounted(){
