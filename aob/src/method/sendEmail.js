@@ -15,7 +15,7 @@ export const invitation = method(
 			email,
 			{
 				subject: "Invitation",
-				text: `Bonjour vous avez été invité à vous inscrire sur Gegaire, rendez-vous ici : ${env.HOST}/invit/${id}`
+				text: `Bonjour vous avez été invité par Connexion Nature à vous inscrire sur Gegaire, rendez-vous ici : ${env.HOST}/invit/${id}`
 			}
 		);
 	}
@@ -40,7 +40,7 @@ export const validatedActivity = method(
 			emails,
 			{
 				subject: "Info activité",
-				text: `Vous avez été sélectionné pour une activité le ${date.split("T")[0].split("-").reverse().join("/")}`
+				text: `Vous avez été sélectionné pour une activité avec Connexion Nature le ${date.split("T")[0].split("-").reverse().join("/")}`
 			}
 		);
 		if(result !== undefined) console.log(result);

@@ -127,7 +127,7 @@ export default defineComponent({
 		return {
 			months: [],
 			guides: [],
-			page: 0,
+			page: 0, // get 20 par 20 selement
 			maxGuide: 0,
 			inputSearchName: "",
 			searchName: "",
@@ -141,13 +141,18 @@ export default defineComponent({
 	},
 	watch: {
 		page(){
+			// get toute les dispo des guide sur les mois selectioner 
+			// ça permet de get plus de guide quand ça dépase 20
 			this.months.forEach(value => this.getAvailabilitys(value, this.page));
 		},
 	},
 	methods: {
 		...mapActions(availabilitysManagerStore, ["initAvailabilitysManagerStore"]),
+
 		async getAvailabilitys(date, page = 0, searchName = this.searchName){
+			// la date est utilise que pour le mois
 			date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
 			const guides = await duplo.get(
 				"/availabilitys", 
 				{
@@ -162,14 +167,14 @@ export default defineComponent({
 					guide = {
 						id: value.id,
 						name: value.name,
-						availabilitys: []
+						availabilitys: [] // contien les dispo ranger pas mois 
 					};
 					this.guides.push(guide);
 				}
 
 				guide.availabilitys.push({
-					date,
-					data: value.availability
+					date, // la date util pour le son mois
+					data: value.availability // les dispo du mois
 				});
 
 				guide.availabilitys.sort((a1, a2) => a1.date - a2.date);
@@ -206,6 +211,8 @@ export default defineComponent({
 			}
 			
 			this.months = month.sort((date1, date2) => date1 - date2);
+
+			// get toute les dispo des guide sur les mois selectioner
 			this.months.forEach(value => this.getAvailabilitys(value, 0));
 		},
 

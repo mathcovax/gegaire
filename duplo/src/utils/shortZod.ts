@@ -1,5 +1,6 @@
 import {zod} from "@duplojs/duplojs";
 
+//@ts-ignore
 export const stringBoolOrNull = zod
 .union([
 	zod.literal("true"), 
@@ -12,20 +13,21 @@ export const stringBoolOrNull = zod
 		value === "false" ? 
 			false : 
 			null
-);
+) as zod.ZodType<boolean | null>;
 
+//@ts-ignore
 export const stringBool = zod
 .union([
 	zod.literal("true"), 
 	zod.literal("false"),
 ])
-.transform((value) => value === "true" ? true : false);
+.transform(value => value === "true" ? true : false) as zod.ZodType<boolean>;
 
 export const dateWithoutTime = zod
 .coerce
 .date()
 .transform(
-	(arg) => new Date(
+	arg => new Date(
 		arg.getFullYear(), 
 		arg.getMonth(), 
 		arg.getDate()

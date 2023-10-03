@@ -5,7 +5,7 @@ import {availabilityExist} from "../checkers/availability";
 import {compareDates} from "../checkers/date";
 import {userExist} from "../checkers/user";
 import {groupExist} from "../checkers/groups";
-import {dateWithoutTime} from "../utils/shortZod";
+import {dateWithoutTime, stringBool} from "../utils/shortZod";
 
 //
 // get all availabilitys by user on one month
@@ -81,10 +81,10 @@ mustBeConnected({options: {isManager: true}})
 		id: zod.coerce.number(),
 	},
 	query: {
-		user: zod.string().containBool.optional(),
-		work: zod.string().containBool.optional(),
-		activity: zod.string().containBool.optional(),
-		group: zod.string().containBool.optional(),
+		user: stringBool.optional(),
+		work: stringBool.optional(),
+		activity: stringBool.optional(),
+		group: stringBool.optional(),
 	}
 })
 .check<typeof availabilityExist, "availability", "availabilityExist">(

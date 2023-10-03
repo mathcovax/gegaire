@@ -1,9 +1,9 @@
 import Duplo from "@duplojs/duplojs";
-import cookieDuplo from "@duplojs/cookie";
-import {importFolder} from "./src/importFolder";
+import duploCookie from "@duplojs/cookie";
 import dotenv from "dotenv";
 import {resolve} from "path";
 import {existsSync} from "fs";
+import duploRoutesDirectory from "@duplojs/routes-directory";
 
 if(existsSync(resolve(process.cwd(), ".env.local"))){
 	dotenv.config({path: resolve(process.cwd(), ".env.local")});
@@ -12,13 +12,15 @@ dotenv.config();
 
 export const duplo = Duplo({port: 80, host: "0.0.0.0"});
 
-duplo.use(cookieDuplo);
+duplo.use(duploCookie);
 
-Promise.all([
-	importFolder("src/routes", /.ts$/), 
-	importFolder("src/security", /.ts$/),
-	importFolder("src/checkers", /.ts$/)
-])
-.then(() => duplo.launch());
+duplo.use(
+	duploRoutesDirectory, 
+	{
+		path: "src",
+		matchs: [{pattern: /.ts$/, handler: (i, o, path) => import(path)}]
+	}
+).then(() => duplo.launch());
+
 
 

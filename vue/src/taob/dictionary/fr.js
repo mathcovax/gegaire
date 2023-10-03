@@ -9,17 +9,17 @@ export default {
 		create: "L'utilisateur a bien été créé.",
 		put: "L'utilisateur a bien été modifié.",
 		delete: "L'utilisateur a bien été supprimé.",
-		forbiddenDelete: "Impossible de supprimer cette utilisateur.",
-		emailAlreadyUse: "Cette adresse email est déjà utilisé.",
+		forbiddenDelete: "Impossible de supprimer cet utilisateur.",
+		emailAlreadyUse: "Cette adresse email est déjà utilisée.",
 		nameAlreadyUse: "Ce nom est déjà utilisé.",
 		telAlreadyUse: "Ce numéro de téléphone est déjà utilisé.",
-		notfound: "Utilisateur demander introuvable.",
+		notfound: "Utilisateur demandé introuvable.",
 		name: "Le format du nom n'est pas conforme.",
 		password: "Le format du mot de passe n'est pas conforme.",
 		searchName: "Le format de 'searchName' n'est pas conforme.",
 		tel: "Le format du numéro de téléphone n'est pas conforme.",
 		wrongPassword: "Le mot de passe n'est pas correct.",
-		edit: "Les informations ont bien été modifiés.",
+		edit: "Les informations ont bien été modifiées.",
 		notAvailable: {
 			am: "La personne n'est pas disponible sur la période indiquée.",
 			pm: "La personne n'est pas disponible sur la période indiquée.",
@@ -33,16 +33,16 @@ export default {
 		notfound: "Ce groupe n'existe pas.",
 		emptyArray: "Aucun groupe n'a été sélectionné.",
 		wrongArray: "Le format des groupes envoyé n'est pas le bon.",
-		min1: "Il faut sélectionner minimum un groupe.",
+		min1: "Il faut sélectionner au minimum un groupe.",
 	},
 	link: {
-		emailAlreadyUse: "Cette adresse email est déjà utilisé par un autre lien.",
+		emailAlreadyUse: "Cette adresse email est déjà utilisée par un autre lien.",
 		notExist: "Ce lien n'existe pas.",
 		create: "Un lien a bien été créé et envoyé.",
 		delete: "Le lien a bien été supprimé.",
 	},
 	availability: {
-		post: "La disponibilité a bien été mis à jour.",
+		post: "La disponibilité a bien été mise à jour.",
 		hasWork: "Impossible de poser une disponibilité après avoir été sélectionné.",
 	},
 	mailer: {
@@ -58,10 +58,10 @@ export default {
 		wrong_group: "Le groupe de la disponibilité ne correspond pas au groupe de l'activité.",
 		status: "Le statut de l'activité a bien été mis à jour.",
 		hasNotRight: "Vous n'avez pas le droit de voir cette activité",
-		isPast: "L'activité est déjà passé.",
+		isPast: "L'activité est déjà passée.",
 		status: {
 			waiting: "En attente",
-			validated: "Valider",
+			validated: "Validé",
 			showning: "Visible",
 		}
 	},
@@ -89,13 +89,13 @@ export default {
 		tel: "Numéro de téléphone",
 		address: "Addresse physique",
 		password: "Mot de passe",
-		confirmPassword: "Confirmé mot de passe",
+		confirmPassword: "Confirmer mot de passe",
 		pepol: "Personne",
 		hour: "Horaire",
 		date: "Date",
 		note: "Note",
-		status: "status",
-		invalidAddress: "Addresse invalide",
+		status: "statut",
+		invalidAddress: "Adresse invalide",
 		group: "Groupe"
 	},
 	rules: {
@@ -105,7 +105,7 @@ export default {
 		guide: {
 			availability: "Disponibilité",
 			activity: "Activités",
-			account: "Profile",
+			account: "Profil",
 
 			planning: "Planning",
 			admin: "Administration",
@@ -121,7 +121,7 @@ export default {
 
 		admin: {
 			guides: "Guides",
-			groups: "Groups",
+			groups: "Groupes",
 			invits: "Invitations",
 			logs: "logs",
 
@@ -154,7 +154,7 @@ export default {
 			toDate: "Jusqu'au",
 			checkedToDate: "Définir sur plusieurs jours.",
 		},
-		toDateIsPast: "La date sélectionnée est antérieur à la date de disponibilité.",
+		toDateIsPast: "La date sélectionnée est antérieure à la date de disponibilité.",
 		toDateTooLarge: "L'intervalle des dates doit être de maximum 3 semaines.",
 		mustSelectAvailability: "Veuillez sélectionner une disponibilité.",
 	},
@@ -177,8 +177,8 @@ export default {
 			id: "ID de connexion",
 			rules: {
 				proCardMissing: "Cette valeur est requise.",
-				proCardLessThan: "Cette valeur doit être inférieur à celle de l'expiration de la carte.",
-				proCardMoreThan: "Cette valeur doit être supérieur à celle de la validité de la carte.",
+				proCardLessThan: "Cette valeur doit être inférieure à celle de l'expiration de la carte.",
+				proCardMoreThan: "Cette valeur doit être supérieure à celle de la validité de la carte.",
 			},
 		}
 	},
@@ -187,7 +187,7 @@ export default {
 		labelCreate: "Nom du groupe",
 		btnCreate: "créer le groupe",
 		btnPopupTitle: "Confirmez-vous l'action ?",
-		btnPopupSubTitle: "Cette action est définitive et elle aura pour conséquence la suppression totale du groupe et chaque guide l'ayant sans verra retirer",
+		btnPopupSubTitle: "Cette action est définitive et elle aura pour conséquence la suppression totale du groupe et chaque guide s'en verra retiré",
 	},
 	"/admin/invits": {
 		title: "Invitations",
@@ -206,8 +206,8 @@ export default {
 		pepol: "Personnes",
 		guides: "Guides",
 		date: "Date",
-		address: "Addresse",
-		group: "Group",
+		address: "Adresse",
+		group: "Groupe",
 		btnSeeMonthBefore: "mois précédent",
 	},
 	editActivity: {
@@ -225,8 +225,8 @@ export default {
 			datePassed: "La date doit être supérieure à celle d'aujourd'hui.",
 			rules: {
 				hourMissing: "Cette valeur est requise.",
-				hourLessThan: "Cette valeur doit être inférieur à celle de la fin de l'activité.",
-				hourMoreThan: "Cette valeur doit être supérieur à celle du commencement de l'activité.",
+				hourLessThan: "Cette valeur doit être inférieure à celle de la fin de l'activité.",
+				hourMoreThan: "Cette valeur doit être supérieure à celle du commencement de l'activité.",
 			}
 		}
 	},
@@ -256,9 +256,9 @@ export default {
 		btnToShow: "rendre visible",
 
 		popupTitleValidate: "Valider l'activité ?",
-		popupSubTitleValidate: "Cette action est irréversible et l'activité ne sera plus mise en avant pour signaler qu'elle n'est pas complète.",
+		popupSubTitleValidate: "Cette action est irréversible, un mail sera envoyé à tous les guides et l'activité ne sera plus mise en avant pour signaler qu'elle n'est pas complète.",
 		popupTitleShow: "Rendre visible l'activité ?",
-		popupSubTitleShow: "Cette action est irréversible et enverra un mail à tous les guides de l'activité.",
+		popupSubTitleShow: "Cette action est irréversible et validera l'activité.",
 
 		popupTitleRemove: "Retirer le guide de l'activité ?",
 		popupSubTitleRemove: "Cela retirera entièrement le guide de l'activité.",
@@ -274,11 +274,11 @@ export default {
 		placeWorkedAfter: "Travail 30 jours aprés",
 	},
 	invit: {
-		title: "Information a remplire."
+		title: "Information à remplir."
 	},
 	"/guide/activities": {
 		title: "Activités",
-		empty: "Aucun travaile ce mois-ci.",
+		empty: "Aucun travail ce mois-ci.",
 		activityNotShow: "Aucune info disponible."
 	},
 	viewActivity: {
