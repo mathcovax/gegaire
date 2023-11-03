@@ -30,7 +30,7 @@ mustBeConnected({options: {isManager: true}})
 	compareDates, 
 	{
 		input: pickup => ({date1: new Date(), date2: pickup("date")}),
-		validate: info => info === "validCompare",
+		result: "validCompare",
 		catch: response => response.code(400).info("activity.isPast").send(),
 	}
 )
@@ -38,7 +38,7 @@ mustBeConnected({options: {isManager: true}})
 	groupExist,
 	{
 		input: pickup => pickup("groupId"),
-		validate: info => info === "group.exist",
+		result: "group.exist",
 		catch: (response, info) => response.code(404).info(info).send(),
 	}
 )
@@ -89,7 +89,7 @@ mustBeConnected({options: {isManager: true}})
 	activityExist,
 	{
 		input: pickup => pickup("activityId"),
-		validate: info => info === "activity.exist",
+		result: "activity.exist",
 		catch: (response, info) => response.code(404).info(info).send(),
 	}
 )
@@ -129,13 +129,13 @@ mustBeConnected({options: {isManager: true}})
 		all: stringBool.optional(),
 	},
 })
-.check<typeof activityExist, "activity", "activity.exist">(
+.check(
 	activityExist,
 	{
 		input: pickup => pickup("activityId"),
-		validate: info => info === "activity.exist",
+		result: "activity.exist",
 		catch: (response, info) => response.code(404).info(info).send(),
-		output: (drop, info, data) => drop("activity", data),
+		indexing: "activity",
 		options: pickup => ({info: true, group: true, guide: !!pickup("all")}),
 	}
 )
@@ -157,13 +157,13 @@ mustBeConnected({options: {isManager: true}})
 		workLeader: zod.boolean(),
 	}
 })
-.check<typeof activityExist, "activity", "activity.exist">(
+.check(
 	activityExist, 
 	{
 		input: (pickup) => pickup("activityId"),
-		validate: (info) => info === "activity.exist",
+		result: "activity.exist",
 		catch: (response, info) => response.code(404).info(info).send(),
-		output: (drop, info, data) => drop("activity", data)
+		indexing: "activity",
 	}
 )
 .check(
@@ -173,7 +173,7 @@ mustBeConnected({options: {isManager: true}})
 			date1: new Date(),
 			date2: pickup("activity").date,
 		}),
-		validate: (info) => info === "validCompare",
+		result: "validCompare",
 		catch: (response, info) => response.code(403).info(info).send()
 	}
 )
@@ -181,20 +181,20 @@ mustBeConnected({options: {isManager: true}})
 	userExist,
 	{
 		input: (pickup) => pickup("userId"),
-		validate: (info) => info === "userExist",
+		result: "userExist",
 		catch: (response, info) => response.code(404).info(info).send()
 	}
 )
-.check<typeof availabilityExist, "availability", "availabilityExist">(
+.check(
 	availabilityExist,
 	{
 		input: (pickup) => ({
 			date: pickup("activity").date,
 			userId: pickup("userId")
 		}),
-		validate: (info) => info === "availabilityExist",
+		result: "availabilityExist",
 		catch: (response, info) => response.code(404).info(info).send(),
-		output: (drop, info, data) => drop("availability", data),
+		indexing: "availability",
 		options: {
 			work: true
 		}
@@ -227,8 +227,9 @@ mustBeConnected({options: {isManager: true}})
 			pmLeader: pickup("workPm") ? pickup("workLeader") : undefined,
 		}
 	});
-
+	
 	else if(
+		//if activity am and pm is same
 		work.amActivityId === work.pmActivityId || 
 		(pickup("workAm") === true && work.pmActivityId === activity.id) ||
 		(pickup("workPm") === true && work.amActivityId === activity.id)

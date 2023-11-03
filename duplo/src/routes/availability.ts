@@ -8,7 +8,7 @@ import {groupExist} from "../checkers/groups";
 import {dateWithoutTime, stringBool} from "../utils/shortZod";
 
 //
-// get all availabilitys by user on one month
+// get all availabilitys by users on one month
 //
 mustBeConnected({options: {isManager: true}})
 .declareRoute("GET", "/availabilitys")
@@ -87,13 +87,13 @@ mustBeConnected({options: {isManager: true}})
 		group: stringBool.optional(),
 	}
 })
-.check<typeof availabilityExist, "availability", "availabilityExist">(
+.check(
 	availabilityExist,
 	{
 		input: (pickup) => pickup("id"),
-		validate: (info) => info === "availabilityExist",
+		result: "availabilityExist",
 		catch: (response, info) => response.code(404).info(info).send(),
-		output: (drop, info, data) => drop("availability", data as Exclude<typeof data, undefined>),
+		indexing: "availability",
 		options: (pickup) => ({
 			activity: pickup("activity"),
 			user: pickup("user"),
@@ -109,7 +109,7 @@ mustBeConnected({options: {isManager: true}})
 });
 
 //
-// get stast availability of date
+// get states availability of date
 //
 mustBeConnected({options: {isManager: true}})
 .declareRoute("GET", "/availability/stats/{date}")
@@ -203,7 +203,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 	userExist,
 	{
 		input: (pickup) => pickup("userId"),
-		validate: (info) => info === "userExist",
+		result: "userExist",
 		catch: (response, info) => response.code(404).info(info).send()
 	}
 )
@@ -211,7 +211,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 	groupExist,
 	{
 		input: pickup => pickup("groupId"),
-		validate: info => info === "group.exist",
+		result: "group.exist",
 		catch: (response, info) => response.code(404).info(info).send()
 	}
 )
@@ -222,7 +222,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 			date1: new Date(),
 			date2: pickup("date"),
 		}),
-		validate: info => info === "validCompare",
+		result: "validCompare",
 		catch: (response) => response.code(400).info("availability.isPast").send(),
 	}
 )
@@ -233,7 +233,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 			date1: pickup("date"),
 			date2: pickup("toDate") as Date,
 		}),
-		validate: info => info === "validCompare",
+		result: "validCompare",
 		catch: (response) => response.code(400).info("availability.invalidToDate").send(),
 		skip: (pickup) => pickup("toDate") === undefined,
 		options: {
@@ -243,16 +243,15 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 		}
 	}
 )
-.check<typeof availabilityExist, "availability">(
+.check(
 	availabilityExist,
 	{
 		input: pickup => ({
 			userId: pickup("userId"),
 			date: pickup("date"),
 		}),
-		validate: () => true,
 		catch: () => {},
-		output: (drop, info, data) => drop("availability", data),
+		indexing: "availability",
 		options: {
 			work: true
 		}
@@ -305,6 +304,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 	});
 
 	if(toDate){
+		// get all availabilitys with note or work from date to toDate
 		const availabilitys = await Prisma.availability.findMany({
 			where: {
 				userId,
@@ -332,6 +332,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 		
 		for(let inc = 0; inc < dayLoop; inc++){
 			incDate.setDate(incDate.getDate() + 1);
+			//i use the finding availabilitys to not redefine then
 			if(availabilitys[0]?.date.getTime() === incDate.getTime()){
 				availabilitys.splice(0, 1);
 				continue;
@@ -349,6 +350,7 @@ mustBeConnected({pickup: ["contentAccessToken"]})
 				date: incDate.toISOString(),
 			});
 		}
+		// delete all availabilitys without note and work
 		await Prisma.availability.deleteMany({
 			where: {
 				userId, 

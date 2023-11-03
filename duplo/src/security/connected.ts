@@ -2,12 +2,6 @@ import {zod} from "@duplojs/duplojs";
 import {duplo} from "../../main";
 import {accessToken} from "../checkers/token";
 
-export interface MustBeConnectedOptions{
-	isManager?: boolean;
-	isAdmin?: boolean;
-	isAdminOrManager?: boolean;
-}
-
 export const mustBeConnected = duplo.declareAbstractRoute(
 	"mustBeConnected", 
 	{
@@ -15,7 +9,7 @@ export const mustBeConnected = duplo.declareAbstractRoute(
 			isManager: false,
 			isAdmin: false,
 			isAdminOrManager: false,
-		} as MustBeConnectedOptions
+		}
 	}
 )
 .extract(
@@ -26,13 +20,13 @@ export const mustBeConnected = duplo.declareAbstractRoute(
 	},
 	(response) => response.code(403).info("noAccessToken").send()
 )
-.check<typeof accessToken, "contentAccessToken", "validToken">(
+.check(
 	accessToken,
 	{
 		input: (pickup) => pickup("accessToken"),
-		validate: (info) => info === "validToken",
+		result: "validToken",
 		catch: (response, info) => response.code(403).info(info).send(),
-		output: (drop, info, data) => drop("contentAccessToken", data),
+		indexing: "contentAccessToken",
 	}
 )
 .cut((floor, response) => {

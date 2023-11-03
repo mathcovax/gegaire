@@ -25,8 +25,8 @@ mustBeConnected({options: {isAdminOrManager: true}})
 .handler(async({pickup}, response) => {
 	const availability = pickup("availability");
 	const date = pickup("date");
-	const am = pickup("am") as boolean | null | undefined;
-	const pm = pickup("pm") as boolean | null | undefined;
+	const am = pickup("am");
+	const pm = pickup("pm");
 	const stats = pickup("stats");
 
 	const users = await Prisma.user.findMany({

@@ -69,11 +69,11 @@ export const availabilityExist =  duplo.createChecker(
 			else return output("availabilityExist", availability);
 		},
 		outputInfo: ["availabilityNotExist", "availabilityExist"],
-		options: {} as {
-			user?: boolean,
-			work?: boolean,
-			activity?: boolean,
-			group?: boolean,
+		options: {
+			user: false,
+			work: false,
+			activity: false,
+			group: false,
 		}
 	}
 );
